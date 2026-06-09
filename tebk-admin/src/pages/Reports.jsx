@@ -28,6 +28,7 @@ export function Reports() {
     const totalRevenue  = orders.filter(o => o.status !== 'cancelled').reduce((s, o) => s + Number(o.total), 0)
     const totalOrders   = orders.length
     const clientCount   = profiles.filter(p => p.role === 'client').length
+    const clientCount   = profiles.filter(p => p.role === 'clinic_owner' || p.role === 'doctor').length
     const avgOrder      = totalOrders > 0 ? Math.round(totalRevenue / totalOrders) : 0
     return { totalRevenue, totalOrders, clientCount, avgOrder }
   }, [orders, profiles])

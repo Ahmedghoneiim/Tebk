@@ -69,6 +69,11 @@ export async function createProductWithVariants(fields, variants) {
     }
   }
   return product
+export async function fetchAllProducts() {
+  return supabase
+    .from('products')
+    .select('*')
+    .order('title')
 }
 
 export async function updateProduct(id, updates) {
