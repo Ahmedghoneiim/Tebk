@@ -64,7 +64,7 @@ All routes are defined in `src/routes/AppRoutes.jsx`. Three protection tiers:
 | `<ProtectedRoute>` | Redirects to `/login` if not authenticated |
 | `<RoleRoute roles={[...]}>` | Redirects to `/dashboard` if role doesn't match |
 
-Role values: `'admin'`, `'client'`, `'supplier'` — stored in `profiles.role`.
+Role values: `'admin'`, `'clinic'`, `'supplier'` — stored in `profiles.role`.
 
 ### Layout system
 

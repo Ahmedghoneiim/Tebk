@@ -8,12 +8,11 @@ export const useCartStore = create(
 
       addItem: (product, quantity = 1) => {
         set((s) => {
-          const key = `${product.id}-${product.variantId || ''}`
-          const existing = s.items.find((i) => `${i.id}-${i.variantId || ''}` === key)
+          const existing = s.items.find((i) => i.id === product.id)
           if (existing) {
             return {
               items: s.items.map((i) =>
-                `${i.id}-${i.variantId || ''}` === key
+                i.id === product.id
                   ? { ...i, quantity: i.quantity + quantity }
                   : i
               ),
@@ -23,16 +22,14 @@ export const useCartStore = create(
         })
       },
 
-      removeItem: (productId, variantId) =>
-        set((s) => ({ items: s.items.filter((i) => !(i.id === productId && (i.variantId || '') === (variantId || ''))) })),
+      removeItem: (productId) =>
+        set((s) => ({ items: s.items.filter((i) => i.id !== productId) })),
 
-      updateQuantity: (productId, quantity, variantId) => {
-        if (quantity < 1) { get().removeItem(productId, variantId); return }
+      updateQuantity: (productId, quantity) => {
+        if (quantity < 1) { get().removeItem(productId); return }
         set((s) => ({
           items: s.items.map((i) =>
-            i.id === productId && (i.variantId || '') === (variantId || '')
-              ? { ...i, quantity }
-              : i
+            i.id === productId ? { ...i, quantity } : i
           ),
         }))
       },

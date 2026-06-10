@@ -42,23 +42,23 @@ export function CartPage() {
         {/* Items */}
         <div className="lg:col-span-2 space-y-3">
           {items.map(item => (
-            <div key={`${item.id}-${item.variantId || ''}`} className="card flex items-center gap-4">
+            <div key={item.id} className="card flex items-center gap-4">
               <div className="w-16 h-16 bg-clinical rounded-xl flex items-center justify-center flex-shrink-0 text-secondary/40">
                 <ShoppingCart className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-ink truncate">{item.name}{item.size ? ` — ${item.size}` : ''}</p>
+                <p className="text-sm font-semibold text-ink truncate">{item.name}</p>
                 <p className="text-xs text-muted capitalize">{item.category}</p>
                 <p className="text-sm font-bold text-primary mt-1">{formatCurrency(item.price)} / {item.unit}</p>
               </div>
               <QuantitySelector
                 value={item.quantity}
-                onChange={(qty) => updateQuantity(item.id, qty, item.variantId)}
+                onChange={(qty) => updateQuantity(item.id, qty)}
                 stock={item.stock ?? 100}
               />
               <div className="text-right">
                 <p className="text-sm font-bold text-primary">{formatCurrency(item.price * item.quantity)}</p>
-                <button onClick={() => removeItem(item.id, item.variantId)} className="text-danger hover:opacity-70 mt-1">
+                <button onClick={() => removeItem(item.id)} className="text-danger hover:opacity-70 mt-1">
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>

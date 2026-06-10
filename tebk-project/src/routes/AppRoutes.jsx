@@ -4,6 +4,7 @@ import { AuthLayout }      from '@/layouts/AuthLayout'
 import { DashboardLayout } from '@/layouts/DashboardLayout'
 import { AdminLayout }      from '@/layouts/AdminLayout'
 import { AdminPanelLayout } from '@/layouts/AdminPanelLayout'
+import { AssistantLayout } from '@/layouts/AssistantLayout'
 import { ProtectedRoute }  from '@/components/shared/ProtectedRoute'
 import { RoleRoute }       from '@/components/shared/RoleRoute'
 
@@ -80,13 +81,17 @@ export function AppRoutes() {
         <Route path="/products/:id"       element={<ProductDetailPage />} />
         <Route path="/bundles"            element={<BundlesPage />} />
         <Route path="/bundles/:id"        element={<BundleDetailPage />} />
-        <Route path="/assistant"          element={<AssistantPage />} />
         <Route path="/image-search"       element={<ImageSearchPage />} />
         <Route path="/terms"              element={<TermsPage />} />
         <Route path="/privacy"            element={<PrivacyPage />} />
         <Route path="/medical-disclaimer" element={<MedicalDisclaimerPage />} />
         <Route path="/offline"            element={<OfflinePage />} />
         <Route path="*"                   element={<NotFoundPage />} />
+      </Route>
+
+      {/* Assistant route — separate layout without Footer */}
+      <Route element={<AssistantLayout />}>
+        <Route path="/assistant"          element={<AssistantPage />} />
       </Route>
 
       {/* Protected dashboard routes */}
