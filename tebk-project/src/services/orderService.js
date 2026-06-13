@@ -64,3 +64,12 @@ export async function fetchAllOrders() {
 export async function updateOrderStatus(orderId, status) {
   return supabase.from('orders').update({ status }).eq('id', orderId)
 }
+
+export async function createPaymobPayment(orderId) {
+  const { data, error } = await supabase.functions.invoke('create-paymob-intention', {
+    body: { orderId },
+  })
+  if (error) return { error }
+  if (!data?.checkoutUrl) return { error: new Error(data?.error || 'No checkoutUrl returned from Paymob') }
+  return { data }
+}

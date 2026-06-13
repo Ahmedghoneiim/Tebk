@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
-import { createOrder } from '@/services/orderService'
+import { createOrder, createPaymobPayment } from '@/services/orderService'
 import { checkoutSchema } from '@/utils/validators'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,15 +38,33 @@ export function CheckoutPage() {
       phone:         user?.phone        || '',
       address:       user?.address      || '',
       city:          user?.city         || '',
-      paymentMethod: 'cash_on_delivery',
+      paymentMethod: 'cash',
     },
   })
 
   const onSubmit = async (data) => {
     setLoading(true)
     const { data: order, error } = await createOrder(user.id, { ...data, total }, items)
+    if (error) {
+      setLoading(false)
+      toast.error('Failed to place order. Please try again.')
+      return
+    }
+
+    if (data.paymentMethod === 'card') {
+      const { data: paymobData, error: paymobError } = await createPaymobPayment(order.id)
+      setLoading(false)
+      if (paymobError) {
+        toast.error('Payment gateway error. Please try again.')
+        return
+      }
+      clearCart()
+      queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
+      window.location.href = paymobData.checkoutUrl
+      return
+    }
+
     setLoading(false)
-    if (error) { toast.error('Failed to place order. Please try again.'); return }
     clearCart()
     queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
     navigate(`/order-success/${order?.id}`)
@@ -102,7 +120,7 @@ export function CheckoutPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { value: 'cash', label: 'Cash on Delivery', desc: 'Pay when you receive your order' },
-                { value: 'bank', label: 'Bank Transfer',    desc: 'Transfer to our account after placing order' },
+                { value: 'card', label: 'Pay by Card',       desc: 'Secure online payment via Paymob' },
               ].map(({ value, label, desc }) => (
                 <label
                   key={value}
