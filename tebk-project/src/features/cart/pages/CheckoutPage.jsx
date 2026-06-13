@@ -6,7 +6,7 @@ import { Loader2 } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
-import { createOrder, createPaymobPayment } from '@/services/orderService'
+import { createOrder } from '@/services/orderService'
 import { checkoutSchema } from '@/utils/validators'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -38,34 +38,18 @@ export function CheckoutPage() {
       phone:         user?.phone        || '',
       address:       user?.address      || '',
       city:          user?.city         || '',
-      paymentMethod: 'cash',
+      paymentMethod: 'cash_on_delivery',
     },
   })
 
   const onSubmit = async (data) => {
     setLoading(true)
-    try {
-      const { data: order, error } = await createOrder(user.id, { ...data, total }, items)
-      if (error) throw error
-
-      if (data.paymentMethod === 'card') {
-        const { data: paymob, error: paymobError } = await createPaymobPayment(order.id)
-        if (paymobError) throw paymobError
-        clearCart()
-        queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
-        window.location.href = paymob.checkoutUrl
-        return
-      }
-
-      clearCart()
-      queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
-      navigate(`/order-success/${order.id}`)
-    } catch (err) {
-      console.error('[Checkout] Error:', err)
-      toast.error(err?.message || 'Failed to place order. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+    const { data: order, error } = await createOrder(user.id, { ...data, total }, items)
+    setLoading(false)
+    if (error) { toast.error('Failed to place order. Please try again.'); return }
+    clearCart()
+    queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
+    navigate(`/order-success/${order?.id}`)
   }
 
   if (items.length === 0) return null
@@ -118,7 +102,7 @@ export function CheckoutPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
                 { value: 'cash', label: 'Cash on Delivery', desc: 'Pay when you receive your order' },
-                { value: 'card', label: 'Pay by Card',      desc: 'Secure online payment via Paymob' },
+                { value: 'bank', label: 'Bank Transfer',    desc: 'Transfer to our account after placing order' },
               ].map(({ value, label, desc }) => (
                 <label
                   key={value}
