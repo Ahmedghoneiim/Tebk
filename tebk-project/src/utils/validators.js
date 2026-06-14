@@ -15,20 +15,13 @@ const fullNameField = z
     'Please enter your full name in English (at least two words).'
   )
 
-const phoneField = z
-  .string()
-  .regex(
-    /^(01[0125][0-9]{8})$/,
-    'Please enter a valid 11-digit Egyptian phone number.'
-  )
+const PHONE_RE    = /^(\+?20)?0?1[0125][0-9]{8}$/
+const PHONE_ERROR = 'Please enter a valid Egyptian phone number.'
 
-const optionalPhone = z
-  .string()
-  .refine(
-    val => val === '' || /^(01[0125][0-9]{8})$/.test(val),
-    { message: 'Please enter a valid 11-digit Egyptian phone number.' }
-  )
-  .optional()
+const phoneField = z.string().regex(PHONE_RE, PHONE_ERROR)
+
+// Profile phone is free — no forced format, any string or empty is accepted.
+const optionalPhone = z.string().optional()
 
 const emailField = z
   .string()

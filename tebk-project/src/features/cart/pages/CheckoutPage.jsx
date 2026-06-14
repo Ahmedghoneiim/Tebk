@@ -92,8 +92,10 @@ export function CheckoutPage() {
                 {errors.email && <p className="text-xs text-danger mt-1">{errors.email.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink mb-1.5">Phone</label>
-                <Input placeholder="+20 10x xxx xxxx" {...register('phone')} />
+                <label className="block text-sm font-medium text-ink mb-1.5">
+                  Phone <span className="text-xs font-normal text-muted">(+2)</span>
+                </label>
+                <Input placeholder="Enter your number" {...register('phone')} />
                 {errors.phone && <p className="text-xs text-danger mt-1">{errors.phone.message}</p>}
               </div>
               <div className="sm:col-span-2">
