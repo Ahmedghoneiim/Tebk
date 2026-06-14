@@ -24,6 +24,8 @@ export function AdminPayments() {
   
 
 
+
+
   const payments = useMemo(() => (data?.data || []).map(order => ({
     id:       `PAY-${order.id.slice(0, 8).toUpperCase()}`,
     customer: order.shipping_name || order.profiles?.full_name || 'Unknown',
