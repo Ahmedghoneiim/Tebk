@@ -1,42 +1,56 @@
-import { CreditCard, TrendingUp, Clock, CheckCircle, XCircle } from 'lucide-react'
+import { useMemo } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { CreditCard, TrendingUp, Clock, CheckCircle, XCircle, Loader2 } from 'lucide-react'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { StatCard } from '@/components/shared/StatCard'
+import { fetchAllOrders } from '@/services/orderService'
 import { formatCurrency, formatDate } from '@/utils/format'
-
-const MOCK_PAYMENTS = [
-  { id: 'PAY-001', order: 'ORD-8A2C', customer: 'Dr. Ahmed Hassan', amount: 3200, method: 'Paymob Card', status: 'completed', date: '2025-05-18T10:30:00Z' },
-  { id: 'PAY-002', order: 'ORD-4F7B', customer: 'Al Nour Clinic', amount: 7800, method: 'Paymob Wallet', status: 'completed', date: '2025-05-17T14:15:00Z' },
-  { id: 'PAY-003', order: 'ORD-2E9D', customer: 'Dr. Sara Khaled', amount: 1550, method: 'Paymob Card', status: 'pending', date: '2025-05-17T09:00:00Z' },
-  { id: 'PAY-004', order: 'ORD-6C1A', customer: 'Shifa Medical', amount: 4100, method: 'Paymob Card', status: 'failed', date: '2025-05-16T16:45:00Z' },
-  { id: 'PAY-005', order: 'ORD-3B5E', customer: 'City Hospital', amount: 12600, method: 'Bank Transfer', status: 'completed', date: '2025-05-15T11:20:00Z' },
-]
+import { getOrderTotal, getPaymentMethodLabel } from '@/utils/payments'
 
 const STATUS = {
   completed: { label: 'Completed', cls: 'bg-emerald-50 text-emerald-700', icon: CheckCircle },
-  pending:   { label: 'Pending',   cls: 'bg-amber-50 text-amber-700',   icon: Clock },
-  failed:    { label: 'Failed',    cls: 'bg-red-50 text-red-700',       icon: XCircle },
+  pending:   { label: 'Pending',   cls: 'bg-amber-50 text-amber-700',     icon: Clock },
+  failed:    { label: 'Failed',    cls: 'bg-rose-50 text-rose-700',       icon: XCircle },
 }
 
 export function AdminPayments() {
-  usePageTitle('Payments — Admin')
+  usePageTitle('Payments - Admin')
 
-  const total    = MOCK_PAYMENTS.reduce((s, p) => p.status === 'completed' ? s + p.amount : s, 0)
-  const pending  = MOCK_PAYMENTS.filter(p => p.status === 'pending').length
-  const failed   = MOCK_PAYMENTS.filter(p => p.status === 'failed').length
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-orders'],
+    queryFn: fetchAllOrders,
+  })
+
+  const payments = useMemo(() => (data?.data || []).map(order => ({
+    id:       `PAY-${order.id.slice(0, 8).toUpperCase()}`,
+    customer: order.shipping_name || order.profiles?.full_name || 'Unknown',
+    amount:   getOrderTotal(order),
+    method:   getPaymentMethodLabel(order.payment_method),
+    status:   order.payment_status === 'paid'
+      ? 'completed'
+      : order.payment_status === 'failed'
+        ? 'failed'
+        : 'pending',
+    date: order.created_at,
+  })), [data?.data])
+
+  const total   = payments.reduce((s, p) => p.status === 'completed' ? s + p.amount : s, 0)
+  const pending = payments.filter(p => p.status === 'pending').length
+  const failed  = payments.filter(p => p.status === 'failed').length
 
   return (
     <div className="space-y-6">
       <div className="flex items-start justify-between">
         <h1 className="section-title">Payments</h1>
         <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-secondary/10 text-secondary border border-secondary/20">
-          <CreditCard className="w-3.5 h-3.5" /> Paymob Integration
+          <CreditCard className="w-3.5 h-3.5" /> Paymob Card + COD
         </span>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard title="Revenue Collected" value={formatCurrency(total)} icon={TrendingUp} trend={8} />
-        <StatCard title="Pending"            value={pending}              icon={Clock} />
-        <StatCard title="Failed"             value={failed}               icon={XCircle} />
+        <StatCard title="Revenue Collected" value={isLoading ? '…' : formatCurrency(total)} icon={TrendingUp} trend={8} />
+        <StatCard title="Pending"           value={isLoading ? '…' : pending}              icon={Clock} />
+        <StatCard title="Failed"            value={isLoading ? '…' : failed}               icon={XCircle} />
       </div>
 
       <div className="card p-0 overflow-hidden">
@@ -56,23 +70,36 @@ export function AdminPayments() {
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              {MOCK_PAYMENTS.map(p => {
-                const { label, cls } = STATUS[p.status]
-                return (
-                  <tr key={p.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-muted">{p.id}</td>
-                    <td className="px-6 py-4 font-medium text-ink">{p.customer}</td>
-                    <td className="px-6 py-4 text-muted">{p.method}</td>
-                    <td className="px-6 py-4 text-right font-semibold text-primary">{formatCurrency(p.amount)}</td>
-                    <td className="px-6 py-4">
-                      <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${cls}`}>
-                        {label}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-muted">{formatDate(p.date)}</td>
-                  </tr>
-                )
-              })}
+              {isLoading ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-10 text-center text-muted">
+                    <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-secondary" />
+                    Loading payment records…
+                  </td>
+                </tr>
+              ) : payments.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="px-6 py-10 text-center text-muted">No payment records.</td>
+                </tr>
+              ) : (
+                payments.map(p => {
+                  const { label, cls } = STATUS[p.status]
+                  return (
+                    <tr key={p.id} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 font-mono text-xs text-muted">{p.id}</td>
+                      <td className="px-6 py-4 font-medium text-ink">{p.customer}</td>
+                      <td className="px-6 py-4 text-muted">{p.method}</td>
+                      <td className="px-6 py-4 text-right font-semibold text-primary">{formatCurrency(p.amount)}</td>
+                      <td className="px-6 py-4">
+                        <span className={`inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold ${cls}`}>
+                          {label}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-muted">{formatDate(p.date)}</td>
+                    </tr>
+                  )
+                })
+              )}
             </tbody>
           </table>
         </div>

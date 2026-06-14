@@ -18,15 +18,15 @@ const fullNameField = z
 const phoneField = z
   .string()
   .regex(
-    /^\+2(01[0125][0-9]{8})$/,
-    'Please enter a valid Egyptian phone number starting with +2 (e.g. +20123456789).'
+    /^(01[0125][0-9]{8})$/,
+    'Please enter a valid 11-digit Egyptian phone number.'
   )
 
 const optionalPhone = z
   .string()
   .refine(
-    val => val === '' || /^\+2(01[0125][0-9]{8})$/.test(val),
-    { message: 'Please enter a valid Egyptian phone number starting with +2 (e.g. +20123456789).' }
+    val => val === '' || /^(01[0125][0-9]{8})$/.test(val),
+    { message: 'Please enter a valid 11-digit Egyptian phone number.' }
   )
   .optional()
 
@@ -51,7 +51,7 @@ export const registerSchema = z
     email:           emailField,
     password:        passwordField,
     confirmPassword: z.string(),
-    role:            z.enum(['client', 'supplier']).default('client'),
+    role:            z.enum(['clinic', 'supplier']).default('clinic'),
     clinicName:      z.string().optional(),
   })
   .refine(d => d.password === d.confirmPassword, {
@@ -80,7 +80,7 @@ export const checkoutSchema = z.object({
   address:       z.string().min(5, 'Please enter a valid address.'),
   city:          z.string().min(2, 'Please enter a city.'),
   notes:         z.string().optional(),
-  paymentMethod: z.enum(['cash', 'bank']).default('cash'),
+  paymentMethod: z.enum(['card', 'cash']).default('cash'), // Supported values are card & cash
 })
 
 export const profileSchema = z.object({

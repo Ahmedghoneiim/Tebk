@@ -4,14 +4,7 @@ import { CreditCard, TrendingUp, Clock, XCircle } from 'lucide-react'
 import { StatCard } from '@/components/StatCard'
 import { fetchAllOrders } from '@/services/adminOrderService'
 import { formatCurrency, formatDate } from '@/lib/utils'
-
-const STATUS_MAP = {
-  delivered: 'completed',
-  shipped:   'completed',
-  processing:'pending',
-  pending:   'pending',
-  cancelled: 'failed',
-}
+import { getOrderTotal, getPaymentMethodLabel, normalizePaymentStatus } from '@/lib/payments'
 
 const STATUS_STYLES = {
   completed: 'badge-success',
@@ -41,11 +34,11 @@ export function Payments() {
   const payments = useMemo(() => orders.map(o => ({
     id:         `PAY-${o.id.toString().slice(0, 6).toUpperCase()}`,
     orderId:    o.id,
-    customer:   o.profiles?.clinic_name || o.profiles?.full_name || o.shipping_name || '—',
+    customer:   o.profiles?.clinic_name || o.profiles?.full_name || o.shipping_name || 'Unknown',
     email:      o.profiles?.email || '',
-    amount:     Number(o.total),
-    method:     o.payment_method?.replace('_', ' ') || 'Unknown',
-    status:     STATUS_MAP[o.status] || 'pending',
+    amount:     getOrderTotal(o),
+    method:     getPaymentMethodLabel(o.payment_method),
+    status:     normalizePaymentStatus(o.payment_status),
     date:       o.created_at,
   })), [orders])
 

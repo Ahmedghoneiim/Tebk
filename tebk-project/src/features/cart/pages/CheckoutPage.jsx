@@ -3,22 +3,22 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
 import { Loader2 } from 'lucide-react'
-import { useQueryClient } from '@tanstack/react-query'
 import { useCartStore } from '@/store/cartStore'
 import { useAuthStore } from '@/store/authStore'
-import { createOrder } from '@/services/orderService'
+import { createOrder, createPaymobCardPayment } from '@/services/orderService'
 import { checkoutSchema } from '@/utils/validators'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { toast } from '@/store/notificationStore'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 export function CheckoutPage() {
+  const { t }                = useTranslation()
   const { items, clearCart } = useCartStore()
   const { user }             = useAuthStore()
   const navigate             = useNavigate()
-  const queryClient          = useQueryClient()
   const [loading, setLoading] = useState(false)
 
   usePageTitle('Checkout')
@@ -38,17 +38,34 @@ export function CheckoutPage() {
       phone:         user?.phone        || '',
       address:       user?.address      || '',
       city:          user?.city         || '',
-      paymentMethod: 'cash_on_delivery',
+      paymentMethod: 'cash',
     },
   })
 
   const onSubmit = async (data) => {
     setLoading(true)
     const { data: order, error } = await createOrder(user.id, { ...data, total }, items)
+    if (error) {
+      setLoading(false)
+      toast.error(error.message || 'Failed to place order.')
+      return
+    }
+
+    if (data.paymentMethod === 'card') {
+      const { data: paymob, error: paymobError } = await createPaymobCardPayment(order.id)
+      setLoading(false)
+      if (paymobError) {
+        console.error('Paymob error details:', paymobError.details)
+        toast.error(paymobError.message || 'Could not start Paymob payment.')
+        return
+      }
+      clearCart()
+      window.location.assign(paymob.checkoutUrl) // Redirects user directly to Paymob Checkout
+      return
+    }
+
     setLoading(false)
-    if (error) { toast.error('Failed to place order. Please try again.'); return }
     clearCart()
-    queryClient.invalidateQueries({ queryKey: ['orders', user.id] })
     navigate(`/order-success/${order?.id}`)
   }
 
@@ -98,11 +115,11 @@ export function CheckoutPage() {
 
           {/* Payment */}
           <div className="card">
-            <h2 className="font-semibold text-primary mb-4">Payment Method</h2>
+            <h2 className="font-semibold text-primary mb-4">{t('checkout.payment_method')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { value: 'cash', label: 'Cash on Delivery', desc: 'Pay when you receive your order' },
-                { value: 'bank', label: 'Bank Transfer',    desc: 'Transfer to our account after placing order' },
+                { value: 'cash', label: t('checkout.cash_on_delivery'), desc: t('checkout.cash_desc') },
+                { value: 'card', label: t('checkout.card_payment'),     desc: t('checkout.card_desc') },
               ].map(({ value, label, desc }) => (
                 <label
                   key={value}
@@ -119,7 +136,7 @@ export function CheckoutPage() {
           </div>
 
           <Button type="submit" className="w-full" size="lg" disabled={loading}>
-            {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> Placing Order…</> : `Place Order — ${formatCurrency(total)}`}
+            {loading ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('checkout.placing')}</> : `${t('checkout.place_order')} — ${formatCurrency(total)}`}
           </Button>
         </form>
 
