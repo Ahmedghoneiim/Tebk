@@ -1,10 +1,9 @@
-import { useParams, useNavigate } from 'react-router-dom'
+﻿import { useParams, useNavigate } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Package, ShoppingCart, ArrowLeft, CheckCircle } from 'lucide-react'
+import { Package, ShoppingCart, ArrowLeft, CheckCircle, Tag, Layers } from 'lucide-react'
 import { useCartStore } from '@/store/cartStore'
 import { toast } from '@/store/notificationStore'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { fetchBundleById } from '@/services/bundleService'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
@@ -13,47 +12,17 @@ import { cl } from '@/utils/cloudinary'
 function BundleDetailSkeleton() {
   return (
     <div className="page-container py-8 animate-pulse">
-      <div className="h-5 w-32 bg-clinical rounded mb-6" />
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="card space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-clinical flex-shrink-0" />
-              <div className="flex-1 space-y-2">
-                <div className="h-6 bg-clinical rounded w-2/3" />
-                <div className="h-4 bg-clinical rounded w-1/3" />
-              </div>
-            </div>
-            <div className="space-y-2">
-              <div className="h-3 bg-clinical rounded" />
-              <div className="h-3 bg-clinical rounded w-5/6" />
-            </div>
-          </div>
-          <div className="card space-y-3">
-            <div className="h-5 bg-clinical rounded w-1/4 mb-4" />
-            {[1, 2, 3, 4].map(i => (
-              <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-clinical">
-                <div className="w-5 h-5 rounded-full bg-white/60 flex-shrink-0" />
-                <div className="flex-1 space-y-1">
-                  <div className="h-3 bg-white/60 rounded w-3/4" />
-                  <div className="h-2 bg-white/60 rounded w-1/2" />
-                </div>
-                <div className="space-y-1 text-right">
-                  <div className="h-3 bg-white/60 rounded w-8" />
-                  <div className="h-2 bg-white/60 rounded w-12" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div className="space-y-4">
-          <div className="card space-y-3">
-            <div className="h-5 bg-clinical rounded w-1/3 mb-4" />
-            <div className="h-4 bg-clinical rounded" />
-            <div className="h-4 bg-clinical rounded" />
-            <div className="h-4 bg-clinical rounded" />
-            <div className="h-10 bg-clinical rounded-lg mt-4" />
-          </div>
+      <div className="h-5 w-32 bg-clinical rounded mb-8" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="rounded-3xl bg-clinical" style={{ height: '460px' }} />
+        <div className="space-y-4 pt-2">
+          <div className="h-7 bg-clinical rounded-lg w-3/4" />
+          <div className="h-4 bg-clinical rounded w-1/3" />
+          <div className="h-3 bg-clinical rounded mt-4" />
+          <div className="h-3 bg-clinical rounded w-5/6" />
+          <div className="h-3 bg-clinical rounded w-4/6" />
+          <div className="h-24 bg-clinical rounded-2xl mt-6" />
+          <div className="h-12 bg-clinical rounded-xl mt-4" />
         </div>
       </div>
     </div>
@@ -98,95 +67,136 @@ export function BundleDetailPage() {
   const savings = bundle.original_price ? bundle.original_price - bundle.bundle_price : null
 
   return (
-    <div className="page-container py-8">
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-2 text-muted hover:text-ink text-sm mb-6 transition-colors"
-      >
-        <ArrowLeft className="w-4 h-4" /> Back to Bundles
-      </button>
+    <div className="min-h-screen" style={{ background: 'linear-gradient(140deg, #CBEDFC 0%, #daeffe 55%, #C1E3C4 100%)' }}>
+      <div className="page-container py-8">
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="card">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-14 h-14 rounded-2xl bg-clinical flex items-center justify-center flex-shrink-0 overflow-hidden">
-                {bundle.image_url
-                  ? <img src={cl.thumb(bundle.image_url, 200)} alt={bundle.name} className="w-full h-full object-cover rounded-2xl" />
-                  : <Package className="w-7 h-7 text-secondary" />
-                }
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <h1 className="text-2xl font-display font-bold text-primary">{bundle.name}</h1>
-                  {bundle.savings_pct && (
-                    <Badge variant="success">Save {bundle.savings_pct}%</Badge>
-                  )}
-                </div>
-                {bundle.category && (
-                  <p className="text-sm text-muted capitalize">{bundle.category} clinic bundle</p>
-                )}
-              </div>
-            </div>
-            <p className="text-muted leading-relaxed">{bundle.description}</p>
-          </div>
+        {/* Back */}
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 text-sm font-medium mb-8 transition-colors hover:text-secondary"
+          style={{ color: '#1a3363' }}
+        >
+          <ArrowLeft className="w-4 h-4" /> Back to Bundles
+        </button>
 
-          <div className="card">
-            <h2 className="font-semibold text-primary mb-4">What's Included</h2>
-            {bundle.items && bundle.items.length > 0 ? (
-              <div className="space-y-3">
-                {bundle.items.map((item, i) => (
-                  <div key={i} className="flex items-center gap-4 p-3 rounded-xl bg-clinical">
-                    <CheckCircle className="w-5 h-5 text-secondary flex-shrink-0" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-ink truncate">{item.name}</p>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <p className="text-sm font-semibold text-primary">×{item.quantity}</p>
-                      <p className="text-xs text-muted">{formatCurrency(item.price)} / unit</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+        {/* ── Main: image LEFT + info RIGHT ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+
+          {/* Image */}
+          <div
+            className="rounded-3xl overflow-hidden relative"
+            style={{ height: '460px', boxShadow: '0 8px 40px rgba(33,51,96,0.13)' }}
+          >
+            {bundle.image_url ? (
+              <img
+                src={cl.combined(bundle.image_url, 900, 920)}
+                alt={bundle.name}
+                className="w-full h-full object-cover"
+              />
             ) : (
-              <p className="text-sm text-muted italic">Details available on request. Contact your account manager for full specifications.</p>
+              <div
+                className="w-full h-full flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #c8edf5, #b5e8e0)' }}
+              >
+                <Package className="w-24 h-24" style={{ color: '#4ea055', opacity: 0.35 }} />
+              </div>
+            )}
+
+            {/* Save badge */}
+            {bundle.savings_pct && (
+              <div
+                className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold shadow-lg"
+                style={{ background: '#C1E3C4', color: '#1a3363' }}
+              >
+                <Tag className="w-3.5 h-3.5" />
+                Save {bundle.savings_pct}%
+              </div>
             )}
           </div>
-        </div>
 
-        <div className="space-y-4">
-          <div className="card">
-            <h2 className="font-semibold text-primary mb-4">Pricing</h2>
-            <div className="space-y-2 mb-4 text-sm">
-              {bundle.original_price && (
-                <div className="flex justify-between text-muted">
-                  <span>Individual price</span>
-                  <span className="line-through">{formatCurrency(bundle.original_price)}</span>
+          {/* Info panel */}
+          <div className="flex flex-col justify-between py-2">
+            <div>
+              {/* Category pill */}
+              {bundle.category && (
+                <span
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider px-3 py-1 rounded-full mb-4"
+                  style={{ background: 'rgba(193,227,196,0.12)', color: '#4ea055' }}
+                >
+                  <Layers className="w-3 h-3" />
+                  {bundle.category} clinic bundle
+                </span>
+              )}
+
+              <h1 className="text-3xl font-display font-bold leading-tight mb-3" style={{ color: '#1a3363' }}>
+                {bundle.name}
+              </h1>
+
+              <p className="text-gray-500 leading-relaxed mb-6">{bundle.description}</p>
+
+              {/* Items preview */}
+              {bundle.items && bundle.items.length > 0 && (
+                <div
+                  className="rounded-2xl p-4 mb-6"
+                  style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.9)' }}
+                >
+                  <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#1a3363' }}>
+                    Included Products
+                  </p>
+                  <ul className="space-y-2">
+                    {bundle.items.map((item, i) => (
+                      <li key={i} className="flex items-center gap-2 text-sm">
+                        <CheckCircle className="w-4 h-4 shrink-0" style={{ color: '#4ea055' }} />
+                        <span className="text-gray-600 flex-1">{item.name}</span>
+                        <span className="font-semibold text-gray-500">×{item.quantity}</span>
+                        <span className="text-gray-400 text-xs">{formatCurrency(item.price)}/unit</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
-              {savings && (
-                <div className="flex justify-between text-success font-medium">
-                  <span>Bundle discount</span>
-                  <span>−{formatCurrency(savings)}</span>
-                </div>
-              )}
-              <div className="border-t border-border pt-2 flex justify-between font-bold text-primary text-lg">
-                <span>Bundle price</span>
-                <span>{formatCurrency(bundle.bundle_price)}</span>
-              </div>
             </div>
 
-            <Button className="w-full" size="lg" onClick={handleAddBundle}>
-              <ShoppingCart className="w-4 h-4" /> Add Bundle to Cart
-            </Button>
-          </div>
+            {/* Pricing + CTA */}
+            <div
+              className="rounded-2xl p-5"
+              style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.9)' }}
+            >
+              <div className="space-y-1.5 mb-4 text-sm">
+                {bundle.original_price && (
+                  <div className="flex justify-between text-gray-400">
+                    <span>Individual price</span>
+                    <span className="line-through">{formatCurrency(bundle.original_price)}</span>
+                  </div>
+                )}
+                {savings && (
+                  <div className="flex justify-between font-medium" style={{ color: '#4ea055' }}>
+                    <span>Bundle discount</span>
+                    <span>−{formatCurrency(savings)}</span>
+                  </div>
+                )}
+                <div className="flex justify-between font-bold text-xl pt-2 border-t border-gray-100" style={{ color: '#1a3363' }}>
+                  <span>Bundle price</span>
+                  <span>{formatCurrency(bundle.bundle_price)}</span>
+                </div>
+              </div>
 
-          <div className="card">
-            <p className="text-xs text-muted leading-relaxed">
-              Bundle prices are locked in for 30 days. Individual item availability may vary. Contact your account manager for custom bundles above 10 units.
-            </p>
+              <button
+                onClick={handleAddBundle}
+                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white font-semibold text-sm transition-all duration-200 hover:opacity-90 hover:scale-[1.02]"
+                style={{ background: '#1a3363' }}
+              >
+                <ShoppingCart className="w-5 h-5" />
+                Add Bundle to Cart
+              </button>
+
+              <p className="text-center text-xs text-gray-400 mt-3">
+                Prices locked for 30 days · Contact your account manager for bulk orders
+              </p>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   )

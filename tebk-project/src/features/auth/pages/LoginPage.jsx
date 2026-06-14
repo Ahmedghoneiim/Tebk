@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
@@ -15,12 +15,12 @@ function MedicalIllustration() {
       <rect x="70" y="55" width="160" height="210" rx="14" fill="white" filter="url(#shadow)"/>
       <defs>
         <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#21cdc0" floodOpacity="0.18"/>
+          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#C1E3C4" floodOpacity="0.18"/>
         </filter>
       </defs>
 
       {/* Clipboard clip */}
-      <rect x="110" y="40" width="80" height="26" rx="8" fill="#21cdc0"/>
+      <rect x="110" y="40" width="80" height="26" rx="8" fill="#C1E3C4"/>
       <circle cx="150" cy="43" r="10" fill="#1aada1"/>
       <circle cx="150" cy="43" r="5" fill="#e8f7f6"/>
 
@@ -28,7 +28,7 @@ function MedicalIllustration() {
       <rect x="88" y="88" width="76" height="90" rx="8" fill="#1a3363"/>
 
       {/* Doctor avatar */}
-      <circle cx="126" cy="112" r="18" fill="#21cdc0"/>
+      <circle cx="126" cy="112" r="18" fill="#C1E3C4"/>
       <circle cx="126" cy="107" r="9" fill="white" opacity="0.9"/>
       <ellipse cx="126" cy="128" rx="14" ry="9" fill="white" opacity="0.9"/>
 
@@ -38,31 +38,31 @@ function MedicalIllustration() {
       <rect x="172" y="120" width="40" height="5" rx="2.5" fill="#e0f5f4"/>
 
       {/* Separator lines */}
-      <line x1="88" y1="196" x2="212" y2="196" stroke="#21cdc0" strokeWidth="4" strokeLinecap="round"/>
+      <line x1="88" y1="196" x2="212" y2="196" stroke="#C1E3C4" strokeWidth="4" strokeLinecap="round"/>
       <line x1="88" y1="212" x2="180" y2="212" stroke="#b2e8e5" strokeWidth="4" strokeLinecap="round"/>
 
       {/* Stethoscope */}
-      <circle cx="148" cy="258" r="14" fill="none" stroke="#21cdc0" strokeWidth="3.5"/>
-      <path d="M162,258 C182,258 196,244 196,226 C196,206 180,194 162,194" stroke="#21cdc0" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
-      <circle cx="162" cy="190" r="7" fill="#21cdc0"/>
+      <circle cx="148" cy="258" r="14" fill="none" stroke="#C1E3C4" strokeWidth="3.5"/>
+      <path d="M162,258 C182,258 196,244 196,226 C196,206 180,194 162,194" stroke="#C1E3C4" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+      <circle cx="162" cy="190" r="7" fill="#C1E3C4"/>
       <circle cx="162" cy="190" r="3.5" fill="white"/>
-      <path d="M134,258 C114,258 100,244 100,226 C100,206 116,194 134,194" stroke="#21cdc0" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
-      <circle cx="134" cy="190" r="7" fill="#21cdc0"/>
+      <path d="M134,258 C114,258 100,244 100,226 C100,206 116,194 134,194" stroke="#C1E3C4" strokeWidth="3.5" fill="none" strokeLinecap="round"/>
+      <circle cx="134" cy="190" r="7" fill="#C1E3C4"/>
       <circle cx="134" cy="190" r="3.5" fill="white"/>
 
       {/* Medicine blisters - left */}
       <rect x="20" y="140" width="54" height="30" rx="6" fill="#c8eeec" transform="rotate(-15 20 140)"/>
-      <circle cx="30" cy="152" r="7" fill="#21cdc0" opacity="0.7"/>
-      <circle cx="48" cy="148" r="7" fill="#21cdc0" opacity="0.7"/>
-      <circle cx="66" cy="144" r="7" fill="#21cdc0" opacity="0.7"/>
+      <circle cx="30" cy="152" r="7" fill="#C1E3C4" opacity="0.7"/>
+      <circle cx="48" cy="148" r="7" fill="#C1E3C4" opacity="0.7"/>
+      <circle cx="66" cy="144" r="7" fill="#C1E3C4" opacity="0.7"/>
 
       {/* Pills scattered */}
-      <ellipse cx="44" cy="192" rx="9" ry="5" rx="9" ry="5" fill="#21cdc0" opacity="0.5" transform="rotate(-30 44 192)"/>
+      <ellipse cx="44" cy="192" rx="9" ry="5" rx="9" ry="5" fill="#C1E3C4" opacity="0.5" transform="rotate(-30 44 192)"/>
       <ellipse cx="56" cy="208" rx="9" ry="5" fill="#b2e8e5" transform="rotate(20 56 208)"/>
-      <ellipse cx="32" cy="220" rx="9" ry="5" fill="#21cdc0" opacity="0.4" transform="rotate(-10 32 220)"/>
+      <ellipse cx="32" cy="220" rx="9" ry="5" fill="#C1E3C4" opacity="0.4" transform="rotate(-10 32 220)"/>
 
       {/* Medicine box - right */}
-      <rect x="228" y="200" width="56" height="72" rx="8" fill="#21cdc0" opacity="0.85"/>
+      <rect x="228" y="200" width="56" height="72" rx="8" fill="#C1E3C4" opacity="0.85"/>
       <rect x="234" y="226" width="44" height="38" rx="5" fill="white" opacity="0.35"/>
       <circle cx="244" cy="218" r="5" fill="white" opacity="0.6"/>
       <circle cx="256" cy="218" r="5" fill="white" opacity="0.6"/>
@@ -109,8 +109,9 @@ export function LoginPage() {
 
   useEffect(() => { return () => clearError() }, [])
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm({
     resolver: zodResolver(loginSchema),
+    mode: 'onChange',
   })
 
   const onSubmit = async (data) => {
@@ -140,20 +141,20 @@ export function LoginPage() {
           {/* Dots top-left */}
           <div className="absolute top-8 left-8 grid grid-cols-5 gap-2.5">
             {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#21cdc0', opacity: 0.45 }} />
+              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#C1E3C4', opacity: 0.45 }} />
             ))}
           </div>
 
           {/* Dots bottom-right */}
           <div className="absolute bottom-14 right-6 grid grid-cols-5 gap-2.5">
             {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#21cdc0', opacity: 0.45 }} />
+              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#C1E3C4', opacity: 0.45 }} />
             ))}
           </div>
 
           {/* Teal wave – bottom right corner */}
           <svg className="absolute bottom-0 right-0" width="110" height="110" viewBox="0 0 110 110">
-            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#21cdc0" opacity="0.35"/>
+            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#C1E3C4" opacity="0.35"/>
           </svg>
 
           {/* Illustration */}
@@ -229,9 +230,17 @@ export function LoginPage() {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white text-sm font-semibold transition-opacity disabled:opacity-60 mt-1"
-                style={{ background: '#21cdc0' }}
+                disabled={loading || !isValid}
+                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 ease-in-out mt-1 ${
+                  isValid && !loading
+                    ? 'hover:scale-[1.02] hover:shadow-lg hover:opacity-90'
+                    : 'cursor-not-allowed'
+                }`}
+                style={{
+                  background: isValid ? '#C1E3C4' : '#e5e7eb',
+                  color:      isValid ? '#1a3363' : '#9ca3af',
+                  opacity:    loading ? 0.7 : 1,
+                }}
               >
                 {loading
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Signing in…</>

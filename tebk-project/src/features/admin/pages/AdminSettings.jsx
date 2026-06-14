@@ -1,4 +1,4 @@
-import { Settings, Globe, Bell, ShieldCheck, CreditCard, Mail } from 'lucide-react'
+﻿import { Settings, Globe, Bell, ShieldCheck, CreditCard, Mail } from 'lucide-react'
 import { usePageTitle } from '@/hooks/usePageTitle'
 
 function SettingRow({ label, description, children }) {
@@ -92,7 +92,7 @@ export function AdminSettings() {
             className="flex-1 text-sm border border-border rounded-xl px-4 py-2.5 focus:outline-none focus:border-secondary transition-colors"
           />
           <button className="px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity"
-            style={{ background: 'linear-gradient(90deg, #21cdc0, #1bb3a7)' }}>
+            style={{ background: 'linear-gradient(90deg, #C1E3C4, #1bb3a7)' }}>
             Save
           </button>
         </div>

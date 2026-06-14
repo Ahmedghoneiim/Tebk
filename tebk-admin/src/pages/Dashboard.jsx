@@ -239,7 +239,7 @@ export function Dashboard() {
                 : recentOrders.length === 0
                   ? <tr><td colSpan={6} className="px-4 py-10 text-center text-muted">No orders yet.</td></tr>
                   : recentOrders.map(o => {
-                    const isB2B   = o.profiles?.role === 'clinic_owner' || o.profiles?.role === 'supplier'
+                    const isB2B   = o.profiles?.role === 'client' || o.profiles?.role === 'supplier'
                     const type    = isB2B ? 'B2B' : 'B2C'
                     const total   = Number(o.total)
                     let moqLabel  = 'N/A'

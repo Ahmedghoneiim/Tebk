@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Outlet, NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, ShoppingBag, Package, Warehouse, Users,
@@ -48,7 +48,7 @@ export function AdminPanelLayout() {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10 shrink-0">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#21cdc0' }}>
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#C1E3C4' }}>
             <span className="text-white font-bold text-base">T</span>
           </div>
           <div className="min-w-0">
@@ -89,7 +89,7 @@ export function AdminPanelLayout() {
         <div className="px-3 py-4 border-t border-white/10 shrink-0">
           <div className="flex items-center gap-3 px-3 py-2 rounded-xl mb-1">
             <Avatar className="h-8 w-8 shrink-0">
-              <AvatarFallback className="text-xs font-bold" style={{ background: '#21cdc0', color: '#fff' }}>
+              <AvatarFallback className="text-xs font-bold" style={{ background: '#C1E3C4', color: '#fff' }}>
                 {initials}
               </AvatarFallback>
             </Avatar>

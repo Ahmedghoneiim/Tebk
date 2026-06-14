@@ -1,4 +1,4 @@
-import { BarChart2, TrendingUp, ShoppingBag, Users, DollarSign } from 'lucide-react'
+﻿import { BarChart2, TrendingUp, ShoppingBag, Users, DollarSign } from 'lucide-react'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { StatCard } from '@/components/shared/StatCard'
 import { formatCurrency } from '@/utils/format'
@@ -48,7 +48,7 @@ export function AdminReports() {
                 className="w-full rounded-t-lg transition-all duration-500"
                 style={{
                   height: `${(revenue / MAX_REV) * 100}%`,
-                  background: 'linear-gradient(180deg, #21cdc0, #1bb3a7)',
+                  background: 'linear-gradient(180deg, #C1E3C4, #1bb3a7)',
                 }}
               />
               <p className="text-xs text-muted font-medium">{month}</p>

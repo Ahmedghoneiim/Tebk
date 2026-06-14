@@ -60,6 +60,7 @@ export const MOCK_BUNDLES = [
     savings_pct:    20,
     category: 'general',
     featured: true,
+    image_url: 'https://res.cloudinary.com/dbdybuins/image/upload/tebk/bundle/y2r7um4ee1kg1uhhkgss.jpg',
     items: [
       { product_id: 'p1', name: 'Nitrile Gloves Box 100', quantity: 5,  price: 120 },
       { product_id: 'p2', name: 'Surgical Masks Box 50',  quantity: 3,  price: 85  },
@@ -77,6 +78,7 @@ export const MOCK_BUNDLES = [
     savings_pct:    22,
     category: 'icu',
     featured: true,
+    image_url: 'https://res.cloudinary.com/dbdybuins/image/upload/tebk/bundle/jtnmtfuqapggs6noi5mz.jpg',
     items: [
       { product_id: 'p3', name: 'N95 Respirators Box 20', quantity: 5,  price: 210 },
       { product_id: 'p5', name: 'IV Cannula 20G Box 50',  quantity: 6,  price: 175 },
@@ -93,6 +95,7 @@ export const MOCK_BUNDLES = [
     savings_pct:    20,
     category: 'dental',
     featured: false,
+    image_url: 'https://res.cloudinary.com/dbdybuins/image/upload/tebk/bundle/o69tvrwu5befgzvowrfk.jpg',
     items: [
       { product_id: 'p1', name: 'Nitrile Gloves Box 100',  quantity: 4,  price: 120 },
       { product_id: 'p2', name: 'Surgical Masks Box 50',   quantity: 2,  price: 85  },
@@ -108,6 +111,7 @@ export const MOCK_BUNDLES = [
     savings_pct:    20,
     category: 'lab',
     featured: false,
+    image_url: 'https://res.cloudinary.com/dbdybuins/image/upload/tebk/bundle/cmaxpywi2s6geowv2chq.jpg',
     items: [
       { product_id: 'p6', name: 'Blood Collection EDTA',  quantity: 5,  price: 145 },
       { product_id: 'p14',name: 'Urine Test Strips',      quantity: 3,  price: 180 },

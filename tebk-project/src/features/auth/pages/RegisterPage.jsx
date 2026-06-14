@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
@@ -15,7 +15,7 @@ function RegisterIllustration() {
       <rect x="60" y="50" width="170" height="220" rx="14" fill="white" filter="url(#rshadow)"/>
       <defs>
         <filter id="rshadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#21cdc0" floodOpacity="0.18"/>
+          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#C1E3C4" floodOpacity="0.18"/>
         </filter>
       </defs>
 
@@ -24,7 +24,7 @@ function RegisterIllustration() {
       <rect x="60" y="88" width="170" height="14" fill="#1a3363"/>
 
       {/* Logo on doc */}
-      <circle cx="110" cy="75" r="18" fill="#21cdc0"/>
+      <circle cx="110" cy="75" r="18" fill="#C1E3C4"/>
       <text x="110" y="80" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">T</text>
 
       {/* Title lines */}
@@ -35,37 +35,37 @@ function RegisterIllustration() {
       <rect x="76" y="116" width="138" height="18" rx="6" fill="#e8f7f6"/>
       <rect x="76" y="142" width="138" height="18" rx="6" fill="#e8f7f6"/>
       <rect x="76" y="168" width="138" height="18" rx="6" fill="#e8f7f6"/>
-      <rect x="76" y="194" width="62" height="18" rx="6" fill="#21cdc0" opacity="0.25"/>
+      <rect x="76" y="194" width="62" height="18" rx="6" fill="#C1E3C4" opacity="0.25"/>
       <rect x="152" y="194" width="62" height="18" rx="6" fill="#e8f7f6"/>
 
       {/* Field icons hints */}
-      <circle cx="90" cy="125" r="4" fill="#21cdc0" opacity="0.5"/>
-      <circle cx="90" cy="151" r="4" fill="#21cdc0" opacity="0.5"/>
-      <circle cx="90" cy="177" r="4" fill="#21cdc0" opacity="0.5"/>
+      <circle cx="90" cy="125" r="4" fill="#C1E3C4" opacity="0.5"/>
+      <circle cx="90" cy="151" r="4" fill="#C1E3C4" opacity="0.5"/>
+      <circle cx="90" cy="177" r="4" fill="#C1E3C4" opacity="0.5"/>
 
       {/* Submit button */}
-      <rect x="76" y="224" width="138" height="24" rx="10" fill="#21cdc0"/>
+      <rect x="76" y="224" width="138" height="24" rx="10" fill="#C1E3C4"/>
       <rect x="106" y="231" width="78" height="10" rx="5" fill="white" opacity="0.8"/>
 
       {/* Floating checkmark badge */}
-      <circle cx="245" cy="100" r="26" fill="#21cdc0" filter="url(#rshadow)"/>
+      <circle cx="245" cy="100" r="26" fill="#C1E3C4" filter="url(#rshadow)"/>
       <path d="M233,100 L241,108 L257,92" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
 
       {/* Floating user badges */}
       <rect x="22" y="130" width="48" height="60" rx="10" fill="#1a3363" filter="url(#rshadow)"/>
-      <circle cx="46" cy="152" r="12" fill="#21cdc0"/>
+      <circle cx="46" cy="152" r="12" fill="#C1E3C4"/>
       <circle cx="46" cy="147" r="6" fill="white" opacity="0.9"/>
       <ellipse cx="46" cy="163" rx="9" ry="6" fill="white" opacity="0.9"/>
 
       {/* Floating pills */}
-      <ellipse cx="264" cy="200" rx="10" ry="6" fill="#21cdc0" opacity="0.6" transform="rotate(-30 264 200)"/>
+      <ellipse cx="264" cy="200" rx="10" ry="6" fill="#C1E3C4" opacity="0.6" transform="rotate(-30 264 200)"/>
       <ellipse cx="280" cy="220" rx="10" ry="6" fill="#b2e8e5" transform="rotate(20 280 220)"/>
-      <ellipse cx="258" cy="235" rx="10" ry="6" fill="#21cdc0" opacity="0.4" transform="rotate(-10 258 235)"/>
+      <ellipse cx="258" cy="235" rx="10" ry="6" fill="#C1E3C4" opacity="0.4" transform="rotate(-10 258 235)"/>
 
       {/* Small stars / sparkles */}
-      <circle cx="44" cy="210" r="4" fill="#21cdc0" opacity="0.5"/>
-      <circle cx="56" cy="225" r="3" fill="#21cdc0" opacity="0.3"/>
-      <circle cx="270" cy="155" r="3.5" fill="#21cdc0" opacity="0.5"/>
+      <circle cx="44" cy="210" r="4" fill="#C1E3C4" opacity="0.5"/>
+      <circle cx="56" cy="225" r="3" fill="#C1E3C4" opacity="0.3"/>
+      <circle cx="270" cy="155" r="3.5" fill="#C1E3C4" opacity="0.5"/>
     </svg>
   )
 }
@@ -104,9 +104,10 @@ export function RegisterPage() {
 
   useEffect(() => { return () => clearError() }, [])
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm({
+  const { register, handleSubmit, watch, formState: { errors, isValid } } = useForm({
     resolver: zodResolver(registerSchema),
     defaultValues: { role: 'client' },
+    mode: 'onChange',
   })
 
   const role = watch('role')
@@ -145,20 +146,20 @@ export function RegisterPage() {
           {/* Dots top-left */}
           <div className="absolute top-8 left-8 grid grid-cols-5 gap-2.5">
             {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#21cdc0', opacity: 0.45 }} />
+              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#C1E3C4', opacity: 0.45 }} />
             ))}
           </div>
 
           {/* Dots bottom-right */}
           <div className="absolute bottom-14 right-6 grid grid-cols-5 gap-2.5">
             {Array.from({ length: 25 }).map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#21cdc0', opacity: 0.45 }} />
+              <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#C1E3C4', opacity: 0.45 }} />
             ))}
           </div>
 
           {/* Teal wave */}
           <svg className="absolute bottom-0 right-0" width="110" height="110" viewBox="0 0 110 110">
-            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#21cdc0" opacity="0.35"/>
+            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#C1E3C4" opacity="0.35"/>
           </svg>
 
           <div className="relative z-10">
@@ -167,7 +168,7 @@ export function RegisterPage() {
 
           {/* Bottom badge */}
           <div className="absolute bottom-6 left-6 flex items-center gap-1.5 z-10">
-            <ShieldCheck className="w-4 h-4" style={{ color: '#21cdc0' }} />
+            <ShieldCheck className="w-4 h-4" style={{ color: '#4ea055' }} />
             <span className="text-xs font-semibold" style={{ color: '#1a3363' }}>ISO Certified Platform</span>
           </div>
         </div>
@@ -281,9 +282,17 @@ export function RegisterPage() {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white text-sm font-semibold transition-opacity disabled:opacity-60 mt-1"
-                style={{ background: '#21cdc0' }}
+                disabled={loading || !isValid}
+                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 ease-in-out mt-1 ${
+                  isValid && !loading
+                    ? 'hover:scale-[1.02] hover:shadow-lg hover:opacity-90'
+                    : 'cursor-not-allowed'
+                }`}
+                style={{
+                  background: isValid ? '#C1E3C4' : '#e5e7eb',
+                  color:      isValid ? '#1a3363' : '#9ca3af',
+                  opacity:    loading ? 0.7 : 1,
+                }}
               >
                 {loading
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating account…</>

@@ -44,7 +44,7 @@ export const registerSchema = z
     email:           emailField,
     password:        passwordField,
     confirmPassword: z.string(),
-    role:            z.enum(['clinic', 'supplier']).default('clinic'),
+    role:            z.enum(['client', 'supplier']).default('client'),
     clinicName:      z.string().optional(),
   })
   .refine(d => d.password === d.confirmPassword, {
