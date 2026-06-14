@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -49,7 +49,7 @@ export function AdminProfile() {
 
       <div className="card flex items-center gap-4">
         <Avatar className="w-16 h-16">
-          <AvatarFallback className="text-xl font-bold" style={{ background: '#21cdc0', color: '#fff' }}>
+          <AvatarFallback className="text-xl font-bold" style={{ background: '#C1E3C4', color: '#fff' }}>
             {initials}
           </AvatarFallback>
         </Avatar>

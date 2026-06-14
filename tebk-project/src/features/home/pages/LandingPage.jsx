@@ -1,18 +1,21 @@
-import { Link } from 'react-router-dom'
+﻿import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Bot, Package, RefreshCw, Warehouse, Camera, ShieldCheck, ArrowRight, Star } from 'lucide-react'
+import {
+  Bot, Package, RefreshCw, Warehouse, Camera,
+  ArrowRight, CheckCircle, ShoppingCart, Sparkles, ShieldCheck,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProductCard } from '@/components/shared/ProductCard'
 import { MOCK_PRODUCTS, MOCK_BUNDLES } from '@/utils/mockData'
 import { formatCurrency } from '@/utils/format'
 
 const FEATURES = [
-  { icon: Bot,        title: 'AI Buyer Assistant',     desc: 'Answer 4 questions, get a full procurement recommendation tailored to your clinic type and budget.' },
-  { icon: Package,    title: 'Smart Bundles',          desc: 'Pre-built, AI-adjusted supply bundles for dental, ICU, lab, and general clinics — buy more, save more.' },
-  { icon: RefreshCw,  title: 'Auto-Refill',            desc: 'Subscribe to consumables and never run out. Pause, resume, or change frequency anytime.' },
-  { icon: Warehouse,  title: 'Inventory Management',   desc: 'Track stock levels, get low-stock alerts, and generate reorder suggestions automatically.' },
-  { icon: Camera,     title: 'Image Search',           desc: 'Photograph any medical item and instantly find the exact product or the closest alternative.' },
-  { icon: ShieldCheck,title: 'B2B Verified',           desc: 'Purpose-built for clinics, hospitals, and procurement teams. Every product is healthcare-grade.' },
+  { icon: Bot,         title: 'AI Buyer Assistant',   desc: 'Answer 4 questions, get a full procurement recommendation tailored to your clinic type and budget.' },
+  { icon: Package,     title: 'Smart Bundles',         desc: 'Pre-built, AI-adjusted supply bundles for dental, ICU, lab, and general clinics — buy more, save more.' },
+  { icon: RefreshCw,   title: 'Auto-Refill',           desc: 'Subscribe to consumables and never run out. Pause, resume, or change frequency anytime.' },
+  { icon: Warehouse,   title: 'Inventory Management',  desc: 'Track stock levels, get low-stock alerts, and generate reorder suggestions automatically.' },
+  { icon: Camera,      title: 'Image Search',          desc: 'Photograph any medical item and instantly find the exact product or the closest alternative.' },
+  { icon: ShieldCheck, title: 'B2B Verified',          desc: 'Purpose-built for clinics, hospitals, and procurement teams. Every product is healthcare-grade.' },
 ]
 
 const STATS = [
@@ -24,58 +27,117 @@ const STATS = [
 
 const FEATURED = MOCK_PRODUCTS.filter(p => p.featured).slice(0, 4)
 
-const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.5 } } }
+const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.55 } } }
 const stagger = { show: { transition: { staggerChildren: 0.1 } } }
 
 export function LandingPage() {
   return (
     <div className="overflow-x-hidden">
-      {/* Hero */}
-      <section className="bg-gradient-to-br from-primary via-primary-700 to-primary-800 text-white py-24 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(46,196,182,0.15),transparent_60%)]" />
-        <div className="page-container relative">
+
+      {/* ══════════════════════════════════════════
+          HERO  — Sehatin-style floating image
+      ══════════════════════════════════════════ */}
+      <section
+        className="relative min-h-[92vh] flex items-center overflow-hidden"
+        style={{ background: 'linear-gradient(140deg, #CBEDFC 0%, #daeffe 50%, #CBEDFC 100%)' }}
+      >
+        {/* ── Right image — absolutely positioned, full height, no frame ── */}
+        <motion.div
+          className="absolute right-0 top-0 bottom-0 hidden lg:block"
+          style={{ width: '52%' }}
+          initial={{ opacity: 0, x: 60 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.25 }}
+        >
+          <img
+            src="/hero-pharmacy.jpg"
+            alt="Pharmacist helping a client"
+            className="w-full h-full object-cover object-center"
+          />
+          {/* Left fade — blends image into hero background */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to right, #CBEDFC 0%, rgba(234,246,251,0.6) 18%, transparent 42%)' }}
+          />
+          {/* Bottom fade */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'linear-gradient(to top, #CBEDFC 0%, transparent 20%)' }}
+          />
+
+        </motion.div>
+
+        {/* ── Left text content ── */}
+        <div className="page-container w-full py-20 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2">
           <motion.div
-            className="max-w-2xl"
+            className=""
             initial="hidden" animate="show" variants={stagger}
           >
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur px-4 py-1.5 rounded-full text-sm font-medium mb-6">
-              <Bot className="w-4 h-4 text-secondary" />
+            {/* Top badge */}
+            <motion.div variants={fadeUp}
+              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm text-sm font-medium mb-8"
+              style={{ color: '#4ea055' }}
+            >
+              <CheckCircle className="w-4 h-4" />
               AI-Powered Medical Procurement
             </motion.div>
-            <motion.h1 variants={fadeUp} className="text-5xl sm:text-6xl font-display font-bold leading-tight mb-6">
-              Smarter procurement for{' '}
-              <span className="text-secondary">modern clinics</span>
+
+            {/* Headline */}
+            <motion.h1
+              variants={fadeUp}
+              className="text-5xl sm:text-6xl xl:text-[68px] font-display font-extrabold leading-[1.05] mb-6"
+              style={{ color: '#1a3363' }}
+            >
+              SMARTER<br />
+              <span style={{ color: '#4ea055' }}>MEDICAL</span><br />
+              SUPPLY.
             </motion.h1>
-            <motion.p variants={fadeUp} className="text-primary-200 text-lg leading-relaxed mb-8">
-              TEBK combines AI-powered recommendations, smart bundles, and subscription refills to transform how healthcare providers buy medical supplies.
+
+            <motion.p variants={fadeUp} className="text-gray-500 text-lg leading-relaxed mb-8 max-w-md">
+              TEBK combines AI-powered recommendations, smart bundles, and subscription refills
+              to transform how healthcare providers buy medical supplies.
             </motion.p>
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
-              <Button size="lg" variant="secondary" asChild>
-                <Link to="/assistant">Try AI Assistant <ArrowRight className="w-4 h-4" /></Link>
-              </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 border-white/30 text-white hover:bg-white/20" asChild>
-                <Link to="/products">Browse Products</Link>
-              </Button>
+
+            {/* CTA buttons */}
+            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-12">
+              <Link
+                to="/assistant"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-white text-sm font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
+                style={{ background: '#1a3363' }}
+              >
+                Try AI Assistant <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/products"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:scale-105 bg-white/60"
+                style={{ borderColor: '#1a3363', color: '#1a3363' }}
+              >
+                Browse Products
+              </Link>
+            </motion.div>
+
+            {/* Stats row — like Sehatin */}
+            <motion.div variants={fadeUp} className="flex items-center gap-10">
+              {STATS.map(({ value, label }, i) => (
+                <div key={label} className="flex items-center gap-3">
+                  {i > 0 && <div className="w-px h-8 bg-gray-200" />}
+                  <div>
+                    <p className="text-2xl font-display font-bold leading-none" style={{ color: '#1a3363' }}>{value}</p>
+                    <p className="text-xs text-gray-400 mt-0.5">{label}</p>
+                  </div>
+                </div>
+              ))}
             </motion.div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="border-b border-border bg-white">
-        <div className="page-container py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {STATS.map(({ value, label }) => (
-              <div key={label}>
-                <p className="text-3xl font-display font-bold text-primary">{value}</p>
-                <p className="text-sm text-muted mt-1">{label}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* Features */}
+
+      {/* ══════════════════════════════════════════
+          FEATURES
+      ══════════════════════════════════════════ */}
       <section className="py-20 bg-background">
         <div className="page-container">
           <div className="text-center mb-14">
@@ -99,7 +161,9 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Featured Products */}
+      {/* ══════════════════════════════════════════
+          FEATURED PRODUCTS
+      ══════════════════════════════════════════ */}
       <section className="py-20 bg-white">
         <div className="page-container">
           <div className="flex items-center justify-between mb-8">
@@ -117,43 +181,117 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* Smart Bundles preview */}
-      <section className="py-20 bg-background">
+      {/* ══════════════════════════════════════════
+          SMART BUNDLES
+      ══════════════════════════════════════════ */}
+      <section className="py-20" style={{ background: 'linear-gradient(140deg, #CBEDFC 0%, #daeffe 55%, #C1E3C4 100%)' }}>
         <div className="page-container">
-          <div className="flex items-center justify-between mb-8">
+
+          {/* Top pill banner */}
+          <div className="flex justify-center mb-10">
+            <div
+              className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full text-sm font-medium"
+              style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(33,51,96,0.08)', color: '#444' }}
+            >
+              <Sparkles className="w-4 h-4" style={{ color: '#4ea055' }} />
+              Pre-built supply kits
+              <span className="w-1 h-1 rounded-full inline-block bg-gray-300" />
+              save up to 22% vs buying individually
+            </div>
+          </div>
+
+          {/* Section header */}
+          <div className="flex items-center justify-between mb-7">
             <div>
               <h2 className="text-2xl font-display font-bold text-primary">Smart Bundles</h2>
-              <p className="text-muted text-sm mt-1">Pre-built kits — save up to 22%</p>
+              <p className="text-muted text-sm mt-1">Pre-built kits for every clinic type</p>
             </div>
             <Button variant="outline" asChild>
               <Link to="/bundles">All bundles <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+          {/* Bundle cards — horizontal image layout */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {MOCK_BUNDLES.filter(b => b.featured).map(bundle => (
-              <Link key={bundle.id} to="/bundles" className="card hover:shadow-card transition-shadow flex flex-col justify-between">
-                <div>
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="font-semibold text-primary">{bundle.name}</h3>
-                    <span className="badge-success ml-2 whitespace-nowrap">Save {bundle.savings_pct}%</span>
-                  </div>
-                  <p className="text-sm text-muted mb-4">{bundle.description}</p>
-                  <p className="text-xs text-muted">{bundle.items.length} products included</p>
+              <div
+                key={bundle.id}
+                className="flex rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative"
+                style={{
+                  background: 'rgba(255,255,255,0.62)',
+                  backdropFilter: 'blur(14px)',
+                  border: '1px solid rgba(255,255,255,0.85)',
+                  boxShadow: '0 4px 28px rgba(33,51,96,0.09)',
+                  minHeight: '220px',
+                }}
+              >
+                {/* Sparkle decoration */}
+                <div className="absolute bottom-3 right-3 opacity-20 pointer-events-none">
+                  <Sparkles className="w-6 h-6 text-secondary" />
                 </div>
-                <div className="flex items-end justify-between mt-4 pt-4 border-t border-border">
+
+                {/* Left – image */}
+                <div className="w-[38%] shrink-0 relative overflow-hidden">
+                  {bundle.image_url ? (
+                    <img
+                      src={bundle.image_url}
+                      alt={bundle.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #c8edf5, #b5e8e0)' }}>
+                      <Package className="w-12 h-12 text-secondary/50" />
+                    </div>
+                  )}
+                  {/* Save badge over image */}
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-xs font-bold" style={{ background: '#C1E3C4', color: '#1a3363' }}>
+                    Save {bundle.savings_pct}%
+                  </div>
+                </div>
+
+                {/* Right – content */}
+                <div className="flex-1 flex flex-col justify-between p-6">
                   <div>
-                    <span className="text-xs text-muted line-through mr-2">{formatCurrency(bundle.original_price)}</span>
-                    <span className="text-lg font-bold text-primary">{formatCurrency(bundle.bundle_price)}</span>
+                    <h3 className="text-lg font-bold mb-2" style={{ color: '#1a3363' }}>{bundle.name}</h3>
+                    <p className="text-sm text-gray-500 leading-relaxed">{bundle.description}</p>
+                    <p className="text-xs text-gray-400 italic mt-3">
+                      {bundle.items.length} products included · Details available on request
+                    </p>
                   </div>
-                  <span className="text-secondary text-sm font-medium">View bundle →</span>
+
+                  <div className="flex items-center justify-between mt-5 pt-4 border-t border-gray-100">
+                    <div className="flex flex-col">
+                      <span className="text-xs text-gray-400 line-through">{formatCurrency(bundle.original_price)}</span>
+                      <span className="text-xl font-bold" style={{ color: '#1a3363' }}>{formatCurrency(bundle.bundle_price)}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Link
+                        to="/bundles"
+                        className="text-sm font-semibold transition-colors hover:underline"
+                        style={{ color: '#1a3363' }}
+                      >
+                        Details →
+                      </Link>
+                      <Link
+                        to="/bundles"
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:scale-105"
+                        style={{ background: '#1a3363' }}
+                      >
+                        <ShoppingCart className="w-4 h-4" />
+                        Add to Cart
+                      </Link>
+                    </div>
+                  </div>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* AI Assistant CTA */}
+      {/* ══════════════════════════════════════════
+          AI ASSISTANT CTA
+      ══════════════════════════════════════════ */}
       <section className="py-20 bg-gradient-to-r from-secondary/10 to-primary/10">
         <div className="page-container text-center">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-6">
@@ -168,6 +306,7 @@ export function LandingPage() {
           </Button>
         </div>
       </section>
+
     </div>
   )
 }

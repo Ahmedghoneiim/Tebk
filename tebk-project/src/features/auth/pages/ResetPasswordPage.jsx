@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
@@ -12,7 +12,7 @@ function ResetIllustration() {
     <svg viewBox="0 0 320 340" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-72 h-64">
       <defs>
         <filter id="rpshadow" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#21cdc0" floodOpacity="0.18"/>
+          <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#C1E3C4" floodOpacity="0.18"/>
         </filter>
       </defs>
 
@@ -24,36 +24,36 @@ function ResetIllustration() {
 
       {/* Checkmark inside shield */}
       <path d="M135,148 L152,165 L185,130"
-        stroke="#21cdc0" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+        stroke="#C1E3C4" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
 
       {/* Key - floating left */}
       <circle cx="62" cy="180" r="22" fill="white" filter="url(#rpshadow)"/>
-      <circle cx="62" cy="180" r="12" fill="none" stroke="#21cdc0" strokeWidth="3.5"/>
-      <rect x="70" y="178" width="32" height="7" rx="3.5" fill="#21cdc0"/>
-      <rect x="96" y="178" width="7" height="12" rx="3" fill="#21cdc0"/>
-      <rect x="86" y="178" width="7" height="10" rx="3" fill="#21cdc0"/>
+      <circle cx="62" cy="180" r="12" fill="none" stroke="#C1E3C4" strokeWidth="3.5"/>
+      <rect x="70" y="178" width="32" height="7" rx="3.5" fill="#C1E3C4"/>
+      <rect x="96" y="178" width="7" height="12" rx="3" fill="#C1E3C4"/>
+      <rect x="86" y="178" width="7" height="10" rx="3" fill="#C1E3C4"/>
 
       {/* Lock open - floating right */}
       <rect x="240" y="155" width="54" height="48" rx="10" fill="white" filter="url(#rpshadow)"/>
       <path d="M252,155 L252,136 Q252,120 267,120 Q282,120 282,136"
-        stroke="#21cdc0" strokeWidth="4" fill="none" strokeLinecap="round"/>
-      <circle cx="267" cy="180" r="8" fill="#21cdc0"/>
-      <rect x="263" y="182" width="8" height="10" rx="3" fill="#21cdc0"/>
+        stroke="#C1E3C4" strokeWidth="4" fill="none" strokeLinecap="round"/>
+      <circle cx="267" cy="180" r="8" fill="#C1E3C4"/>
+      <rect x="263" y="182" width="8" height="10" rx="3" fill="#C1E3C4"/>
 
       {/* New password field visual */}
       <rect x="72" y="258" width="176" height="32" rx="10" fill="white" filter="url(#rpshadow)"/>
-      <circle cx="92" cy="274" r="6" fill="#21cdc0" opacity="0.5"/>
+      <circle cx="92" cy="274" r="6" fill="#C1E3C4" opacity="0.5"/>
       <rect x="106" y="270" width="60" height="8" rx="4" fill="#b2e8e5"/>
       <circle cx="232" cy="274" r="5" fill="#e0f0f0"/>
 
       {/* Stars / sparkles */}
-      <circle cx="46" cy="110" r="4" fill="#21cdc0" opacity="0.5"/>
-      <circle cx="36" cy="128" r="3" fill="#21cdc0" opacity="0.3"/>
-      <circle cx="56" cy="135" r="2.5" fill="#21cdc0" opacity="0.4"/>
+      <circle cx="46" cy="110" r="4" fill="#C1E3C4" opacity="0.5"/>
+      <circle cx="36" cy="128" r="3" fill="#C1E3C4" opacity="0.3"/>
+      <circle cx="56" cy="135" r="2.5" fill="#C1E3C4" opacity="0.4"/>
 
-      <circle cx="274" cy="110" r="4" fill="#21cdc0" opacity="0.5"/>
+      <circle cx="274" cy="110" r="4" fill="#C1E3C4" opacity="0.5"/>
       <circle cx="288" cy="128" r="3" fill="#b2e8e5" opacity="0.7"/>
-      <circle cx="264" cy="130" r="2.5" fill="#21cdc0" opacity="0.35"/>
+      <circle cx="264" cy="130" r="2.5" fill="#C1E3C4" opacity="0.35"/>
     </svg>
   )
 }
@@ -62,7 +62,7 @@ function DotsGrid() {
   return (
     <div className="grid grid-cols-5 gap-2.5">
       {Array.from({ length: 25 }).map((_, i) => (
-        <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#21cdc0', opacity: 0.45 }} />
+        <div key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: '#C1E3C4', opacity: 0.45 }} />
       ))}
     </div>
   )
@@ -75,8 +75,9 @@ export function ResetPasswordPage() {
   const [showConfPw, setShowConfPw]   = useState(false)
   const navigate = useNavigate()
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors, isValid } } = useForm({
     resolver: zodResolver(resetPasswordSchema),
+    mode: 'onChange',
   })
 
   const onSubmit = async ({ password }) => {
@@ -111,7 +112,7 @@ export function ResetPasswordPage() {
           <div className="absolute bottom-14 right-6"><DotsGrid /></div>
 
           <svg className="absolute bottom-0 right-0" width="110" height="110" viewBox="0 0 110 110">
-            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#21cdc0" opacity="0.35"/>
+            <path d="M110,110 L0,110 Q55,55 110,0 Z" fill="#C1E3C4" opacity="0.35"/>
           </svg>
 
           <div className="relative z-10">
@@ -188,15 +189,23 @@ export function ResetPasswordPage() {
               {/* Password hint */}
               <div className="rounded-2xl px-4 py-3" style={{ background: '#e8f7f6' }}>
                 <p className="text-xs text-gray-500">
-                  Password must be at least <span className="font-semibold" style={{ color: '#21cdc0' }}>8 characters</span> long
+                  Password must be at least <span className="font-semibold" style={{ color: '#4ea055' }}>8 characters</span> long
                 </p>
               </div>
 
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-white text-sm font-semibold transition-opacity disabled:opacity-60"
-                style={{ background: '#21cdc0' }}
+                disabled={loading || !isValid}
+                className={`w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-300 ease-in-out ${
+                  isValid && !loading
+                    ? 'hover:scale-[1.02] hover:shadow-lg hover:opacity-90'
+                    : 'cursor-not-allowed'
+                }`}
+                style={{
+                  background: isValid ? '#C1E3C4' : '#e5e7eb',
+                  color:      isValid ? '#1a3363' : '#9ca3af',
+                  opacity:    loading ? 0.7 : 1,
+                }}
               >
                 {loading
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Updating…</>
