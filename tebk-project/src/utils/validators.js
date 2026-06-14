@@ -80,7 +80,7 @@ export const checkoutSchema = z.object({
   address:       z.string().min(5, 'Please enter a valid address.'),
   city:          z.string().min(2, 'Please enter a city.'),
   notes:         z.string().optional(),
-  paymentMethod: z.enum(['cash', 'card']).default('cash'),
+  paymentMethod: z.enum(['cash', 'bank']).default('cash'),
 })
 
 export const profileSchema = z.object({
