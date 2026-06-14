@@ -70,8 +70,10 @@ export function AdminProfile() {
               {errors.fullName && <p className="text-xs text-danger mt-1">{errors.fullName.message}</p>}
             </div>
             <div>
-              <label className="block text-sm font-medium text-ink mb-1.5">Phone</label>
-              <Input {...register('phone')} placeholder="+20 10x xxx xxxx" />
+              <label className="block text-sm font-medium text-ink mb-1.5">
+                Phone <span className="text-xs font-normal text-muted">(+2)</span>
+              </label>
+              <Input placeholder="Enter your number" {...register('phone')} />
             </div>
             <div>
               <label className="block text-sm font-medium text-ink mb-1.5">Organisation</label>
