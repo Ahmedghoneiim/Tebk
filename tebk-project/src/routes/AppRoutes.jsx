@@ -26,6 +26,7 @@ import { ImageSearchPage } from '@/features/image-search/pages/ImageSearchPage'
 import { TermsPage }       from '@/features/legal/pages/TermsPage'
 import { PrivacyPage }     from '@/features/legal/pages/PrivacyPage'
 import { MedicalDisclaimerPage } from '@/features/legal/pages/MedicalDisclaimerPage'
+import { AboutPage }             from '@/features/about/pages/AboutPage'
 import { NotFoundPage }    from '@/features/errors/NotFoundPage'
 import { OfflinePage }     from '@/features/errors/OfflinePage'
 
@@ -85,6 +86,7 @@ export function AppRoutes() {
         <Route path="/terms"              element={<TermsPage />} />
         <Route path="/privacy"            element={<PrivacyPage />} />
         <Route path="/medical-disclaimer" element={<MedicalDisclaimerPage />} />
+        <Route path="/about"              element={<AboutPage />} />
         <Route path="/offline"            element={<OfflinePage />} />
         <Route path="*"                   element={<NotFoundPage />} />
       </Route>

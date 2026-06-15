@@ -47,7 +47,7 @@ export function ProductCard({ product, onAddToCart }) {
 
         {/* Image Section */}
         <div className="relative h-52 flex items-center justify-center overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #f5a623 0%, #f8c84a 100%)' }}>
+          style={{ background: 'linear-gradient(135deg, #E0F9FB 0%, #CCFBFE 100%)' }}>
           {product.image_url ? (
             <img
               src={cl.combined(product.image_url, 400, 400)}
@@ -55,7 +55,7 @@ export function ProductCard({ product, onAddToCart }) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <Package className="w-16 h-16 text-white/60" />
+            <Package className="w-16 h-16 text-secondary/40" />
           )}
 
           {/* New badge */}
@@ -99,24 +99,24 @@ export function ProductCard({ product, onAddToCart }) {
 
         {/* Info Section */}
         <div className="p-4">
-          <p className="text-xs text-gray-400 dark:text-slate-500 capitalize mb-0.5">{product.category}</p>
-          <h3 className="text-sm font-bold text-gray-800 dark:text-white line-clamp-2 leading-snug mb-3 group-hover:text-primary transition-colors">
+          <p className="text-xs text-subtle dark:text-slate-500 capitalize mb-0.5 tracking-wide">{product.category}</p>
+          <h3 className="text-sm font-semibold text-ink dark:text-white line-clamp-2 leading-snug mb-3 group-hover:text-secondary transition-colors duration-200">
             {product.name}
           </h3>
           <div className="flex items-end justify-between">
             <div>
-              <p className="text-xs text-gray-400 dark:text-slate-500 mb-0.5">Price</p>
-              <span className="text-lg font-bold text-gray-900 dark:text-white">
+              <p className="text-xs text-subtle dark:text-slate-500 mb-0.5">Price</p>
+              <span className="text-lg font-bold text-primary dark:text-white">
                 {formatCurrency(product.price)}
               </span>
               {product.unit && (
-                <span className="text-xs text-gray-400 dark:text-slate-500 ml-1">/{product.unit}</span>
+                <span className="text-xs text-subtle dark:text-slate-500 ml-1">/{product.unit}</span>
               )}
             </div>
             <button
               onClick={handleAddToCart}
               disabled={product.stock === 0}
-              className="w-10 h-10 rounded-xl bg-blue-500 hover:bg-blue-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-colors shadow-sm"
+              className="w-10 h-10 rounded-xl bg-secondary hover:bg-secondary-600 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200 shadow-soft hover:shadow-teal hover:-translate-y-px"
             >
               <ShoppingCart className="w-4 h-4 text-white" />
             </button>

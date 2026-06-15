@@ -1,16 +1,16 @@
 ﻿import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
 import {
   Bot, Package, RefreshCw, Warehouse, Camera,
-  ArrowRight, CheckCircle, ShoppingCart, Sparkles, ShieldCheck,
+  ArrowRight, ShoppingCart, Sparkles, ShieldCheck,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ProductCard } from '@/components/shared/ProductCard'
-import { MOCK_PRODUCTS, MOCK_BUNDLES } from '@/utils/mockData'
+import { MOCK_BUNDLES } from '@/utils/mockData'
+import { fetchFeaturedProducts } from '@/services/productService'
 import { formatCurrency } from '@/utils/format'
 import { useTranslation } from '@/hooks/useTranslation'
-
-const FEATURED = MOCK_PRODUCTS.filter(p => p.featured).slice(0, 4)
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.55 } } }
 const stagger = { show: { transition: { staggerChildren: 0.1 } } }
@@ -33,106 +33,135 @@ export function LandingPage() {
     { value: '98%',    label: t('landing.stat_accuracy') },
     { value: '24h',    label: t('landing.stat_delivery') },
   ]
+  const { data: productsData, isLoading: productsLoading } = useQuery({
+    queryKey: ['products', 'featured'],
+    queryFn:  fetchFeaturedProducts,
+    staleTime: 5 * 60 * 1000,
+  })
+
+  const featured = (productsData?.data || []).slice(0, 4)
 
   return (
-    <div className="overflow-x-hidden">
+    <div className="overflow-x-hidden -mt-20">
 
       {/* ══════════════════════════════════════════
-          HERO  — Sehatin-style floating image
+          HERO  — Full-width teal + wave bottom
       ══════════════════════════════════════════ */}
       <section
-        className="relative min-h-[92vh] flex items-center overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #CBEDFC 0%, #daeffe 50%, #CBEDFC 100%)' }}
+        className="relative flex items-center overflow-hidden"
+        style={{ background: '#17C3CE', minHeight: '100vh' }}
       >
-        {/* ── Right image — absolutely positioned, full height, no frame ── */}
+        {/* ── Full-width background image ── */}
         <motion.div
-          className="absolute right-0 top-0 bottom-0 hidden lg:block"
-          style={{ width: '52%' }}
-          initial={{ opacity: 0, x: 60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.9, delay: 0.25 }}
+          className="absolute inset-0"
+          initial={{ opacity: 0, scale: 1.04 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.1 }}
         >
           <img
             src="/hero-pharmacy.jpg"
-            alt="Pharmacist helping a client"
-            className="w-full h-full object-cover object-center"
+            alt="Medical supplies"
+            className="w-full h-full object-cover"
+            style={{ objectPosition: 'right center' }}
           />
-          {/* Left fade — blends image into hero background */}
+          {/* Left-side teal gradient — only covers text area */}
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to right, #CBEDFC 0%, rgba(234,246,251,0.6) 18%, transparent 42%)' }}
+            style={{
+              background: 'linear-gradient(to right, rgba(23,195,206,0.92) 0%, rgba(23,195,206,0.75) 22%, rgba(23,195,206,0.35) 42%, transparent 60%)',
+            }}
           />
-          {/* Bottom fade */}
+          {/* Bottom gradient — softens into wave */}
           <div
             className="absolute inset-0"
-            style={{ background: 'linear-gradient(to top, #CBEDFC 0%, transparent 20%)' }}
+            style={{ background: 'linear-gradient(to top, rgba(23,195,206,0.35) 0%, transparent 18%)' }}
           />
-
         </motion.div>
 
-        {/* ── Left text content ── */}
-        <div className="page-container w-full py-20 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2">
-          <motion.div
-            className=""
-            initial="hidden" animate="show" variants={stagger}
-          >
-            {/* Top badge */}
-            <motion.div variants={fadeUp}
-              className="inline-flex items-center gap-2 bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm text-sm font-medium mb-8"
-              style={{ color: '#4ea055' }}
-            >
-              <CheckCircle className="w-4 h-4" />
-              {t('landing.badge')}
-            </motion.div>
+        {/* ── Text content ── */}
+        <div className="page-container w-full relative z-10 pt-32 pb-36">
+          <div className="max-w-[50%]">
+            <motion.div initial="hidden" animate="show" variants={stagger}>
 
-            {/* Headline */}
-            <motion.h1
-              variants={fadeUp}
-              className="text-5xl sm:text-6xl xl:text-[68px] font-display font-extrabold leading-[1.05] mb-6"
-              style={{ color: '#1a3363' }}
-            >
-              {t('landing.hero_headline_1')}<br />
-              <span style={{ color: '#4ea055' }}>{t('landing.hero_headline_2')}</span><br />
-              {t('landing.hero_headline_3')}
-            </motion.h1>
-
-            <motion.p variants={fadeUp} className="text-gray-500 text-lg leading-relaxed mb-8 max-w-md">
-              {t('landing.hero_desc')}
-            </motion.p>
-
-            {/* CTA buttons */}
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-12">
-              <Link
-                to="/assistant"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-white text-sm font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
-                style={{ background: '#1a3363' }}
+              {/* Eyebrow */}
+              <motion.p
+                variants={fadeUp}
+                className="text-sm font-semibold tracking-[0.18em] uppercase mb-3"
+                style={{ color: 'rgba(255,255,255,0.75)', fontStyle: 'italic' }}
               >
-                {t('landing.try_assistant')} <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                to="/products"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:scale-105 bg-white/60"
-                style={{ borderColor: '#1a3363', color: '#1a3363' }}
-              >
-                {t('landing.browse_products')}
-              </Link>
-            </motion.div>
+                Awesome Care
+              </motion.p>
 
-            {/* Stats row — like Sehatin */}
-            <motion.div variants={fadeUp} className="flex items-center gap-10">
-              {STATS.map(({ value, label }, i) => (
-                <div key={label} className="flex items-center gap-3">
-                  {i > 0 && <div className="w-px h-8 bg-gray-200" />}
-                  <div>
-                    <p className="text-2xl font-display font-bold leading-none" style={{ color: '#1a3363' }}>{value}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">{label}</p>
+              {/* Headline */}
+              <motion.h1
+                variants={fadeUp}
+                className="font-display font-extrabold leading-[1.05] mb-6"
+                style={{ fontSize: 'clamp(2.8rem, 6vw, 5rem)', color: '#fff' }}
+              >
+                SMARTER<br />
+                <span style={{ color: '#fff' }}>MEDICAL</span><br />
+                SUPPLY.
+              </motion.h1>
+
+              {/* Description */}
+              <motion.p
+                variants={fadeUp}
+                className="text-base leading-relaxed mb-10 max-w-sm"
+                style={{ color: 'rgba(255,255,255,0.82)' }}
+              >
+                TEBK combines AI-powered recommendations, smart bundles, and subscription refills
+                to transform how healthcare providers buy medical supplies.
+              </motion.p>
+
+              {/* CTA */}
+              <motion.div variants={fadeUp} className="flex flex-wrap gap-3 mb-14">
+                <Link
+                  to="/assistant"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-bold uppercase tracking-wide transition-all duration-200 hover:scale-105 hover:shadow-xl"
+                  style={{ background: '#1a3363', letterSpacing: '0.08em' }}
+                >
+                  Our Solutions
+                </Link>
+                <Link
+                  to="/products"
+                  className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:scale-105 hover:bg-white/20"
+                  style={{ borderColor: 'rgba(255,255,255,0.7)', color: '#fff' }}
+                >
+                  Browse Products
+                </Link>
+              </motion.div>
+
+              {/* Stats row */}
+              <motion.div variants={fadeUp} className="flex items-center gap-8 flex-wrap">
+                {STATS.map(({ value, label }, i) => (
+                  <div key={label} className="flex items-center gap-3">
+                    {i > 0 && <div className="w-px h-8" style={{ background: 'rgba(255,255,255,0.3)' }} />}
+                    <div>
+                      <p className="text-2xl font-display font-bold leading-none text-white">{value}</p>
+                      <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.65)' }}>{label}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </motion.div>
+
             </motion.div>
-          </motion.div>
           </div>
+        </div>
+
+        {/* ── Bottom white wave ── */}
+        <div className="absolute bottom-0 left-0 right-0 leading-none">
+          <svg
+            viewBox="0 0 1440 110"
+            preserveAspectRatio="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full block"
+            style={{ height: 110 }}
+          >
+            <path
+              d="M0,110 C240,38 480,10 720,30 C960,50 1200,38 1440,110 L1440,110 L0,110 Z"
+              fill="white"
+            />
+          </svg>
         </div>
       </section>
 
@@ -140,7 +169,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════
           FEATURES
       ══════════════════════════════════════════ */}
-      <section className="py-20 bg-background">
+      <section className="py-20 section-surface">
         <div className="page-container">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-display font-bold text-primary">{t('landing.features_title')}</h2>
@@ -166,7 +195,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════
           FEATURED PRODUCTS
       ══════════════════════════════════════════ */}
-      <section className="py-20 bg-white">
+      <section className="py-20 section-white">
         <div className="page-container">
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -178,7 +207,14 @@ export function LandingPage() {
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {FEATURED.map(p => <ProductCard key={p.id} product={p} />)}
+            {productsLoading
+              ? Array(4).fill(0).map((_, i) => (
+                  <div key={i} className="rounded-3xl bg-gray-100 animate-pulse h-72" />
+                ))
+              : featured.length > 0
+                ? featured.map(p => <ProductCard key={p.id} product={p} />)
+                : <p className="col-span-4 text-center text-muted py-8">No featured products yet.</p>
+            }
           </div>
         </div>
       </section>
@@ -186,7 +222,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════
           SMART BUNDLES
       ══════════════════════════════════════════ */}
-      <section className="py-20" style={{ background: 'linear-gradient(140deg, #CBEDFC 0%, #daeffe 55%, #C1E3C4 100%)' }}>
+      <section className="py-20 section-clinical">
         <div className="page-container">
 
           {/* Top pill banner */}
@@ -294,7 +330,7 @@ export function LandingPage() {
       {/* ══════════════════════════════════════════
           AI ASSISTANT CTA
       ══════════════════════════════════════════ */}
-      <section className="py-20 bg-gradient-to-r from-secondary/10 to-primary/10">
+      <section className="py-20 section-alt">
         <div className="page-container text-center">
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-6">
             <Bot className="w-8 h-8 text-white" />

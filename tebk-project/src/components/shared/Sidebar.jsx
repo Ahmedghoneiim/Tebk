@@ -3,6 +3,7 @@ import { ShoppingBag, Heart, Bell, User, Layers, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useAuthStore } from '@/store/authStore'
 import { useTranslation } from '@/hooks/useTranslation'
+import { TebkLogo } from './TebkLogo'
 
 function SidebarLink({ to, icon: Icon, label, end }) {
   return (
@@ -43,9 +44,6 @@ export function Sidebar() {
     <aside className="hidden lg:flex flex-col w-56 shrink-0 m-3 rounded-2xl shadow-card bg-white dark:bg-slate-800 py-5 px-3 sticky top-[calc(4rem+12px)] h-[calc(100vh-5rem-24px)] overflow-y-auto border border-transparent dark:border-slate-700">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-1 mb-6">
-        <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shrink-0">
-          <span className="text-white font-bold text-sm">T</span>
-        </div>
         <span className="font-display font-bold text-primary dark:text-white text-lg">TEBK</span>
       </div>
 
