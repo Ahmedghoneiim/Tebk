@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Migration script secrets
+.env.migrate
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
