@@ -8,6 +8,7 @@ import { EmptyState } from '@/components/shared/EmptyState'
 import { TableRowSkeleton } from '@/components/shared/LoadingSkeleton'
 import { formatCurrency, formatDate } from '@/utils/format'
 import { MOCK_ORDERS } from '@/utils/mockData'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_BADGE = {
   pending:    'warning',
@@ -18,6 +19,7 @@ const STATUS_BADGE = {
 }
 
 export function OrderHistoryPage() {
+  const { t } = useTranslation()
   const { user } = useAuthStore()
   const { data, isLoading } = useQuery({
     queryKey: ['orders', user?.id],
@@ -31,8 +33,8 @@ export function OrderHistoryPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="section-title">My Orders</h1>
-        <p className="text-muted text-sm mt-1">{orders.length} orders</p>
+        <h1 className="section-title">{t('orders.title')}</h1>
+        <p className="text-muted text-sm mt-1">{t('orders.count').replace('{n}', orders.length)}</p>
       </div>
 
       <div className="card p-0 overflow-hidden">
@@ -40,7 +42,7 @@ export function OrderHistoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-background">
-                {['Order #', 'Date', 'Items', 'Total', 'Status', ''].map(h => (
+                {[t('orders.col_order'), t('orders.col_date'), t('orders.col_items'), t('orders.col_total'), t('orders.col_status'), ''].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted uppercase tracking-wide">{h}</th>
                 ))}
               </tr>
@@ -50,7 +52,7 @@ export function OrderHistoryPage() {
                 ? Array.from({ length: 5 }).map((_, i) => <TableRowSkeleton key={i} cols={6} />)
                 : orders.length === 0
                   ? (
-                    <tr><td colSpan={6}><EmptyState icon={Package} title="No orders yet" description="Your order history will appear here." /></td></tr>
+                    <tr><td colSpan={6}><EmptyState icon={Package} title={t('orders.no_orders')} description={t('orders.no_orders_desc')} /></td></tr>
                   )
                   : orders.map(order => (
                     <tr key={order.id} className="hover:bg-clinical transition-colors">
@@ -62,7 +64,7 @@ export function OrderHistoryPage() {
                         <Badge variant={STATUS_BADGE[order.status] || 'default'} className="capitalize">{order.status}</Badge>
                       </td>
                       <td className="px-4 py-3">
-                        <Link to={`/orders/${order.id}`} className="text-secondary text-xs hover:underline">Details</Link>
+                        <Link to={`/orders/${order.id}`} className="text-secondary text-xs hover:underline">{t('orders.details')}</Link>
                       </td>
                     </tr>
                   ))

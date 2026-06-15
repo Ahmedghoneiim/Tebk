@@ -9,6 +9,7 @@ import { useAuthStore } from '@/store/authStore'
 import { toast } from '@/store/notificationStore'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_VARIANT = { active: 'success', paused: 'warning', cancelled: 'danger' }
 
@@ -35,6 +36,7 @@ function SubSkeleton() {
 
 export function SubscriptionsPage() {
   usePageTitle('Subscriptions')
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
 
   const { data, isLoading } = useQuery({
@@ -60,9 +62,9 @@ export function SubscriptionsPage() {
       const { error } = await updateSubscriptionStatus(sub.id, newStatus)
       if (error) {
         setLocalStatus(prev => ({ ...prev, [sub.id]: sub.status }))
-        toast.error('Failed to update subscription')
+        toast.error(t('subscriptions.error_update'))
       } else {
-        toast.success(`Subscription ${newStatus === 'active' ? 'resumed' : 'paused'}`)
+        toast.success(newStatus === 'active' ? t('subscriptions.resumed') : t('subscriptions.paused_toast'))
       }
     } finally {
       setLoadingId(null)
@@ -77,9 +79,9 @@ export function SubscriptionsPage() {
       const { error } = await cancelSubscription(sub.id)
       if (error) {
         setLocalStatus(prev => ({ ...prev, [sub.id]: sub.status }))
-        toast.error('Failed to cancel subscription')
+        toast.error(t('subscriptions.error_cancel'))
       } else {
-        toast.success('Subscription cancelled')
+        toast.success(t('subscriptions.cancelled'))
       }
     } finally {
       setLoadingId(null)
@@ -89,8 +91,8 @@ export function SubscriptionsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="section-title">Subscriptions</h1>
-        <p className="text-muted text-sm mt-1">Auto-refill for your regular consumables</p>
+        <h1 className="section-title">{t('subscriptions.title')}</h1>
+        <p className="text-muted text-sm mt-1">{t('subscriptions.subtitle')}</p>
       </div>
 
       {isLoading ? (
@@ -98,7 +100,7 @@ export function SubscriptionsPage() {
           {[1, 2, 3].map(i => <SubSkeleton key={i} />)}
         </div>
       ) : subs.length === 0 ? (
-        <EmptyState icon={RefreshCw} title="No subscriptions yet" description="Subscribe to consumables to get automatic refills and save 10%." />
+        <EmptyState icon={RefreshCw} title={t('subscriptions.empty')} description={t('subscriptions.empty_desc')} />
       ) : (
         <div className="space-y-4">
           {subs.map(sub => (
@@ -111,19 +113,19 @@ export function SubscriptionsPage() {
                   <p className="text-sm font-semibold text-ink">{sub.product}</p>
                   <p className="text-xs text-muted capitalize">{sub.qty} units · {sub.frequency}</p>
                   {sub.next_delivery && sub.status !== 'cancelled' && (
-                    <p className="text-xs text-muted mt-0.5">Next delivery: {sub.next_delivery}</p>
+                    <p className="text-xs text-muted mt-0.5">{t('subscriptions.next_delivery')} {sub.next_delivery}</p>
                   )}
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <Badge variant={STATUS_VARIANT[sub.status]} className="capitalize">{sub.status}</Badge>
-                <span className="text-sm font-bold text-primary">{formatCurrency(sub.price * sub.qty)}/delivery</span>
+                <span className="text-sm font-bold text-primary">{formatCurrency(sub.price * sub.qty)}{t('subscriptions.per_delivery')}</span>
                 {sub.status !== 'cancelled' && (
                   <>
                     <Button
                       size="icon"
                       variant="outline"
-                      title={sub.status === 'active' ? 'Pause' : 'Resume'}
+                      title={sub.status === 'active' ? t('subscriptions.pause') : t('subscriptions.resume')}
                       disabled={loadingId === sub.id}
                       onClick={() => handleToggle(sub)}
                     >
@@ -132,7 +134,7 @@ export function SubscriptionsPage() {
                     <Button
                       size="icon"
                       variant="outline"
-                      title="Cancel"
+                      title={t('subscriptions.cancel_btn')}
                       disabled={loadingId === sub.id}
                       onClick={() => handleCancel(sub)}
                     >

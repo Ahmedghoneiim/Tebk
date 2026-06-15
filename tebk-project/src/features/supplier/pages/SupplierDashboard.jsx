@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const MOCK_FULFILLMENT_ORDERS = [
   { id: 'ORD-1041', clinic: 'Cairo Medical Center',    product: 'Nitrile Gloves Box 100',     qty: 20, status: 'pending',    total: 2400 },
@@ -18,31 +19,32 @@ const STATUS_ICON    = { pending: Clock, processing: Package, shipped: Truck }
 
 export function SupplierDashboard() {
   usePageTitle('Supplier Dashboard')
+  const { t } = useTranslation()
 
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="section-title">Supplier Dashboard</h1>
-        <p className="text-muted text-sm mt-1">Your sales and fulfillment overview</p>
+        <h1 className="section-title">{t('supplier.dashboard_title')}</h1>
+        <p className="text-muted text-sm mt-1">{t('supplier.dashboard_subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Active Products"   value="12"                    icon={Package}     trend={5}  />
-        <StatCard title="Pending Orders"    value="3"                     icon={Clock}                  />
-        <StatCard title="Revenue (30d)"     value={formatCurrency(28400)} icon={TrendingUp}  trend={22} />
-        <StatCard title="Fulfilled Orders"  value="45"                    icon={CheckCircle} trend={18} />
+        <StatCard title={t('supplier.stat_active')}    value="12"                    icon={Package}     trend={5}  />
+        <StatCard title={t('supplier.stat_pending')}   value="3"                     icon={Clock}                  />
+        <StatCard title={t('supplier.stat_revenue')}   value={formatCurrency(28400)} icon={TrendingUp}  trend={22} />
+        <StatCard title={t('supplier.stat_fulfilled')} value="45"                    icon={CheckCircle} trend={18} />
       </div>
 
       <div className="card p-0 overflow-hidden">
         <div className="px-6 py-4 border-b border-border">
-          <h2 className="font-semibold text-primary">Recent Orders to Fulfill</h2>
-          <p className="text-xs text-muted mt-0.5">Showing last 5 orders across all clinics</p>
+          <h2 className="font-semibold text-primary">{t('supplier.recent_title')}</h2>
+          <p className="text-xs text-muted mt-0.5">{t('supplier.recent_subtitle')}</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-background">
-                {['Order ID', 'Clinic', 'Product', 'Qty', 'Total', 'Status', 'Action'].map(h => (
+                {[t('supplier.col_order_id'), t('supplier.col_clinic'), t('supplier.col_product'), t('supplier.col_qty'), t('supplier.col_total'), t('supplier.col_status'), t('supplier.col_action')].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted uppercase">{h}</th>
                 ))}
               </tr>
@@ -65,13 +67,13 @@ export function SupplierDashboard() {
                     </td>
                     <td className="px-4 py-3">
                       {order.status === 'pending' && (
-                        <Button size="sm" variant="outline">Mark Processing</Button>
+                        <Button size="sm" variant="outline">{t('supplier.mark_processing')}</Button>
                       )}
                       {order.status === 'processing' && (
-                        <Button size="sm">Mark Shipped</Button>
+                        <Button size="sm">{t('supplier.mark_shipped')}</Button>
                       )}
                       {order.status === 'shipped' && (
-                        <span className="text-xs text-muted">Delivered</span>
+                        <span className="text-xs text-muted">{t('supplier.delivered')}</span>
                       )}
                     </td>
                   </tr>

@@ -5,6 +5,7 @@ import { fetchNotifications, markAllNotificationsRead } from '@/services/notific
 import { EmptyState } from '@/components/shared/EmptyState'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { formatRelativeTime } from '@/utils/format'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const icons = {
   welcome: <Sparkles className="w-5 h-5 text-secondary" />,
@@ -15,6 +16,7 @@ const icons = {
 
 export function NotificationsPage() {
   usePageTitle('Notifications')
+  const { t } = useTranslation()
   const { user } = useAuthStore()
   const queryClient = useQueryClient()
 
@@ -33,7 +35,7 @@ export function NotificationsPage() {
   if (isLoading) {
     return (
       <div className="space-y-6">
-        <h1 className="section-title">Notifications</h1>
+        <h1 className="section-title">{t('notifications.title')}</h1>
         <div className="card p-6 space-y-4">
           {[1, 2, 3].map(i => (
             <div key={i} className="flex gap-4 animate-pulse">
@@ -52,8 +54,8 @@ export function NotificationsPage() {
   if (notifications.length === 0) {
     return (
       <div className="space-y-6">
-        <h1 className="section-title">Notifications</h1>
-        <EmptyState icon={Bell} title="No notifications" description="You're all caught up!" />
+        <h1 className="section-title">{t('notifications.title')}</h1>
+        <EmptyState icon={Bell} title={t('notifications.no_notifications')} description={t('notifications.all_caught_up')} />
       </div>
     )
   }
@@ -64,10 +66,10 @@ export function NotificationsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <h1 className="section-title mb-0">Notifications</h1>
+          <h1 className="section-title mb-0">{t('notifications.title')}</h1>
           {unreadCount > 0 && (
             <span className="px-2 py-0.5 rounded-full bg-secondary text-white text-xs font-bold">
-              {unreadCount} new
+              {t('notifications.new_badge').replace('{n}', unreadCount)}
             </span>
           )}
         </div>
@@ -76,7 +78,7 @@ export function NotificationsPage() {
             onClick={handleMarkAllRead}
             className="text-sm text-secondary hover:underline"
           >
-            Mark all as read
+            {t('notifications.mark_all_read')}
           </button>
         )}
       </div>

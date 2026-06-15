@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 import { registerSchema } from '@/utils/validators'
 import { toast } from '@/store/notificationStore'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 function RegisterIllustration() {
   return (
@@ -91,6 +92,7 @@ function AppleIcon() {
 
 export function RegisterPage() {
   usePageTitle('Create Account')
+  const { t } = useTranslation()
   const { register: registerUser, loading, error, clearError, user } = useAuthStore()
   const navigate = useNavigate()
   const [showPw, setShowPw]         = useState(false)
@@ -118,7 +120,7 @@ export function RegisterPage() {
       if (result?.session) {
         // auto-confirm → useEffect handles redirect
       } else {
-        toast.success('Account created! Please check your email to verify.')
+        toast.success(t('auth.account_created_toast'))
         navigate('/login')
       }
     }
@@ -169,7 +171,7 @@ export function RegisterPage() {
           {/* Bottom badge */}
           <div className="absolute bottom-6 left-6 flex items-center gap-1.5 z-10">
             <ShieldCheck className="w-4 h-4" style={{ color: '#4ea055' }} />
-            <span className="text-xs font-semibold" style={{ color: '#1a3363' }}>ISO Certified Platform</span>
+            <span className="text-xs font-semibold" style={{ color: '#1a3363' }}>{t('auth.iso_certified')}</span>
           </div>
         </div>
 
@@ -177,8 +179,8 @@ export function RegisterPage() {
         <div className="flex-1 flex flex-col justify-center px-10 py-10">
           <div className="max-w-sm mx-auto w-full">
 
-            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Create Account</h1>
-            <p className="text-gray-400 text-sm mb-7">Join TEBK to access medical supplies</p>
+            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.create_account')}</h1>
+            <p className="text-gray-400 text-sm mb-7">{t('auth.register_subtitle')}</p>
 
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4">
@@ -192,7 +194,7 @@ export function RegisterPage() {
                 <div className="relative">
                   <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
-                    placeholder="Full Name"
+                    placeholder={t('auth.full_name')}
                     className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('fullName')}
                   />
@@ -206,7 +208,7 @@ export function RegisterPage() {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t('auth.email')}
                     className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('email')}
                   />
@@ -216,11 +218,11 @@ export function RegisterPage() {
 
               {/* Account Type */}
               <div>
-                <p className="text-xs font-semibold text-gray-400 mb-2 ml-1">Account Type</p>
+                <p className="text-xs font-semibold text-gray-400 mb-2 ml-1">{t('auth.account_type')}</p>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { value: 'supplier', label: 'Supplier' },
-                    { value: 'client',   label: 'Client'   },
+                    { value: 'supplier', label: t('auth.supplier') },
+                    { value: 'client',   label: t('auth.client')   },
                   ].map(({ value, label }) => (
                     <label
                       key={value}
@@ -243,7 +245,7 @@ export function RegisterPage() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type={showPw ? 'text' : 'password'}
-                    placeholder="Password"
+                    placeholder={t('auth.password')}
                     className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('password')}
                   />
@@ -264,7 +266,7 @@ export function RegisterPage() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type={showConfPw ? 'text' : 'password'}
-                    placeholder="Confirm Password"
+                    placeholder={t('auth.confirm_password')}
                     className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('confirmPassword')}
                   />
@@ -295,8 +297,8 @@ export function RegisterPage() {
                 }}
               >
                 {loading
-                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Creating account…</>
-                  : 'Register'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('auth.creating_account')}</>
+                  : t('auth.register')
                 }
               </button>
             </form>
@@ -304,7 +306,7 @@ export function RegisterPage() {
             {/* Divider */}
             <div className="flex items-center gap-3 my-4">
               <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400 whitespace-nowrap">or register with</span>
+              <span className="text-xs text-gray-400 whitespace-nowrap">{t('auth.or_register_with')}</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
@@ -326,18 +328,18 @@ export function RegisterPage() {
 
             {/* Footer */}
             <p className="text-center text-sm text-gray-400 mt-5">
-              Already have an account?{' '}
+              {t('auth.already_have_account')}{' '}
               <Link to="/login" className="font-bold hover:underline" style={{ color: '#1a3363' }}>
-                Login
+                {t('auth.login')}
               </Link>
             </p>
 
             {/* Terms */}
             <p className="text-center text-xs text-gray-300 mt-3">
-              By registering you agree to our{' '}
-              <Link to="/terms" className="underline">Terms</Link>
-              {' '}and{' '}
-              <Link to="/privacy" className="underline">Privacy Policy</Link>
+              {t('auth.agree_terms')}{' '}
+              <Link to="/terms" className="underline">{t('auth.terms')}</Link>
+              {' '}{t('auth.and')}{' '}
+              <Link to="/privacy" className="underline">{t('auth.privacy')}</Link>
             </p>
           </div>
         </div>

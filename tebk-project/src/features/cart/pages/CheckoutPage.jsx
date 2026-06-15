@@ -47,7 +47,7 @@ export function CheckoutPage() {
     const { data: order, error } = await createOrder(user.id, { ...data, total }, items)
     if (error) {
       setLoading(false)
-      toast.error(error.message || 'Failed to place order.')
+      toast.error(error.message || t('checkout.error'))
       return
     }
 
@@ -73,44 +73,44 @@ export function CheckoutPage() {
 
   return (
     <div className="page-container py-8">
-      <h1 className="section-title mb-8">Checkout</h1>
+      <h1 className="section-title mb-8">{t('checkout.title')}</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-2 space-y-6">
           {/* Shipping */}
           <div className="card">
-            <h2 className="font-semibold text-primary mb-4">Shipping Information</h2>
+            <h2 className="font-semibold text-primary mb-4">{t('checkout.shipping_info')}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-ink mb-1.5">Full Name</label>
-                <Input placeholder="Dr. Ahmed Mohamed" {...register('fullName')} />
+                <label className="block text-sm font-medium text-ink mb-1.5">{t('checkout.field_full_name')}</label>
+                <Input placeholder={t('checkout.placeholder_name')} {...register('fullName')} />
                 {errors.fullName && <p className="text-xs text-danger mt-1">{errors.fullName.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink mb-1.5">Email</label>
+                <label className="block text-sm font-medium text-ink mb-1.5">{t('checkout.field_email')}</label>
                 <Input type="email" {...register('email')} />
                 {errors.email && <p className="text-xs text-danger mt-1">{errors.email.message}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium text-ink mb-1.5">
-                  Phone <span className="text-xs font-normal text-muted">(+2)</span>
+                  {t('checkout.field_phone')} <span className="text-xs font-normal text-muted">{t('checkout.field_phone_hint')}</span>
                 </label>
-                <Input placeholder="Enter your number" {...register('phone')} />
+                <Input placeholder={t('checkout.placeholder_phone')} {...register('phone')} />
                 {errors.phone && <p className="text-xs text-danger mt-1">{errors.phone.message}</p>}
               </div>
               <div className="sm:col-span-2">
-                <label className="block text-sm font-medium text-ink mb-1.5">Address</label>
-                <Input placeholder="123 Medical District, Building 4" {...register('address')} />
+                <label className="block text-sm font-medium text-ink mb-1.5">{t('checkout.field_address')}</label>
+                <Input placeholder={t('checkout.placeholder_address')} {...register('address')} />
                 {errors.address && <p className="text-xs text-danger mt-1">{errors.address.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink mb-1.5">City</label>
-                <Input placeholder="Cairo" {...register('city')} />
+                <label className="block text-sm font-medium text-ink mb-1.5">{t('checkout.field_city')}</label>
+                <Input placeholder={t('checkout.placeholder_city')} {...register('city')} />
                 {errors.city && <p className="text-xs text-danger mt-1">{errors.city.message}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium text-ink mb-1.5">Notes <span className="text-muted">(optional)</span></label>
-                <Input placeholder="Delivery instructions…" {...register('notes')} />
+                <label className="block text-sm font-medium text-ink mb-1.5">{t('checkout.field_notes')} <span className="text-muted">{t('checkout.optional')}</span></label>
+                <Input placeholder={t('checkout.placeholder_notes')} {...register('notes')} />
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export function CheckoutPage() {
 
         {/* Summary */}
         <div className="card h-fit">
-          <h2 className="font-semibold text-primary mb-4">Order Summary</h2>
+          <h2 className="font-semibold text-primary mb-4">{t('checkout.order_summary')}</h2>
           <div className="space-y-2 mb-4">
             {items.map(item => (
               <div key={item.id} className="flex justify-between text-sm">
@@ -155,14 +155,14 @@ export function CheckoutPage() {
           </div>
           <div className="border-t border-border pt-3 space-y-1.5 text-sm">
             <div className="flex justify-between text-muted">
-              <span>Subtotal</span><span>{formatCurrency(subtotal)}</span>
+              <span>{t('checkout.subtotal')}</span><span>{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between text-muted">
-              <span>Shipping</span>
-              <span>{shipping === 0 ? <span className="text-success">Free</span> : formatCurrency(shipping)}</span>
+              <span>{t('cart.shipping')}</span>
+              <span>{shipping === 0 ? <span className="text-success">{t('checkout.free')}</span> : formatCurrency(shipping)}</span>
             </div>
             <div className="flex justify-between font-semibold pt-1">
-              <span>Total</span><span className="text-primary">{formatCurrency(total)}</span>
+              <span>{t('checkout.total')}</span><span className="text-primary">{formatCurrency(total)}</span>
             </div>
           </div>
         </div>

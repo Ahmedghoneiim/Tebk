@@ -30,7 +30,7 @@ export function SettingsPage() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-ink">{t('settings.theme')}</p>
-            <p className="text-xs text-muted">Choose light or dark interface</p>
+            <p className="text-xs text-muted">{t('settings.theme_desc')}</p>
           </div>
           <div className="flex items-center gap-2 bg-clinical p-1 rounded-xl">
             <button
@@ -51,7 +51,7 @@ export function SettingsPage() {
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <div>
             <p className="text-sm font-medium text-ink">{t('settings.language')}</p>
-            <p className="text-xs text-muted">Select interface language</p>
+            <p className="text-xs text-muted">{t('settings.language_desc')}</p>
           </div>
           <div className="flex items-center gap-2 bg-clinical p-1 rounded-xl">
             <button

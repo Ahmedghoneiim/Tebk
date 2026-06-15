@@ -8,8 +8,7 @@ import { Input } from '@/components/ui/input'
 import { fetchInventory, exportInventoryCSV } from '@/services/inventoryService'
 import { useAuthStore } from '@/store/authStore'
 import { usePageTitle } from '@/hooks/usePageTitle'
-
-const TABLE_HEADERS = ['Product', 'Category', 'Current Stock', 'Min Threshold', 'Monthly Usage', 'Status', 'Action']
+import { useTranslation } from '@/hooks/useTranslation'
 
 function TableSkeleton() {
   return (
@@ -29,6 +28,7 @@ function TableSkeleton() {
 
 export function InventoryPage() {
   usePageTitle('Inventory')
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
   const [search, setSearch] = useState('')
 
@@ -46,9 +46,9 @@ export function InventoryPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div>
-          <h1 className="section-title">Inventory</h1>
+          <h1 className="section-title">{t('inventory.title')}</h1>
           <p className="text-muted text-sm mt-1">
-            {isLoading ? 'Loading…' : `${items.length} tracked items · ${lowStockCount} low stock alerts`}
+            {isLoading ? t('common.loading') : t('inventory.subtitle').replace('{count}', items.length).replace('{low}', lowStockCount)}
           </p>
         </div>
         <div className="flex gap-2">
@@ -58,21 +58,21 @@ export function InventoryPage() {
             onClick={() => exportInventoryCSV(items)}
             disabled={isLoading || items.length === 0}
           >
-            <Download className="w-4 h-4" /> Export CSV
+            <Download className="w-4 h-4" /> {t('inventory.export_csv')}
           </Button>
-          <Button size="sm"><Plus className="w-4 h-4" /> Add Item</Button>
+          <Button size="sm"><Plus className="w-4 h-4" /> {t('inventory.add_item')}</Button>
         </div>
       </div>
 
       {!isLoading && lowStockCount > 0 && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-xl px-4 py-3 flex items-center gap-2 text-sm text-yellow-800">
           <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-          {lowStockCount} item{lowStockCount > 1 ? 's are' : ' is'} running low. Consider reordering.
+          {t('inventory.low_stock_banner').replace('{n}', lowStockCount)}
         </div>
       )}
 
       <div className="relative max-w-xs">
-        <Input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search inventory…" className="pl-9" />
+        <Input value={search} onChange={e => setSearch(e.target.value)} placeholder={t('inventory.search_placeholder')} className="pl-9" />
       </div>
 
       <div className="card p-0 overflow-hidden">
@@ -80,7 +80,7 @@ export function InventoryPage() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border bg-background">
-                {TABLE_HEADERS.map(h => (
+                {[t('inventory.col_product'), t('inventory.col_category'), t('inventory.col_current'), t('inventory.col_min'), t('inventory.col_monthly'), t('inventory.col_status'), t('inventory.col_action')].map(h => (
                   <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted uppercase">{h}</th>
                 ))}
               </tr>
@@ -99,8 +99,8 @@ export function InventoryPage() {
                     <td className="px-4 py-3 text-muted">{item.monthly_usage}/mo</td>
                     <td className="px-4 py-3">
                       {isLow
-                        ? <Badge variant="warning"><AlertTriangle className="w-3 h-3 mr-1" />Low Stock</Badge>
-                        : <Badge variant="success">OK</Badge>
+                        ? <Badge variant="warning"><AlertTriangle className="w-3 h-3 mr-1" />{t('inventory.status_low')}</Badge>
+                        : <Badge variant="success">{t('inventory.status_ok')}</Badge>
                       }
                     </td>
                     <td className="px-4 py-3">
@@ -109,7 +109,7 @@ export function InventoryPage() {
                           to={`/products?search=${encodeURIComponent(item.name)}`}
                           className="text-secondary text-xs hover:underline"
                         >
-                          Reorder
+                          {t('inventory.reorder')}
                         </Link>
                       )}
                     </td>

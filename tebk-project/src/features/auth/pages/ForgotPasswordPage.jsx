@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { Loader2, Mail, CheckCircle, ArrowLeft } from 'lucide-react'
 import { forgotPasswordSchema } from '@/utils/validators'
 import { sendPasswordResetEmail } from '@/services/authService'
+import { useTranslation } from '@/hooks/useTranslation'
 
 function ForgotIllustration() {
   return (
@@ -65,6 +66,7 @@ function DotsGrid() {
 }
 
 export function ForgotPasswordPage() {
+  const { t } = useTranslation()
   const [sent, setSent]               = useState(false)
   const [loading, setLoading]         = useState(false)
   const [serverError, setServerError] = useState('')
@@ -113,7 +115,7 @@ export function ForgotPasswordPage() {
           </div>
 
           <p className="absolute bottom-8 left-0 right-0 text-center text-xs font-medium z-10" style={{ color: '#1a3363', opacity: 0.6 }}>
-            Secure password recovery
+            {t('auth.secure_recovery')}
           </p>
         </div>
 
@@ -131,9 +133,9 @@ export function ForgotPasswordPage() {
                   <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.8} />
                 </div>
 
-                <h1 className="text-2xl font-bold mb-2" style={{ color: '#1a3363' }}>Check your inbox</h1>
+                <h1 className="text-2xl font-bold mb-2" style={{ color: '#1a3363' }}>{t('auth.check_inbox')}</h1>
                 <p className="text-gray-400 text-sm leading-relaxed mb-2">
-                  We sent a password reset link to
+                  {t('auth.reset_link_sent')}
                 </p>
                 <p className="text-sm font-semibold mb-8" style={{ color: '#4ea055' }}>
                   {getValues('email')}
@@ -144,7 +146,7 @@ export function ForgotPasswordPage() {
                   style={{ background: '#e8f7f6' }}
                 >
                   <p className="text-xs text-gray-500 leading-relaxed">
-                    Didn't receive the email? Check your spam folder or wait a few minutes.
+                    {t('auth.spam_notice')}
                   </p>
                 </div>
 
@@ -154,15 +156,15 @@ export function ForgotPasswordPage() {
                   style={{ color: '#1a3363' }}
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to Login
+                  {t('auth.back_to_login')}
                 </Link>
               </div>
             ) : (
               /* ── Form State ── */
               <>
-                <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Forgot Password?</h1>
+                <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.forgot_title')}</h1>
                 <p className="text-gray-400 text-sm mb-8">
-                  Enter your email and we'll send you a reset link
+                  {t('auth.forgot_subtitle')}
                 </p>
 
                 {serverError && (
@@ -177,7 +179,7 @@ export function ForgotPasswordPage() {
                       <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                       <input
                         type="email"
-                        placeholder="Email"
+                        placeholder={t('auth.email')}
                         className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                         {...register('email')}
                       />
@@ -202,8 +204,8 @@ export function ForgotPasswordPage() {
                     }}
                   >
                     {loading
-                      ? <><Loader2 className="w-4 h-4 animate-spin" /> Sending…</>
-                      : 'Send Reset Link'
+                      ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('auth.sending')}</>
+                      : t('auth.send_reset_link')
                     }
                   </button>
                 </form>
@@ -215,7 +217,7 @@ export function ForgotPasswordPage() {
                     style={{ color: '#1a3363' }}
                   >
                     <ArrowLeft className="w-4 h-4" />
-                    Back to Login
+                    {t('auth.back_to_login')}
                   </Link>
                 </p>
               </>

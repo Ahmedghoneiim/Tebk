@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/authStore'
 import { toast } from '@/store/notificationStore'
 import { formatDate } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_BADGE = { approved: 'success', pending: 'warning', rejected: 'danger', processed: 'default' }
 
@@ -37,6 +38,7 @@ function TableSkeleton() {
 
 export function ReturnsPage() {
   usePageTitle('Returns')
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
 
   const { data, isLoading } = useQuery({
@@ -59,32 +61,32 @@ export function ReturnsPage() {
     setSaving(true)
     const { data: created, error } = await createReturn(user?.id, form)
     setSaving(false)
-    if (error) { toast.error('Failed to submit return'); return }
+    if (error) { toast.error(t('returns.error_submit')); return }
     setLocalItems(prev => [created, ...prev])
     setOpen(false)
     setForm(EMPTY_FORM)
-    toast.success('Return request submitted')
+    toast.success(t('returns.success_submit'))
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="section-title">Returns</h1>
-          <p className="text-muted text-sm mt-1">Manage product return requests</p>
+          <h1 className="section-title">{t('returns.title')}</h1>
+          <p className="text-muted text-sm mt-1">{t('returns.subtitle')}</p>
         </div>
-        <Button onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> New Return</Button>
+        <Button onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> {t('returns.new_return')}</Button>
       </div>
 
       {!isLoading && allItems.length === 0 ? (
-        <EmptyState icon={RotateCcw} title="No returns" description="You haven't submitted any return requests." />
+        <EmptyState icon={RotateCcw} title={t('returns.empty')} description={t('returns.empty_desc')} />
       ) : (
         <div className="card p-0 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-background">
-                  {['Return #', 'Product', 'Reason', 'Date', 'Status'].map(h => (
+                  {[t('returns.col_return'), t('returns.col_product'), t('returns.col_reason'), t('returns.col_date'), t('returns.col_status')].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted uppercase">{h}</th>
                   ))}
                 </tr>
@@ -110,40 +112,40 @@ export function ReturnsPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>New Return Request</DialogTitle>
-            <DialogDescription>Submit a return for an item from a recent order.</DialogDescription>
+            <DialogTitle>{t('returns.dialog_title')}</DialogTitle>
+            <DialogDescription>{t('returns.dialog_desc')}</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Product Name <span className="text-danger">*</span></label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('returns.field_product')} <span className="text-danger">*</span></label>
               <Input
-                placeholder="e.g. Nitrile Gloves Box 100"
+                placeholder={t('returns.field_product_ph')}
                 value={form.product}
                 onChange={e => setForm(f => ({ ...f, product: e.target.value }))}
                 required
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Order ID</label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('returns.field_order_id')}</label>
               <Input
-                placeholder="e.g. o1"
+                placeholder={t('returns.field_order_ph')}
                 value={form.order_id}
                 onChange={e => setForm(f => ({ ...f, order_id: e.target.value }))}
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Reason <span className="text-danger">*</span></label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('returns.field_reason')} <span className="text-danger">*</span></label>
               <Input
-                placeholder="e.g. Wrong size delivered"
+                placeholder={t('returns.field_reason_ph')}
                 value={form.reason}
                 onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
                 required
               />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>{t('returns.cancel')}</Button>
               <Button type="submit" disabled={saving || !form.product.trim() || !form.reason.trim()}>
-                {saving ? 'Submitting…' : 'Submit Return'}
+                {saving ? t('returns.submitting') : t('returns.submit')}
               </Button>
             </DialogFooter>
           </form>

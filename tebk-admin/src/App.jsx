@@ -36,7 +36,7 @@ function AuthInit({ children }) {
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename="/admin">
+      <BrowserRouter>
         <AuthInit>
           <Routes>
             {/* Public */}

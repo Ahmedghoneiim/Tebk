@@ -66,12 +66,12 @@ export function Navbar() {
   }
 
   const NAV_LINKS = [
-    { to: '/',           label: t('nav.home'),      end: true },
+    { to: '/',           label: t('nav.home'),       end: true },
     { to: '/products',   label: t('nav.products') },
-    { to: '/categories', label: 'Categories' },
+    { to: '/categories', label: t('nav.categories') },
     { to: '/bundles',    label: t('nav.bundles') },
     { to: '/assistant',  label: t('nav.assistant') },
-    { to: '/about',      label: 'About' },
+    { to: '/about',      label: t('nav.about') },
   ]
 
   return (
@@ -228,7 +228,7 @@ export function Navbar() {
                     </DropdownMenuItem>
                     {user.role === 'admin' && (
                       <DropdownMenuItem onClick={() => { window.location.href = '/admin' }}>
-                        <ExternalLink className="w-4 h-4" /> Admin Panel
+                        <ExternalLink className="w-4 h-4" /> {t('user_menu.admin_panel')}
                       </DropdownMenuItem>
                     )}
                     <DropdownMenuSeparator />

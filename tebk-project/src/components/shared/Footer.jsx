@@ -107,7 +107,7 @@ export function Footer() {
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="w-12 h-12 rounded-full bg-secondary hover:bg-secondary/80 flex items-center justify-center transition-all duration-200 hover:scale-110 shadow-lg"
-              aria-label="Scroll to top"
+              aria-label={t('footer.scroll_to_top')}
             >
               <ArrowUp className="w-5 h-5 text-white" />
             </button>
@@ -117,7 +117,7 @@ export function Footer() {
                 © {new Date().getFullYear()} TEBK. {t('footer.rights')}
               </p>
               <p className="text-white/30 text-xs">
-                For B2B procurement only. Not for direct patient care.
+                {t('footer.b2b_notice')}
               </p>
             </div>
           </div>

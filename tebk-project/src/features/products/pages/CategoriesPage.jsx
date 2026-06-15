@@ -4,6 +4,7 @@ import { ArrowRight, Shield, Activity, Package, Boxes, Scissors, Star } from 'lu
 import { fetchCategories, fetchProducts } from '@/services/productService'
 import { Skeleton } from '@/components/ui/skeleton'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 import { cn } from '@/lib/utils'
 
 const COLORS = [
@@ -29,6 +30,7 @@ function CategorySkeleton() {
 
 export function CategoriesPage() {
   usePageTitle('Categories')
+  const { t } = useTranslation()
   const navigate = useNavigate()
 
   const { data: catData, isLoading: catsLoading } = useQuery({
@@ -51,8 +53,8 @@ export function CategoriesPage() {
   return (
     <div className="page-container py-8">
       <div className="mb-8">
-        <h1 className="section-title">Categories</h1>
-        <p className="text-muted text-sm mt-1">Browse products by category</p>
+        <h1 className="section-title">{t('categories.title')}</h1>
+        <p className="text-muted text-sm mt-1">{t('categories.subtitle')}</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -79,7 +81,7 @@ export function CategoriesPage() {
                     {cat.name}
                   </h2>
                   <div className="flex items-center justify-between">
-                    <p className="text-xs text-muted">{count} {count === 1 ? 'product' : 'products'}</p>
+                    <p className="text-xs text-muted">{count} {count === 1 ? t('categories.product') : t('categories.products')}</p>
                     <ArrowRight className="w-4 h-4 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </div>
                 </button>

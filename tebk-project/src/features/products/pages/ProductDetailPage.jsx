@@ -13,8 +13,10 @@ import { formatCurrency } from '@/utils/format'
 import { cn } from '@/lib/utils'
 import { cl } from '@/utils/cloudinary'
 import { QuantitySelector } from '@/components/shared/QuantitySelector'
+import { useTranslation } from '@/hooks/useTranslation'
 
 export function ProductDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const navigate = useNavigate()
   const [qty, setQty] = useState(1)
@@ -62,8 +64,8 @@ export function ProductDetailPage() {
   if (!product) {
     return (
       <div className="page-container py-16 text-center">
-        <p className="text-muted">Product not found.</p>
-        <Button variant="outline" className="mt-4" onClick={() => navigate('/products')}>Back to Products</Button>
+        <p className="text-muted">{t('product.not_found')}</p>
+        <Button variant="outline" className="mt-4" onClick={() => navigate('/products')}>{t('product.back_to_products')}</Button>
       </div>
     )
   }
@@ -75,13 +77,13 @@ export function ProductDetailPage() {
     }
     setSizeWarning(false)
     addToCart({ ...product, variantId: selectedVariant?.id, size: selectedVariant?.size }, qty)
-    toast.success(`${qty}× ${product.name}${selectedVariant ? ` (${selectedVariant.size})` : ''} added to cart`)
+    toast.success(`${qty}× ${product.name}${selectedVariant ? ` (${selectedVariant.size})` : ''} ${t('product.added_toast')}`)
   }
 
   return (
     <div className="page-container py-8">
       <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-sm text-muted hover:text-ink mb-6 transition-colors">
-        <ArrowLeft className="w-4 h-4" /> Back
+        <ArrowLeft className="w-4 h-4" /> {t('product.back')}
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
@@ -101,9 +103,9 @@ export function ProductDetailPage() {
 
           <div className="flex items-center gap-3 mb-4">
             <span className="text-3xl font-bold text-primary">{formatCurrency(displayedPrice)}</span>
-            <span className="text-sm text-muted">per {product.unit}</span>
-            {product.stock < 20 && product.stock > 0 && <Badge variant="warning">Low Stock</Badge>}
-            {product.stock === 0 && <Badge variant="danger">Out of Stock</Badge>}
+            <span className="text-sm text-muted">{t('product.per')} {product.unit}</span>
+            {product.stock < 20 && product.stock > 0 && <Badge variant="warning">{t('product.low_stock')}</Badge>}
+            {product.stock === 0 && <Badge variant="danger">{t('product.out_of_stock')}</Badge>}
           </div>
 
           <p className="text-sm text-muted leading-relaxed mb-6">{product.description}</p>
@@ -112,7 +114,7 @@ export function ProductDetailPage() {
           {variants.length > 0 && (
             <div className="mb-6">
               <p className="text-sm font-medium text-ink dark:text-slate-200 mb-3">
-                Size {selectedVariant && <span className="text-secondary ml-1">— {selectedVariant.size}</span>}
+                {t('product.size_label')} {selectedVariant && <span className="text-secondary ml-1">— {selectedVariant.size}</span>}
               </p>
               <div className="flex flex-wrap gap-2">
                 {variants.map(v => (
@@ -136,14 +138,14 @@ export function ProductDetailPage() {
                 ))}
               </div>
               {sizeWarning && (
-                <p className="text-xs text-danger mt-2">Please select a size before adding to cart.</p>
+                <p className="text-xs text-danger mt-2">{t('product.size_warning')}</p>
               )}
             </div>
           )}
 
           {/* Qty selector */}
           <div className="flex items-center gap-4 mb-6">
-            <span className="text-sm font-medium text-ink">Quantity:</span>
+            <span className="text-sm font-medium text-ink">{t('product.quantity')}</span>
             <QuantitySelector value={qty} onChange={setQty} stock={effectiveStock} />
             <span className="text-sm text-muted">= {formatCurrency(displayedPrice * qty)}</span>
           </div>
@@ -151,11 +153,11 @@ export function ProductDetailPage() {
           <div className="flex gap-3">
             <Button className="flex-1" onClick={handleAddToCart} disabled={effectiveStock === 0}>
               <ShoppingCart className="w-4 h-4" />
-              {effectiveStock === 0 ? 'نفذت الكمية' : 'Add to Cart'}
+              {effectiveStock === 0 ? t('product.out_of_stock_btn') : t('product.add_to_cart')}
             </Button>
             <Button
               variant="outline"
-              onClick={() => { toggle(product); toast.info(wishlisted ? 'Removed from wishlist' : 'Added to wishlist') }}
+              onClick={() => { toggle(product); toast.info(wishlisted ? t('product.removed_wishlist') : t('product.added_wishlist')) }}
               className={cn(wishlisted && 'border-danger text-danger hover:bg-red-50')}
             >
               <Heart className={cn('w-4 h-4', wishlisted && 'fill-danger')} />
@@ -164,7 +166,7 @@ export function ProductDetailPage() {
 
           <div className="mt-6 pt-6 border-t border-border">
             <p className="text-xs text-muted">
-              <span className="font-medium text-ink">Stock:</span> {effectiveStock > 0 ? `${effectiveStock} units available` : 'Out of stock'}
+              <span className="font-medium text-ink">{t('product.stock_label')}</span> {effectiveStock > 0 ? `${effectiveStock} ${t('product.units_available')}` : t('product.no_stock')}
             </p>
           </div>
         </div>

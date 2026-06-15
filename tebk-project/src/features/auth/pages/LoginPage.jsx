@@ -7,6 +7,7 @@ import { useAuthStore } from '@/store/authStore'
 import { loginSchema } from '@/utils/validators'
 import { toast } from '@/store/notificationStore'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 function MedicalIllustration() {
   return (
@@ -92,6 +93,7 @@ function AppleIcon() {
 
 export function LoginPage() {
   usePageTitle('Login')
+  const { t } = useTranslation()
   const { login, loading, error, clearError, user } = useAuthStore()
   const navigate  = useNavigate()
   const location  = useLocation()
@@ -116,7 +118,7 @@ export function LoginPage() {
 
   const onSubmit = async (data) => {
     const { error } = await login(data.email, data.password)
-    if (!error) toast.success('Welcome back!')
+    if (!error) toast.success(t('auth.welcome_back'))
   }
 
   return (
@@ -167,8 +169,8 @@ export function LoginPage() {
         <div className="flex-1 flex flex-col justify-center px-10 py-14">
           <div className="max-w-sm mx-auto w-full">
 
-            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Welcome Back!</h1>
-            <p className="text-gray-400 text-sm mb-8">Login to your account</p>
+            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.welcome_back')}</h1>
+            <p className="text-gray-400 text-sm mb-8">{t('auth.login_subtitle')}</p>
 
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4">
@@ -183,7 +185,7 @@ export function LoginPage() {
                   <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type="email"
-                    placeholder="Email"
+                    placeholder={t('auth.email')}
                     className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('email')}
                   />
@@ -197,7 +199,7 @@ export function LoginPage() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type={showPw ? 'text' : 'password'}
-                    placeholder="Password"
+                    placeholder={t('auth.password')}
                     className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('password')}
                   />
@@ -216,14 +218,14 @@ export function LoginPage() {
               <div className="flex items-center justify-between pt-0.5">
                 <label className="flex items-center gap-2 cursor-pointer select-none">
                   <input type="checkbox" className="w-4 h-4 rounded border-gray-300 accent-teal-500" />
-                  <span className="text-sm text-gray-500">Remember me</span>
+                  <span className="text-sm text-gray-500">{t('auth.remember_me')}</span>
                 </label>
                 <Link
                   to="/forgot-password"
                   className="text-sm font-semibold hover:underline"
                   style={{ color: '#1a3363' }}
                 >
-                  Forgot password?
+                  {t('auth.forgot_password')}
                 </Link>
               </div>
 
@@ -243,8 +245,8 @@ export function LoginPage() {
                 }}
               >
                 {loading
-                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Signing in…</>
-                  : 'Login'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('auth.signing_in')}</>
+                  : t('auth.login')
                 }
               </button>
             </form>
@@ -252,7 +254,7 @@ export function LoginPage() {
             {/* Divider */}
             <div className="flex items-center gap-3 my-5">
               <div className="flex-1 h-px bg-gray-200" />
-              <span className="text-xs text-gray-400 whitespace-nowrap">or login with</span>
+              <span className="text-xs text-gray-400 whitespace-nowrap">{t('auth.or_login_with')}</span>
               <div className="flex-1 h-px bg-gray-200" />
             </div>
 
@@ -274,9 +276,9 @@ export function LoginPage() {
 
             {/* Footer */}
             <p className="text-center text-sm text-gray-400 mt-6">
-              Don't have an account?{' '}
+              {t('auth.no_account')}{' '}
               <Link to="/register" className="font-bold hover:underline" style={{ color: '#1a3363' }}>
-                Register
+                {t('auth.register')}
               </Link>
             </p>
           </div>

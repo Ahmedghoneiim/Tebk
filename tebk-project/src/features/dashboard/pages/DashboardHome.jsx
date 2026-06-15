@@ -13,6 +13,7 @@ import { usePageTitle } from '@/hooks/usePageTitle'
 import { PageSkeleton } from '@/components/shared/LoadingSkeleton'
 import { formatCurrency, formatDate } from '@/utils/format'
 import { MOCK_ORDERS } from '@/utils/mockData'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_BADGE = {
   pending:    'warning',
@@ -24,12 +25,13 @@ const STATUS_BADGE = {
 
 export function DashboardHome() {
   usePageTitle('Dashboard')
+  const { t } = useTranslation()
   const { user, isNewUser, clearNewUser } = useAuthStore()
 
-  // Show welcome toast once after registration
   useEffect(() => {
     if (isNewUser) {
-      toast.success(`Welcome to TEBK, ${user?.full_name?.split(' ')[0] || 'Doctor'}! Your account is ready.`)
+      const firstName = user?.full_name?.split(' ')[0] || t('dashboard.doctor')
+      toast.success(t('dashboard.welcome_toast').replace('{name}', firstName))
       clearNewUser()
     }
   }, [])
@@ -57,8 +59,8 @@ export function DashboardHome() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="section-title">Welcome back, {user?.full_name?.split(' ')[0] || 'Doctor'}</h1>
-        <p className="text-muted text-sm mt-1">{user?.clinic_name || 'Your clinic dashboard'}</p>
+        <h1 className="section-title">{t('dashboard.welcome_back')} {user?.full_name?.split(' ')[0] || t('dashboard.doctor')}</h1>
+        <p className="text-muted text-sm mt-1">{user?.clinic_name || t('dashboard.clinic_dashboard')}</p>
       </div>
 
       {/* Notifications widget — shown only when there are unread notifications */}
@@ -67,13 +69,13 @@ export function DashboardHome() {
           <div className="flex items-center justify-between px-5 py-3 border-b border-border">
             <div className="flex items-center gap-2">
               <Bell className="w-4 h-4 text-secondary" />
-              <span className="text-sm font-semibold text-primary">Notifications</span>
+              <span className="text-sm font-semibold text-primary">{t('dashboard.notifications')}</span>
               <span className="w-5 h-5 rounded-full bg-secondary text-white text-[10px] font-bold flex items-center justify-center">
                 {unreadNotifications.length}
               </span>
             </div>
             <Link to="/notifications" className="text-xs text-secondary hover:underline flex items-center gap-1">
-              View all <ArrowRight className="w-3 h-3" />
+              {t('dashboard.view_all')} <ArrowRight className="w-3 h-3" />
             </Link>
           </div>
           <div className="divide-y divide-border">
@@ -92,18 +94,18 @@ export function DashboardHome() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Orders"    value={orders.length}              icon={ShoppingBag} trend={8}  />
-        <StatCard title="Total Spent"     value={formatCurrency(totalSpent)} icon={TrendingUp}  trend={12} />
-        <StatCard title="Pending Orders"  value={orders.filter(o => o.status === 'pending').length}    icon={Clock}     />
-        <StatCard title="Delivered"       value={orders.filter(o => o.status === 'delivered').length}  icon={Package}   />
+        <StatCard title={t('dashboard.stat_total_orders')}   value={orders.length}              icon={ShoppingBag} trend={8}  />
+        <StatCard title={t('dashboard.stat_total_spent')}    value={formatCurrency(totalSpent)} icon={TrendingUp}  trend={12} />
+        <StatCard title={t('dashboard.stat_pending')}        value={orders.filter(o => o.status === 'pending').length}    icon={Clock}     />
+        <StatCard title={t('dashboard.stat_delivered')}      value={orders.filter(o => o.status === 'delivered').length}  icon={Package}   />
       </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
-          { to: '/products',  icon: Package, label: 'Browse Products', desc: 'Shop medical supplies' },
-          { to: '/assistant', icon: Bot,     label: 'AI Assistant',    desc: 'Get procurement advice' },
-          { to: '/bundles',   icon: Package, label: 'Smart Bundles',   desc: 'Pre-built supply kits' },
+          { to: '/products',  icon: Package, label: t('dashboard.action_products'),  desc: t('dashboard.action_products_desc') },
+          { to: '/assistant', icon: Bot,     label: t('dashboard.action_assistant'), desc: t('dashboard.action_assistant_desc') },
+          { to: '/bundles',   icon: Package, label: t('dashboard.action_bundles'),   desc: t('dashboard.action_bundles_desc') },
         ].map(({ to, icon: Icon, label, desc }) => (
           <Link key={to} to={to} className="card hover:shadow-card transition-shadow flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-clinical flex items-center justify-center">
@@ -120,20 +122,20 @@ export function DashboardHome() {
       {/* Recent Orders */}
       <div className="card p-0 overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
-          <h2 className="font-semibold text-primary">Recent Orders</h2>
+          <h2 className="font-semibold text-primary">{t('dashboard.recent_orders')}</h2>
           <Button variant="ghost" size="sm" asChild>
-            <Link to="/orders">View all <ArrowRight className="w-3.5 h-3.5" /></Link>
+            <Link to="/orders">{t('dashboard.view_all')} <ArrowRight className="w-3.5 h-3.5" /></Link>
           </Button>
         </div>
         {recentOrders.length === 0 ? (
-          <div className="px-6 py-12 text-center text-muted text-sm">No orders yet.</div>
+          <div className="px-6 py-12 text-center text-muted text-sm">{t('dashboard.no_orders')}</div>
         ) : (
           <div className="divide-y divide-border">
             {recentOrders.map(order => (
               <Link key={order.id} to={`/orders/${order.id}`} className="flex items-center justify-between px-6 py-4 hover:bg-clinical transition-colors">
                 <div>
-                  <p className="text-sm font-medium text-ink">Order #{order.id.slice(0, 8).toUpperCase()}</p>
-                  <p className="text-xs text-muted mt-0.5">{formatDate(order.created_at)} · {order.order_items?.length || 0} items</p>
+                  <p className="text-sm font-medium text-ink">{t('orders.col_order')}{order.id.slice(0, 8).toUpperCase()}</p>
+                  <p className="text-xs text-muted mt-0.5">{formatDate(order.created_at)} · {order.order_items?.length || 0} {t('dashboard.items')}</p>
                 </div>
                 <div className="flex items-center gap-3">
                   <Badge variant={STATUS_BADGE[order.status] || 'default'} className="capitalize">{order.status}</Badge>

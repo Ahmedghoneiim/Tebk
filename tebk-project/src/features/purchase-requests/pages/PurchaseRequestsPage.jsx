@@ -14,6 +14,7 @@ import { useAuthStore } from '@/store/authStore'
 import { toast } from '@/store/notificationStore'
 import { formatCurrency, formatDate } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_BADGE = { approved: 'success', pending: 'warning', rejected: 'danger' }
 
@@ -37,6 +38,7 @@ function TableSkeleton() {
 
 export function PurchaseRequestsPage() {
   usePageTitle('Purchase Requests')
+  const { t } = useTranslation()
   const user = useAuthStore(s => s.user)
 
   const { data, isLoading } = useQuery({
@@ -59,32 +61,32 @@ export function PurchaseRequestsPage() {
     setSaving(true)
     const { data: created, error } = await createPurchaseRequest(user?.id, form)
     setSaving(false)
-    if (error) { toast.error('Failed to create request'); return }
+    if (error) { toast.error(t('purchase_requests.error_create')); return }
     setLocalItems(prev => [created, ...prev])
     setOpen(false)
     setForm(EMPTY_FORM)
-    toast.success('Purchase request submitted')
+    toast.success(t('purchase_requests.success_create'))
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="section-title">Purchase Requests</h1>
-          <p className="text-muted text-sm mt-1">B2B procurement approval workflow</p>
+          <h1 className="section-title">{t('purchase_requests.title')}</h1>
+          <p className="text-muted text-sm mt-1">{t('purchase_requests.subtitle')}</p>
         </div>
-        <Button onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> New Request</Button>
+        <Button onClick={() => setOpen(true)}><Plus className="w-4 h-4" /> {t('purchase_requests.new_request')}</Button>
       </div>
 
       {!isLoading && allItems.length === 0 ? (
-        <EmptyState icon={Layers} title="No purchase requests" description="Create a purchase request to start the procurement approval flow." />
+        <EmptyState icon={Layers} title={t('purchase_requests.empty')} description={t('purchase_requests.empty_desc')} />
       ) : (
         <div className="card p-0 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-border bg-background">
-                  {['Title', 'Description', 'Items', 'Total', 'Date', 'Status'].map(h => (
+                  {[t('purchase_requests.col_title'), t('purchase_requests.col_desc'), t('purchase_requests.col_items'), t('purchase_requests.col_total'), t('purchase_requests.col_date'), t('purchase_requests.col_status')].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted uppercase">{h}</th>
                   ))}
                 </tr>
@@ -111,41 +113,41 @@ export function PurchaseRequestsPage() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>New Purchase Request</DialogTitle>
-            <DialogDescription>Submit a procurement request for admin approval.</DialogDescription>
+            <DialogTitle>{t('purchase_requests.dialog_title')}</DialogTitle>
+            <DialogDescription>{t('purchase_requests.dialog_desc')}</DialogDescription>
           </DialogHeader>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Title <span className="text-danger">*</span></label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('purchase_requests.field_title')} <span className="text-danger">*</span></label>
               <Input
-                placeholder="e.g. Monthly PPE Restock"
+                placeholder={t('purchase_requests.field_title_ph')}
                 value={form.title}
                 onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
                 required
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Description</label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('purchase_requests.field_desc')}</label>
               <Input
-                placeholder="Briefly describe what you need and why"
+                placeholder={t('purchase_requests.field_desc_ph')}
                 value={form.description}
                 onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-ink block mb-1">Estimated Total (EGP)</label>
+              <label className="text-sm font-medium text-ink block mb-1">{t('purchase_requests.field_total')}</label>
               <Input
                 type="number"
                 min="0"
-                placeholder="e.g. 3500"
+                placeholder={t('purchase_requests.field_total_ph')}
                 value={form.total}
                 onChange={e => setForm(f => ({ ...f, total: e.target.value }))}
               />
             </div>
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>{t('purchase_requests.cancel')}</Button>
               <Button type="submit" disabled={saving || !form.title.trim()}>
-                {saving ? 'Submitting…' : 'Submit Request'}
+                {saving ? t('purchase_requests.submitting') : t('purchase_requests.submit')}
               </Button>
             </DialogFooter>
           </form>

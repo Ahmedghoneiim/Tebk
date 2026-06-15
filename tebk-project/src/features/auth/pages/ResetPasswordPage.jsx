@@ -6,6 +6,7 @@ import { Loader2, Lock, Eye, EyeOff } from 'lucide-react'
 import { resetPasswordSchema } from '@/utils/validators'
 import { updatePassword } from '@/services/authService'
 import { toast } from '@/store/notificationStore'
+import { useTranslation } from '@/hooks/useTranslation'
 
 function ResetIllustration() {
   return (
@@ -69,6 +70,7 @@ function DotsGrid() {
 }
 
 export function ResetPasswordPage() {
+  const { t } = useTranslation()
   const [loading, setLoading]         = useState(false)
   const [serverError, setServerError] = useState('')
   const [showPw, setShowPw]           = useState(false)
@@ -86,7 +88,7 @@ export function ResetPasswordPage() {
     const { error } = await updatePassword(password)
     setLoading(false)
     if (error) { setServerError(error.message); return }
-    toast.success('Password updated successfully!')
+    toast.success(t('auth.password_updated_toast'))
     navigate('/login')
   }
 
@@ -120,7 +122,7 @@ export function ResetPasswordPage() {
           </div>
 
           <p className="absolute bottom-8 left-0 right-0 text-center text-xs font-medium z-10" style={{ color: '#1a3363', opacity: 0.6 }}>
-            Create a strong new password
+            {t('auth.strong_password')}
           </p>
         </div>
 
@@ -128,9 +130,9 @@ export function ResetPasswordPage() {
         <div className="flex-1 flex flex-col justify-center px-10 py-14">
           <div className="max-w-sm mx-auto w-full">
 
-            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Set New Password</h1>
+            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.set_new_password')}</h1>
             <p className="text-gray-400 text-sm mb-8">
-              Choose a strong password for your account
+              {t('auth.new_password_subtitle')}
             </p>
 
             {serverError && (
@@ -146,7 +148,7 @@ export function ResetPasswordPage() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type={showPw ? 'text' : 'password'}
-                    placeholder="New Password"
+                    placeholder={t('auth.new_password')}
                     className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('password')}
                   />
@@ -169,7 +171,7 @@ export function ResetPasswordPage() {
                   <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-300" />
                   <input
                     type={showConfPw ? 'text' : 'password'}
-                    placeholder="Confirm New Password"
+                    placeholder={t('auth.confirm_new_password')}
                     className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-gray-200 text-sm text-gray-700 focus:outline-none focus:border-teal-400 transition-colors placeholder:text-gray-300"
                     {...register('confirmPassword')}
                   />
@@ -189,7 +191,7 @@ export function ResetPasswordPage() {
               {/* Password hint */}
               <div className="rounded-2xl px-4 py-3" style={{ background: '#e8f7f6' }}>
                 <p className="text-xs text-gray-500">
-                  Password must be at least <span className="font-semibold" style={{ color: '#4ea055' }}>8 characters</span> long
+                  {t('auth.password_hint')}
                 </p>
               </div>
 
@@ -208,8 +210,8 @@ export function ResetPasswordPage() {
                 }}
               >
                 {loading
-                  ? <><Loader2 className="w-4 h-4 animate-spin" /> Updating…</>
-                  : 'Update Password'
+                  ? <><Loader2 className="w-4 h-4 animate-spin" /> {t('auth.updating')}</>
+                  : t('auth.update_password')
                 }
               </button>
             </form>

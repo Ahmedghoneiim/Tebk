@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input'
 import { MOCK_PRODUCTS } from '@/utils/mockData'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 import { toast } from '@/store/notificationStore'
 
 function stockVariant(stock) {
@@ -14,14 +15,9 @@ function stockVariant(stock) {
   return 'success'
 }
 
-function stockLabel(stock) {
-  if (stock === 0) return 'Out of Stock'
-  if (stock < 20)  return 'Low Stock'
-  return 'In Stock'
-}
-
 export function SupplierProducts() {
   usePageTitle('My Products')
+  const { t } = useTranslation()
 
   const [products, setProducts] = useState(MOCK_PRODUCTS.slice(0, 6))
   const [editingId, setEditingId] = useState(null)
@@ -38,22 +34,22 @@ export function SupplierProducts() {
     const price = Number(editValues.price)
     const stock = Number(editValues.stock)
     if (isNaN(price) || price <= 0 || isNaN(stock) || stock < 0) {
-      toast.error('Invalid price or stock value')
+      toast.error(t('supplier.error_invalid'))
       return
     }
     setProducts(prev => prev.map(p => p.id === id ? { ...p, price, stock } : p))
     setEditingId(null)
-    toast.success('Listing updated')
+    toast.success(t('supplier.success_updated'))
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="section-title">My Products</h1>
-          <p className="text-muted text-sm mt-1">{products.length} listings managed</p>
+          <h1 className="section-title">{t('supplier.products_title')}</h1>
+          <p className="text-muted text-sm mt-1">{t('supplier.products_subtitle').replace('{n}', products.length)}</p>
         </div>
-        <Button><Plus className="w-4 h-4" /> Add Product</Button>
+        <Button><Plus className="w-4 h-4" /> {t('supplier.add_product')}</Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -63,7 +59,7 @@ export function SupplierProducts() {
             <div key={p.id} className="card">
               <div className="flex items-start justify-between mb-3">
                 <h3 className="text-sm font-semibold text-ink flex-1 mr-2">{p.name}</h3>
-                <Badge variant={stockVariant(p.stock)}>{stockLabel(p.stock)}</Badge>
+                <Badge variant={stockVariant(p.stock)}>{p.stock === 0 ? t('supplier.status_out') : p.stock < 20 ? t('supplier.status_low') : t('supplier.status_in_stock')}</Badge>
               </div>
               <p className="text-xs text-muted capitalize mb-3">{p.category}</p>
 
@@ -71,7 +67,7 @@ export function SupplierProducts() {
                 <div className="space-y-2">
                   <div className="flex gap-2">
                     <div className="flex-1">
-                      <label className="text-xs text-muted mb-1 block">Price (EGP)</label>
+                      <label className="text-xs text-muted mb-1 block">{t('supplier.col_price')}</label>
                       <Input
                         type="number"
                         min="0"
@@ -81,7 +77,7 @@ export function SupplierProducts() {
                       />
                     </div>
                     <div className="flex-1">
-                      <label className="text-xs text-muted mb-1 block">Stock</label>
+                      <label className="text-xs text-muted mb-1 block">{t('supplier.col_stock')}</label>
                       <Input
                         type="number"
                         min="0"
@@ -93,10 +89,10 @@ export function SupplierProducts() {
                   </div>
                   <div className="flex gap-2">
                     <Button size="sm" className="flex-1" onClick={() => saveEdit(p.id)}>
-                      <Check className="w-3.5 h-3.5" /> Save
+                      <Check className="w-3.5 h-3.5" /> {t('supplier.save')}
                     </Button>
                     <Button size="sm" variant="outline" className="flex-1" onClick={cancelEdit}>
-                      <X className="w-3.5 h-3.5" /> Cancel
+                      <X className="w-3.5 h-3.5" /> {t('common.cancel')}
                     </Button>
                   </div>
                 </div>
@@ -104,12 +100,12 @@ export function SupplierProducts() {
                 <div className="flex items-center justify-between">
                   <span className="text-primary font-bold">{formatCurrency(p.price)}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs text-muted">Stock: {p.stock}</span>
+                    <span className="text-xs text-muted">{t('supplier.col_stock_label')} {p.stock}</span>
                     <button
                       className="text-secondary text-xs hover:underline"
                       onClick={() => startEdit(p)}
                     >
-                      Edit listing
+                      {t('supplier.edit_listing')}
                     </button>
                   </div>
                 </div>

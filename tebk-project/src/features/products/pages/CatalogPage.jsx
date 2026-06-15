@@ -10,16 +10,18 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 import { cn } from '@/lib/utils'
-
-const SORT_OPTIONS = [
-  { value: 'name_asc',   label: 'Name A–Z' },
-  { value: 'price_asc',  label: 'Price: Low to High' },
-  { value: 'price_desc', label: 'Price: High to Low' },
-]
 
 export function CatalogPage() {
   usePageTitle('Product Catalog')
+  const { t } = useTranslation()
+
+  const SORT_OPTIONS = [
+    { value: 'name_asc',   label: t('catalog.sort_name_asc') },
+    { value: 'price_asc',  label: t('catalog.sort_price_asc') },
+    { value: 'price_desc', label: t('catalog.sort_price_desc') },
+  ]
   const [searchParams, setSearchParams] = useSearchParams()
   const [search,      setSearch]      = useState('')
   const [sortBy,      setSortBy]      = useState('name_asc')
@@ -64,11 +66,11 @@ export function CatalogPage() {
   return (
     <div className="page-container py-8">
       <div className="mb-6">
-        <h1 className="section-title">Medical Supplies</h1>
+        <h1 className="section-title">{t('catalog.title')}</h1>
         <p className="text-muted text-sm mt-1">
           {search || category !== 'all'
-            ? `${products.length} of ${allProducts.length} products`
-            : `${allProducts.length} products available`}
+            ? t('catalog.products_filtered').replace('{count}', products.length).replace('{total}', allProducts.length)
+            : t('catalog.products_available').replace('{total}', allProducts.length)}
         </p>
       </div>
 
@@ -79,7 +81,7 @@ export function CatalogPage() {
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search products…"
+            placeholder={t('catalog.search_placeholder')}
             className="pl-10"
           />
           {search && (
@@ -101,7 +103,7 @@ export function CatalogPage() {
           className={cn(activeFiltersCount > 0 && 'border-secondary text-secondary')}
         >
           <SlidersHorizontal className="w-4 h-4" />
-          Filters
+          {t('catalog.filters')}
           {activeFiltersCount > 0 && (
             <Badge variant="secondary" className="ml-1">{activeFiltersCount}</Badge>
           )}
@@ -115,7 +117,7 @@ export function CatalogPage() {
           className={cn('px-4 py-1.5 rounded-full text-sm font-medium transition-colors',
             category === 'all' ? 'bg-primary text-white' : 'bg-white border border-border text-muted hover:border-primary hover:text-primary dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 dark:hover:border-secondary dark:hover:text-secondary')}
         >
-          All
+          {t('catalog.all')}
         </button>
         {categories.map(c => (
           <button
@@ -135,13 +137,13 @@ export function CatalogPage() {
           {Array.from({ length: 8 }).map((_, i) => <ProductCardSkeleton key={i} />)}
         </div>
       ) : isError ? (
-        <p className="text-center py-16 text-danger text-sm">Failed to load products. Please refresh.</p>
+        <p className="text-center py-16 text-danger text-sm">{t('catalog.load_error')}</p>
       ) : products.length === 0 ? (
         <EmptyState
-          title="No products found"
-          description="Try adjusting your search or category filter."
+          title={t('catalog.no_products')}
+          description={t('catalog.no_products_desc')}
           action={() => { setSearch(''); setCategory('all') }}
-          actionLabel="Clear filters"
+          actionLabel={t('catalog.clear_filters')}
         />
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

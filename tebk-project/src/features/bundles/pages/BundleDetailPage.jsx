@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { fetchBundleById } from '@/services/bundleService'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 import { cl } from '@/utils/cloudinary'
 
 function BundleDetailSkeleton() {
@@ -30,6 +31,7 @@ function BundleDetailSkeleton() {
 }
 
 export function BundleDetailPage() {
+  const { t }     = useTranslation()
   const { id }    = useParams()
   const navigate  = useNavigate()
   const addToCart = useCartStore(s => s.addItem)
@@ -47,8 +49,8 @@ export function BundleDetailPage() {
   if (!bundle) {
     return (
       <div className="page-container py-16 text-center">
-        <p className="text-muted mb-4">Bundle not found.</p>
-        <Button variant="outline" onClick={() => navigate('/bundles')}>Back to Bundles</Button>
+        <p className="text-muted mb-4">{t('bundles.not_found')}</p>
+        <Button variant="outline" onClick={() => navigate('/bundles')}>{t('bundles.back')}</Button>
       </div>
     )
   }
@@ -61,7 +63,7 @@ export function BundleDetailPage() {
     } else {
       addToCart({ id: `bundle-${bundle.id}`, name: bundle.name, price: bundle.bundle_price, category: 'bundle', unit: 'bundle' }, 1)
     }
-    toast.success(`${bundle.name} added to cart!`)
+    toast.success(`${bundle.name} ${t('bundles.added_toast')}`)
   }
 
   const savings = bundle.original_price ? bundle.original_price - bundle.bundle_price : null
@@ -76,7 +78,7 @@ export function BundleDetailPage() {
           className="flex items-center gap-2 text-sm font-medium mb-8 transition-colors hover:text-secondary"
           style={{ color: '#1a3363' }}
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Bundles
+          <ArrowLeft className="w-4 h-4" /> {t('bundles.back')}
         </button>
 
         {/* ── Main: image LEFT + info RIGHT ── */}
@@ -109,7 +111,7 @@ export function BundleDetailPage() {
                 style={{ background: '#C1E3C4', color: '#1a3363' }}
               >
                 <Tag className="w-3.5 h-3.5" />
-                Save {bundle.savings_pct}%
+                {t('bundles.save_pct').replace('{pct}', bundle.savings_pct)}
               </div>
             )}
           </div>
@@ -124,7 +126,7 @@ export function BundleDetailPage() {
                   style={{ background: 'rgba(193,227,196,0.12)', color: '#4ea055' }}
                 >
                   <Layers className="w-3 h-3" />
-                  {bundle.category} clinic bundle
+                  {bundle.category} {t('bundles.clinic_bundle_suffix')}
                 </span>
               )}
 
@@ -141,7 +143,7 @@ export function BundleDetailPage() {
                   style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.9)' }}
                 >
                   <p className="text-xs font-semibold uppercase tracking-wider mb-3" style={{ color: '#1a3363' }}>
-                    Included Products
+                    {t('bundles.included_products')}
                   </p>
                   <ul className="space-y-2">
                     {bundle.items.map((item, i) => (
@@ -149,7 +151,7 @@ export function BundleDetailPage() {
                         <CheckCircle className="w-4 h-4 shrink-0" style={{ color: '#4ea055' }} />
                         <span className="text-gray-600 flex-1">{item.name}</span>
                         <span className="font-semibold text-gray-500">×{item.quantity}</span>
-                        <span className="text-gray-400 text-xs">{formatCurrency(item.price)}/unit</span>
+                        <span className="text-gray-400 text-xs">{formatCurrency(item.price)}{t('bundles.per_unit')}</span>
                       </li>
                     ))}
                   </ul>
@@ -165,18 +167,18 @@ export function BundleDetailPage() {
               <div className="space-y-1.5 mb-4 text-sm">
                 {bundle.original_price && (
                   <div className="flex justify-between text-gray-400">
-                    <span>Individual price</span>
+                    <span>{t('bundles.individual_price')}</span>
                     <span className="line-through">{formatCurrency(bundle.original_price)}</span>
                   </div>
                 )}
                 {savings && (
                   <div className="flex justify-between font-medium" style={{ color: '#4ea055' }}>
-                    <span>Bundle discount</span>
+                    <span>{t('bundles.bundle_discount')}</span>
                     <span>−{formatCurrency(savings)}</span>
                   </div>
                 )}
                 <div className="flex justify-between font-bold text-xl pt-2 border-t border-gray-100" style={{ color: '#1a3363' }}>
-                  <span>Bundle price</span>
+                  <span>{t('bundles.bundle_price')}</span>
                   <span>{formatCurrency(bundle.bundle_price)}</span>
                 </div>
               </div>
@@ -187,11 +189,11 @@ export function BundleDetailPage() {
                 style={{ background: '#1a3363' }}
               >
                 <ShoppingCart className="w-5 h-5" />
-                Add Bundle to Cart
+                {t('bundles.add_bundle')}
               </button>
 
               <p className="text-center text-xs text-gray-400 mt-3">
-                Prices locked for 30 days · Contact your account manager for bulk orders
+                {t('bundles.price_note')}
               </p>
             </div>
           </div>

@@ -1,0 +1,3 @@
+{
+  "_comment": "Each sub-project (tebk-project, tebk-admin) is deployed as a separate Vercel project with its own Root Directory. See tebk-project/vercel.json and tebk-admin/vercel.json for the actual config."
+}

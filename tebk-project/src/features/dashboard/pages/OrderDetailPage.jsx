@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { formatCurrency, formatDate } from '@/utils/format'
 import { MOCK_ORDERS } from '@/utils/mockData'
+import { useTranslation } from '@/hooks/useTranslation'
 
 const STATUS_BADGE = {
   pending:    'warning',
@@ -18,6 +19,7 @@ const STATUS_BADGE = {
 }
 
 export function OrderDetailPage() {
+  const { t } = useTranslation()
   const { id } = useParams()
   const { user } = useAuthStore()
   const navigate = useNavigate()
@@ -48,8 +50,8 @@ export function OrderDetailPage() {
   if (!order) {
     return (
       <div className="text-center py-16">
-        <p className="text-muted">Order not found.</p>
-        <Button variant="outline" className="mt-4" onClick={() => navigate('/orders')}>Back to Orders</Button>
+        <p className="text-muted">{t('orders.not_found')}</p>
+        <Button variant="outline" className="mt-4" onClick={() => navigate('/orders')}>{t('orders.back')}</Button>
       </div>
     )
   }
@@ -61,7 +63,7 @@ export function OrderDetailPage() {
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="section-title">Order #{order.id.slice(0, 8).toUpperCase()}</h1>
+          <h1 className="section-title">{t('orders.col_order')}{order.id.slice(0, 8).toUpperCase()}</h1>
           <p className="text-muted text-sm">{formatDate(order.created_at)}</p>
         </div>
         <Badge variant={STATUS_BADGE[order.status] || 'default'} className="capitalize ml-auto">{order.status}</Badge>
@@ -70,7 +72,7 @@ export function OrderDetailPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 card p-0 overflow-hidden">
           <div className="px-5 py-4 border-b border-border">
-            <h2 className="font-semibold text-primary">Order Items</h2>
+            <h2 className="font-semibold text-primary">{t('orders.order_items_section')}</h2>
           </div>
           <div className="divide-y divide-border">
             {order.order_items?.map(item => (
@@ -90,22 +92,22 @@ export function OrderDetailPage() {
 
         <div className="space-y-4">
           <div className="card">
-            <h2 className="font-semibold text-primary mb-3">Order Summary</h2>
+            <h2 className="font-semibold text-primary mb-3">{t('orders.summary')}</h2>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-muted">
-                <span>Subtotal</span><span>{formatCurrency(order.total - 50)}</span>
+                <span>{t('orders.subtotal')}</span><span>{formatCurrency(order.total - 50)}</span>
               </div>
               <div className="flex justify-between text-muted">
-                <span>Shipping</span><span className="text-success">Free</span>
+                <span>{t('orders.shipping')}</span><span className="text-success">{t('orders.free')}</span>
               </div>
               <div className="flex justify-between font-semibold pt-2 border-t border-border">
-                <span>Total</span><span className="text-primary">{formatCurrency(order.total)}</span>
+                <span>{t('orders.total')}</span><span className="text-primary">{formatCurrency(order.total)}</span>
               </div>
             </div>
           </div>
 
           <div className="card">
-            <h2 className="font-semibold text-primary mb-3">Shipping To</h2>
+            <h2 className="font-semibold text-primary mb-3">{t('orders.shipping_to')}</h2>
             <div className="text-sm text-muted space-y-1">
               <p className="text-ink font-medium">{order.shipping_name}</p>
               <p>{order.shipping_address}</p>

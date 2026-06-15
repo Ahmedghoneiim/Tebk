@@ -8,22 +8,7 @@ import { Button } from '@/components/ui/button'
 import { ProductCard } from '@/components/shared/ProductCard'
 import { MOCK_PRODUCTS, MOCK_BUNDLES } from '@/utils/mockData'
 import { formatCurrency } from '@/utils/format'
-
-const FEATURES = [
-  { icon: Bot,         title: 'AI Buyer Assistant',   desc: 'Answer 4 questions, get a full procurement recommendation tailored to your clinic type and budget.' },
-  { icon: Package,     title: 'Smart Bundles',         desc: 'Pre-built, AI-adjusted supply bundles for dental, ICU, lab, and general clinics — buy more, save more.' },
-  { icon: RefreshCw,   title: 'Auto-Refill',           desc: 'Subscribe to consumables and never run out. Pause, resume, or change frequency anytime.' },
-  { icon: Warehouse,   title: 'Inventory Management',  desc: 'Track stock levels, get low-stock alerts, and generate reorder suggestions automatically.' },
-  { icon: Camera,      title: 'Image Search',          desc: 'Photograph any medical item and instantly find the exact product or the closest alternative.' },
-  { icon: ShieldCheck, title: 'B2B Verified',          desc: 'Purpose-built for clinics, hospitals, and procurement teams. Every product is healthcare-grade.' },
-]
-
-const STATS = [
-  { value: '5,000+', label: 'Medical Products' },
-  { value: '300+',   label: 'Healthcare Clients' },
-  { value: '98%',    label: 'Order Accuracy' },
-  { value: '24h',    label: 'Avg. Delivery' },
-]
+import { useTranslation } from '@/hooks/useTranslation'
 
 const FEATURED = MOCK_PRODUCTS.filter(p => p.featured).slice(0, 4)
 
@@ -31,6 +16,24 @@ const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transi
 const stagger = { show: { transition: { staggerChildren: 0.1 } } }
 
 export function LandingPage() {
+  const { t } = useTranslation()
+
+  const FEATURES = [
+    { icon: Bot,         title: t('landing.feature_ai_title'),        desc: t('landing.feature_ai_desc') },
+    { icon: Package,     title: t('landing.feature_bundles_title'),    desc: t('landing.feature_bundles_desc') },
+    { icon: RefreshCw,   title: t('landing.feature_refill_title'),     desc: t('landing.feature_refill_desc') },
+    { icon: Warehouse,   title: t('landing.feature_inventory_title'),  desc: t('landing.feature_inventory_desc') },
+    { icon: Camera,      title: t('landing.feature_camera_title'),     desc: t('landing.feature_camera_desc') },
+    { icon: ShieldCheck, title: t('landing.feature_b2b_title'),        desc: t('landing.feature_b2b_desc') },
+  ]
+
+  const STATS = [
+    { value: '5,000+', label: t('landing.stat_products') },
+    { value: '300+',   label: t('landing.stat_clients') },
+    { value: '98%',    label: t('landing.stat_accuracy') },
+    { value: '24h',    label: t('landing.stat_delivery') },
+  ]
+
   return (
     <div className="overflow-x-hidden">
 
@@ -80,7 +83,7 @@ export function LandingPage() {
               style={{ color: '#4ea055' }}
             >
               <CheckCircle className="w-4 h-4" />
-              AI-Powered Medical Procurement
+              {t('landing.badge')}
             </motion.div>
 
             {/* Headline */}
@@ -89,14 +92,13 @@ export function LandingPage() {
               className="text-5xl sm:text-6xl xl:text-[68px] font-display font-extrabold leading-[1.05] mb-6"
               style={{ color: '#1a3363' }}
             >
-              SMARTER<br />
-              <span style={{ color: '#4ea055' }}>MEDICAL</span><br />
-              SUPPLY.
+              {t('landing.hero_headline_1')}<br />
+              <span style={{ color: '#4ea055' }}>{t('landing.hero_headline_2')}</span><br />
+              {t('landing.hero_headline_3')}
             </motion.h1>
 
             <motion.p variants={fadeUp} className="text-gray-500 text-lg leading-relaxed mb-8 max-w-md">
-              TEBK combines AI-powered recommendations, smart bundles, and subscription refills
-              to transform how healthcare providers buy medical supplies.
+              {t('landing.hero_desc')}
             </motion.p>
 
             {/* CTA buttons */}
@@ -106,14 +108,14 @@ export function LandingPage() {
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-white text-sm font-semibold transition-all duration-200 hover:scale-105 hover:shadow-lg"
                 style={{ background: '#1a3363' }}
               >
-                Try AI Assistant <ArrowRight className="w-4 h-4" />
+                {t('landing.try_assistant')} <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 to="/products"
                 className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-semibold border-2 transition-all duration-200 hover:scale-105 bg-white/60"
                 style={{ borderColor: '#1a3363', color: '#1a3363' }}
               >
-                Browse Products
+                {t('landing.browse_products')}
               </Link>
             </motion.div>
 
@@ -141,8 +143,8 @@ export function LandingPage() {
       <section className="py-20 bg-background">
         <div className="page-container">
           <div className="text-center mb-14">
-            <h2 className="text-3xl font-display font-bold text-primary">Everything your clinic needs</h2>
-            <p className="text-muted mt-3 max-w-xl mx-auto">From one-click reorders to AI-driven procurement recommendations — TEBK does the heavy lifting.</p>
+            <h2 className="text-3xl font-display font-bold text-primary">{t('landing.features_title')}</h2>
+            <p className="text-muted mt-3 max-w-xl mx-auto">{t('landing.features_subtitle')}</p>
           </div>
           <motion.div
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -168,11 +170,11 @@ export function LandingPage() {
         <div className="page-container">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-display font-bold text-primary">Popular products</h2>
-              <p className="text-muted text-sm mt-1">Most ordered by clinics this month</p>
+              <h2 className="text-2xl font-display font-bold text-primary">{t('landing.popular_products')}</h2>
+              <p className="text-muted text-sm mt-1">{t('landing.popular_subtitle')}</p>
             </div>
             <Button variant="outline" asChild>
-              <Link to="/products">View all <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/products">{t('landing.view_all')} <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -194,20 +196,20 @@ export function LandingPage() {
               style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(33,51,96,0.08)', color: '#444' }}
             >
               <Sparkles className="w-4 h-4" style={{ color: '#4ea055' }} />
-              Pre-built supply kits
+              {t('landing.prebuilt_kits')}
               <span className="w-1 h-1 rounded-full inline-block bg-gray-300" />
-              save up to 22% vs buying individually
+              {t('landing.save_22')}
             </div>
           </div>
 
           {/* Section header */}
           <div className="flex items-center justify-between mb-7">
             <div>
-              <h2 className="text-2xl font-display font-bold text-primary">Smart Bundles</h2>
-              <p className="text-muted text-sm mt-1">Pre-built kits for every clinic type</p>
+              <h2 className="text-2xl font-display font-bold text-primary">{t('landing.bundles_title')}</h2>
+              <p className="text-muted text-sm mt-1">{t('landing.bundles_subtitle')}</p>
             </div>
             <Button variant="outline" asChild>
-              <Link to="/bundles">All bundles <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/bundles">{t('landing.all_bundles')} <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
 
@@ -255,7 +257,7 @@ export function LandingPage() {
                     <h3 className="text-lg font-bold mb-2" style={{ color: '#1a3363' }}>{bundle.name}</h3>
                     <p className="text-sm text-gray-500 leading-relaxed">{bundle.description}</p>
                     <p className="text-xs text-gray-400 italic mt-3">
-                      {bundle.items.length} products included · Details available on request
+                      {bundle.items.length} {t('landing.products_included')}
                     </p>
                   </div>
 
@@ -270,7 +272,7 @@ export function LandingPage() {
                         className="text-sm font-semibold transition-colors hover:underline"
                         style={{ color: '#1a3363' }}
                       >
-                        Details →
+                        {t('landing.details')}
                       </Link>
                       <Link
                         to="/bundles"
@@ -278,7 +280,7 @@ export function LandingPage() {
                         style={{ background: '#1a3363' }}
                       >
                         <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
+                        {t('landing.add_to_cart')}
                       </Link>
                     </div>
                   </div>
@@ -297,12 +299,12 @@ export function LandingPage() {
           <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center mx-auto mb-6">
             <Bot className="w-8 h-8 text-white" />
           </div>
-          <h2 className="text-3xl font-display font-bold text-primary mb-3">Not sure what to order?</h2>
+          <h2 className="text-3xl font-display font-bold text-primary mb-3">{t('landing.ai_cta_title')}</h2>
           <p className="text-muted max-w-md mx-auto mb-8">
-            Answer 4 quick questions about your clinic and our AI will build a complete procurement list with quantities and cost estimates.
+            {t('landing.ai_cta_desc')}
           </p>
           <Button size="lg" asChild>
-            <Link to="/assistant">Start AI Assistant <ArrowRight className="w-4 h-4" /></Link>
+            <Link to="/assistant">{t('landing.start_assistant')} <ArrowRight className="w-4 h-4" /></Link>
           </Button>
         </div>
       </section>

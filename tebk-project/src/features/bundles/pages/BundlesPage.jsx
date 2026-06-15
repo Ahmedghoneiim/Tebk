@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { fetchBundles } from '@/services/bundleService'
 import { formatCurrency } from '@/utils/format'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 import { cl } from '@/utils/cloudinary'
 
 function BundleSkeleton() {
@@ -34,6 +35,7 @@ function BundleSkeleton() {
 
 export function BundlesPage() {
   usePageTitle('Smart Bundles')
+  const { t } = useTranslation()
   const addToCart = useCartStore(s => s.addItem)
 
   const { data, isLoading } = useQuery({
@@ -50,7 +52,7 @@ export function BundlesPage() {
     } else {
       addToCart({ id: `bundle-${bundle.id}`, name: bundle.name, price: bundle.bundle_price, category: 'bundle', unit: 'bundle' }, 1)
     }
-    toast.success(`${bundle.name} added to cart!`)
+    toast.success(`${bundle.name} ${t('bundles.added_toast')}`)
   }
 
   return (
@@ -67,10 +69,10 @@ export function BundlesPage() {
             style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 14px rgba(33,51,96,0.07)', color: '#555' }}
           >
             <Sparkles className="w-4 h-4" style={{ color: '#4ea055' }} />
-            Pre-built supply kits — save up to 22% vs buying individually
+            {t('bundles.prebuilt_badge')}
           </div>
-          <h1 className="text-3xl font-display font-bold" style={{ color: '#1a3363' }}>Smart Bundles</h1>
-          <p className="text-gray-400 text-sm mt-1">Choose a ready-made bundle and add everything to cart in one click</p>
+          <h1 className="text-3xl font-display font-bold" style={{ color: '#1a3363' }}>{t('bundles.title')}</h1>
+          <p className="text-gray-400 text-sm mt-1">{t('bundles.subtitle')}</p>
         </div>
 
         {/* Bundle grid */}
@@ -115,7 +117,7 @@ export function BundlesPage() {
                     <div
                       className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold shadow"
                       style={{ background: '#C1E3C4', color: '#1a3363' }}>
-                      Save {bundle.savings_pct}%
+                      {t('bundles.save_pct').replace('{pct}', bundle.savings_pct)}
                     </div>
                   )}
                 </div>
@@ -129,7 +131,7 @@ export function BundlesPage() {
                     </h3>
                     {bundle.category && (
                       <span className="text-xs font-medium capitalize" style={{ color: '#4ea055' }}>
-                        {bundle.category} clinic
+                        {bundle.category} {t('bundles.clinic_suffix')}
                       </span>
                     )}
                   </div>
@@ -147,11 +149,11 @@ export function BundlesPage() {
                         </li>
                       ))}
                       {bundle.items.length > 3 && (
-                        <li className="text-xs text-gray-400 pl-4">+{bundle.items.length - 3} more products</li>
+                        <li className="text-xs text-gray-400 pl-4">{t('bundles.more_products').replace('{count}', bundle.items.length - 3)}</li>
                       )}
                     </ul>
                   ) : (
-                    <p className="text-xs text-gray-400 italic mb-2">Details available on request</p>
+                    <p className="text-xs text-gray-400 italic mb-2">{t('bundles.details_on_request')}</p>
                   )}
 
                   {/* Price + Actions */}
@@ -171,7 +173,7 @@ export function BundlesPage() {
                         className="text-sm font-semibold transition-colors hover:underline"
                         style={{ color: '#1a3363' }}
                       >
-                        Details →
+                        {t('bundles.details_link')}
                       </Link>
                       <button
                         onClick={() => handleAddBundle(bundle)}
@@ -179,7 +181,7 @@ export function BundlesPage() {
                         style={{ background: '#1a3363' }}
                       >
                         <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
+                        {t('bundles.add_to_cart')}
                       </button>
                     </div>
                   </div>

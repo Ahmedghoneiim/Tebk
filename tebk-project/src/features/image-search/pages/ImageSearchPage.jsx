@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { ProductCard } from '@/components/shared/ProductCard'
 import { MOCK_PRODUCTS } from '@/utils/mockData'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { useTranslation } from '@/hooks/useTranslation'
 
 function mockImageMatch(seed = 0) {
   const idx = seed % MOCK_PRODUCTS.length
@@ -18,6 +19,7 @@ function mockImageMatch(seed = 0) {
 
 export function ImageSearchPage() {
   usePageTitle('Image Search')
+  const { t } = useTranslation()
   const [preview,  setPreview]  = useState(null)
   const [loading,  setLoading]  = useState(false)
   const [results,  setResults]  = useState(null)
@@ -43,8 +45,8 @@ export function ImageSearchPage() {
             <Camera className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-display font-bold text-primary">Image Search</h1>
-            <p className="text-sm text-muted">Upload or photograph a medical item to find it instantly</p>
+            <h1 className="text-2xl font-display font-bold text-primary">{t('image_search.title')}</h1>
+            <p className="text-sm text-muted">{t('image_search.subtitle')}</p>
           </div>
         </div>
 
@@ -60,8 +62,8 @@ export function ImageSearchPage() {
               <div className="w-14 h-14 rounded-2xl bg-clinical flex items-center justify-center mx-auto mb-4">
                 <Upload className="w-7 h-7 text-secondary" />
               </div>
-              <p className="font-medium text-ink">Drop an image here or click to upload</p>
-              <p className="text-sm text-muted mt-1">JPG, PNG, WEBP up to 10MB</p>
+              <p className="font-medium text-ink">{t('image_search.upload_cta')}</p>
+              <p className="text-sm text-muted mt-1">{t('image_search.upload_hint')}</p>
             </div>
           )}
           <input
@@ -77,7 +79,7 @@ export function ImageSearchPage() {
         {preview && !results && (
           <div className="flex justify-center mt-4">
             <Button onClick={() => { setLoading(true); setTimeout(() => { setLoading(false); setResults(mockImageMatch(seed)) }, 1500) }} disabled={loading}>
-              {loading ? 'Analyzing image…' : <><Search className="w-4 h-4" /> Search</>}
+              {loading ? t('image_search.analyzing') : <><Search className="w-4 h-4" /> {t('image_search.search')}</>}
             </Button>
           </div>
         )}
@@ -87,13 +89,13 @@ export function ImageSearchPage() {
           <div className="mt-8 space-y-6">
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <h2 className="font-semibold text-primary">Best Match</h2>
-                <Badge variant="success">Confidence: {results.confidence}%</Badge>
+                <h2 className="font-semibold text-primary">{t('image_search.best_match')}</h2>
+                <Badge variant="success">{t('image_search.confidence').replace('{pct}', results.confidence)}</Badge>
               </div>
               <ProductCard product={results.exact} />
             </div>
             <div>
-              <h2 className="font-semibold text-primary mb-3">Similar Products</h2>
+              <h2 className="font-semibold text-primary mb-3">{t('image_search.similar')}</h2>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {results.alternatives.map(p => <ProductCard key={p.id} product={p} />)}
               </div>

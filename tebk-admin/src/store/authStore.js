@@ -95,7 +95,7 @@ export const useAuthStore = create((set, get) => ({
       password,
       options: {
         data:            { full_name: fullName, role: 'admin' },
-        emailRedirectTo: `${window.location.origin}/admin`,
+        emailRedirectTo: `${window.location.origin}/`,
       },
     })
 
@@ -150,7 +150,7 @@ export const useAuthStore = create((set, get) => ({
   sendPasswordReset: async (email) => {
     set({ loading: true, error: null })
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/admin/reset-password`,
+      redirectTo: `${window.location.origin}/reset-password`,
     })
     set({ loading: false })
     if (error) { set({ error: error.message }); return { error } }
