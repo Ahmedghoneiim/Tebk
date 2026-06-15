@@ -18,19 +18,8 @@ import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu'
+import { TebkLogo } from './TebkLogo'
 import { cn } from '@/lib/utils'
-
-function NavLogo() {
-  return (
-    <svg viewBox="0 0 64 64" fill="none" className="w-7 h-7">
-      <rect x="20" y="32" width="40" height="12" rx="5" fill="#1a3363" />
-      <rect x="32" y="20" width="12" height="40" rx="5" fill="#1a3363" />
-      <rect x="4"  y="18" width="40" height="12" rx="5" fill="#C1E3C4" />
-      <rect x="18" y="4"  width="12" height="40" rx="5" fill="#C1E3C4" />
-      <path d="M 8,52 A 44,44 0 0 1 52,8" stroke="white" strokeWidth="6" strokeLinecap="round" fill="none" />
-    </svg>
-  )
-}
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -77,8 +66,7 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-40 py-3 px-4',
-        'bg-white/60 dark:bg-slate-950/60 backdrop-blur-sm',
+        'fixed top-0 left-0 right-0 z-40 py-3 px-4 bg-transparent',
         'animate-in slide-in-from-top-2 fade-in duration-500',
       )}
     >
@@ -86,19 +74,16 @@ export function Navbar() {
         <div
           className={cn(
             'flex items-center justify-between h-14 gap-4',
-            'bg-slate-200 dark:bg-slate-800',
+            'bg-white/90 dark:bg-slate-900/90 backdrop-blur-md',
             'rounded-full px-5',
-            'border border-slate-300/60 dark:border-slate-700',
-            'transition-shadow duration-300',
-            scrolled ? 'shadow-lg' : 'shadow-md'
+            'border border-border dark:border-slate-700',
+            'transition-all duration-300',
+            scrolled ? 'shadow-card' : 'shadow-soft'
           )}
         >
 
           {/* Logo */}
           <Link to="/" className="flex items-center gap-1.5 shrink-0 group">
-            <div className="transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-              <NavLogo />
-            </div>
             <span className="font-display font-bold text-primary dark:text-white text-xl transition-colors duration-200 group-hover:text-secondary">
               TEBK
             </span>
@@ -154,7 +139,7 @@ export function Navbar() {
             {/* Theme toggle */}
             <button
               onClick={toggleTheme}
-              className="w-9 h-9 rounded-xl hover:bg-slate-300/70 dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110"
+              className="w-9 h-9 rounded-xl hover:bg-clinical dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110"
             >
               {theme === 'dark'
                 ? <Sun  className="w-4 h-4 transition-transform duration-300 hover:rotate-45" />
@@ -177,7 +162,7 @@ export function Navbar() {
                 {/* Wishlist */}
                 <Link
                   to="/wishlist"
-                  className="w-9 h-9 rounded-xl hover:bg-slate-300/70 dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
+                  className="w-9 h-9 rounded-xl hover:bg-clinical dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
                 >
                   <Heart className="w-4 h-4" />
                 </Link>
@@ -185,7 +170,7 @@ export function Navbar() {
                 {/* Notifications bell */}
                 <Link
                   to="/notifications"
-                  className="w-9 h-9 rounded-xl hover:bg-slate-300/70 dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
+                  className="w-9 h-9 rounded-xl hover:bg-clinical dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
                 >
                   <Bell className="w-4 h-4" />
                   {unreadCount > 0 && (
@@ -198,7 +183,7 @@ export function Navbar() {
                 {/* Cart */}
                 <Link
                   to="/cart"
-                  className="w-9 h-9 rounded-xl hover:bg-slate-300/70 dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
+                  className="w-9 h-9 rounded-xl hover:bg-clinical dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110 relative"
                 >
                   <ShoppingCart className="w-4 h-4" />
                   {cartCount > 0 && (
@@ -251,7 +236,7 @@ export function Navbar() {
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(v => !v)}
-              className="md:hidden w-9 h-9 rounded-xl hover:bg-slate-300/70 dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110"
+              className="md:hidden w-9 h-9 rounded-xl hover:bg-clinical dark:hover:bg-slate-700 flex items-center justify-center text-muted dark:text-slate-400 hover:text-ink dark:hover:text-slate-100 transition-all duration-200 hover:scale-110"
             >
               <span className={cn('transition-all duration-300', mobileOpen ? 'rotate-90' : 'rotate-0')}>
                 {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

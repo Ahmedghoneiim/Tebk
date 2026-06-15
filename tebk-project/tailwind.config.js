@@ -1,65 +1,80 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
-  content: [
-    './index.html',
-    './src/**/*.{js,jsx}',
-  ],
+  content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
       colors: {
+
+        /* ── Primary  (Navy — Authority / Trust) ── */
         primary: {
-          DEFAULT: '#213360',
-          50:  '#e8ebf2',
-          100: '#c5cedf',
-          200: '#9faec8',
-          300: '#798eb0',
-          400: '#5e779f',
-          500: '#436090',
-          600: '#354d7a',
-          700: '#273a64',
-          800: '#213360',
-          900: '#16234a',
+          DEFAULT: '#1a3363',
+          50:  '#EEF3FF',
+          100: '#DCE6FF',
+          200: '#BACEFF',
+          300: '#8AACFF',
+          400: '#5577EE',
+          500: '#2E52D5',
+          600: '#2240AF',
+          700: '#1a3363',   // DEFAULT
+          800: '#132648',
+          900: '#0D192F',
         },
+
+        /* ── Secondary (Teal — Brand / Health) ── */
         secondary: {
-          DEFAULT: '#4ea055',
-          50:  '#f4fbf4',
-          100: '#e4f5e6',
-          200: '#C1E3C4',
-          300: '#9cd0a0',
-          400: '#74b87a',
-          500: '#4ea055',
-          600: '#358a3c',
-          700: '#25712c',
-          800: '#155820',
-          900: '#083f14',
+          DEFAULT: '#17C3CE',
+          50:  '#EFFFFE',
+          100: '#CCFBFD',
+          200: '#9AF6FA',
+          300: '#5DE8F2',
+          400: '#22D3DE',
+          500: '#17C3CE',   // DEFAULT
+          600: '#0EA3AC',
+          700: '#0C7F87',
+          800: '#095C63',
+          900: '#063C40',
         },
-        background: '#EDF9FE',
-        ink:      '#0e204d',
-        clinical: '#CBEDFC',
-        subtitle: '#435ba1',
-        success:  '#16A34A',
-        warning:  '#F59E0B',
-        danger:   '#E11D48',
-        muted:    '#848e9f',
-        border:   '#e7ebef',
-        mint:     '#C1E3C4',
-        sky:      '#CBEDFC',
+
+        /* ── Neutrals ── */
+        background: '#F9FAFB',   // clean off-white — page bg
+        ink:        '#111827',   // near-black — primary text
+        muted:      '#6B7280',   // gray-500  — secondary text
+        subtle:     '#9CA3AF',   // gray-400  — placeholders, captions
+        border:     '#E5E7EB',   // gray-200  — dividers, card borders
+
+        /* ── Brand tints (section backgrounds) ── */
+        clinical:   '#F0FDFE',   // barely-teal  — alt sections
+        mint:       '#ECFDF5',   // barely-green — success tints
+        sky:        '#F0F9FF',   // barely-blue  — info tints
+
+        /* ── Semantic ── */
+        success:  '#059669',
+        warning:  '#D97706',
+        danger:   '#DC2626',
       },
+
       fontFamily: {
         sans:    ['Inter', 'system-ui', 'sans-serif'],
         display: ['Poppins', 'Inter', 'system-ui', 'sans-serif'],
       },
+
+      /* Neutral shadows — no color tint, clean depth */
       boxShadow: {
-        soft:  '0 2px 12px 0 rgba(33,51,96,0.08)',
-        card:  '0 4px 24px 0 rgba(33,51,96,0.10)',
-        modal: '0 8px 40px 0 rgba(33,51,96,0.16)',
+        soft:  '0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.06)',
+        card:  '0 2px 4px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.08)',
+        modal: '0 4px 6px rgba(0,0,0,0.05), 0 20px 50px rgba(0,0,0,0.14)',
+        teal:  '0 4px 16px rgba(23,195,206,0.28)',
+        navy:  '0 4px 16px rgba(26,51,99,0.22)',
       },
+
       borderRadius: {
-        xl:  '1rem',
-        '2xl': '1.5rem',
-        '3xl': '2rem',
+        xl:    '0.75rem',
+        '2xl': '1rem',
+        '3xl': '1.5rem',
+        '4xl': '2rem',
       },
+
       keyframes: {
         fadeIn: {
           '0%':   { opacity: '0', transform: 'translateY(-4px)' },

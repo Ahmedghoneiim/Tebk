@@ -1,4 +1,5 @@
 ﻿import { useState } from 'react'
+import { TebkLogo } from '@/components/shared/TebkLogo'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
@@ -96,12 +97,6 @@ export function ResetPasswordPage() {
         className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-visible flex relative"
         style={{ minHeight: '500px' }}
       >
-        {/* Logo badge */}
-        <div className="absolute -top-1 right-8 z-20">
-          <div className="w-14 h-16 rounded-b-2xl flex items-center justify-center shadow-xl" style={{ background: '#1a3363' }}>
-            <span className="text-white font-bold text-xl tracking-widest">T</span>
-          </div>
-        </div>
 
         {/* ── Left – Illustration Panel ── */}
         <div

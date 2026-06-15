@@ -6,6 +6,7 @@ import {
   Menu, ChevronRight,
 } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
+import { TebkLogo } from '@/components/shared/TebkLogo'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { ToastContainer } from '@/components/shared/ToastContainer'
 import { cn } from '@/lib/utils'
@@ -48,9 +49,6 @@ export function AdminPanelLayout() {
       >
         {/* Logo */}
         <div className="flex items-center gap-3 px-5 py-5 border-b border-white/10 shrink-0">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: '#C1E3C4' }}>
-            <span className="text-white font-bold text-base">T</span>
-          </div>
           <div className="min-w-0">
             <p className="font-display font-bold text-white text-lg leading-none">TEBK</p>
             <p className="text-white/40 text-[10px] font-semibold tracking-widest mt-0.5">ADMIN PANEL</p>

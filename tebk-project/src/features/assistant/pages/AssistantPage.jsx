@@ -37,52 +37,58 @@ function saveSessionMessages(sessionId, messages) {
 
 const T = {
   ar: {
-    welcome: 'صباح النور يا دكتور! أنا مساعد طِبك الذكي. ابحث عن أي مستلزم طبي أو ابعت صورته وأنا هساعدك فوراً 😊',
-    tagline: 'مساعدك الذكي لتجهيز عيادتك بأفضل المستلزمات الطبية',
-    online: 'متاح الآن',
-    newChat: '+ محادثة جديدة',
-    history: 'المحادثات السابقة',
+    welcome: 'أهلاً دكتور! أنا مساعد TEBK الذكي، هنا لمساعدتك في العثور على أي مستلزمات طبية أو تجهيز عيادتك. يمكنك البحث بأفضل المعدات، بحث عن منتج أو حتى إرسال صورة وسأقوم بمساعدتك فوراً 🌟',
+    tagline: 'مساعدك الذكي لتجهيز عيادتك',
+    online: 'نشط الآن',
+    newChat: 'New Chat +',
+    history: 'PREVIOUS CHATS',
     noHistory: 'مفيش محادثات سابقة\nابدأ محادثة جديدة!',
-    placeholder: 'اكتب رسالتك أو ارفع صورة المنتج...',
-    subtitle: 'بيساعدك تلاقي وتطلب أي مستلزم طبي',
-    title: 'مساعد طِبك الذكي',
+    placeholder: 'اكتب رسالتك أو قم برفع صورة المنتج..',
+    subtitle: 'مساعدك للعيادة',
+    title: 'TEBK Smart Assistant',
     error: 'عذراً، في مشكلة في الاتصال. حاول تاني.',
     imgMsg: 'ابعت صورة للبحث',
     limitMsg: '⚠️ المحادثة طالت كتير. برجاء بدء محادثة جديدة للحصول على أفضل خدمة.',
     newChatBtn: 'ابدأ محادثة جديدة',
     features: [
-      { icon: '🔍', label: 'بحث ذكي' },
-      { icon: '📷', label: 'بحث بالصور' },
-      { icon: '🔔', label: 'تنبيه تلقائي' },
-      { icon: '📦', label: 'طلب سريع' },
+      { icon: '🛒', label: 'Quick Order' },
+      { icon: '🔔', label: 'Auto Alerts' },
+      { icon: '📷', label: 'Image Search' },
+      { icon: '🔍', label: 'Smart Search' },
     ],
+    settings: 'Settings',
+    help: 'Help',
     today: 'اليوم',
     dir: 'rtl',
     imageSaved: 'صورة محفوظة وجاهزة للإرسال',
+    clinicalAssistant: 'Your clinical assistant',
   },
   en: {
     welcome: 'Hello Doctor! I\'m Tebk Smart Assistant. Search for any medical supply or send a photo and I\'ll help you right away 😊',
-    tagline: 'Your smart assistant for equipping your clinic with the best medical supplies',
+    tagline: 'Your smart assistant for equipping your clinic',
     online: 'Online now',
-    newChat: '+ New Chat',
-    history: 'Previous Chats',
+    newChat: 'New Chat +',
+    history: 'PREVIOUS CHATS',
     noHistory: 'No previous chats\nStart a new one!',
-    placeholder: 'Type your message or upload a product image...',
-    subtitle: 'Helps you find and order any medical supply',
-    title: 'Tebk Smart Assistant',
+    placeholder: 'Type your message or upload a product image..',
+    subtitle: 'Your clinical assistant',
+    title: 'TEBK Smart Assistant',
     error: 'Sorry, connection issue. Please try again.',
     imgMsg: 'Searching by image',
     limitMsg: '⚠️ This chat has gotten too long. Please start a new conversation for the best experience.',
     newChatBtn: 'Start New Chat',
     features: [
-      { icon: '🔍', label: 'Smart Search' },
-      { icon: '📷', label: 'Image Search' },
+      { icon: '🛒', label: 'Quick Order' },
       { icon: '🔔', label: 'Auto Alerts' },
-      { icon: '📦', label: 'Quick Order' },
+      { icon: '📷', label: 'Image Search' },
+      { icon: '🔍', label: 'Smart Search' },
     ],
+    settings: 'Settings',
+    help: 'Help',
     today: 'Today',
     dir: 'ltr',
     imageSaved: 'Image ready to send',
+    clinicalAssistant: 'Your clinical assistant',
   }
 }
 
@@ -133,7 +139,6 @@ export function AssistantPage() {
     setPendingImage(null)
     setLoading(true)
 
-    // save chat title on first message
     const userCount = newMessages.filter(m => m.role === 'user').length
     if (userCount === 1 && text.trim()) {
       const title = text.slice(0, 28)
@@ -174,22 +179,18 @@ export function AssistantPage() {
     e.target.value = ''
   }
 
-const startNewChat = () => {
-  // مسح كل حاجة متعلقة بالسيشن الحالي
-  const oldId = sessionStorage.getItem('tebk_session')
-  if (oldId) {
-    localStorage.removeItem('tebk_msgs_' + oldId)
+  const startNewChat = () => {
+    const oldId = sessionStorage.getItem('tebk_session')
+    if (oldId) localStorage.removeItem('tebk_msgs_' + oldId)
+    const newId = 'sess_' + Math.random().toString(36).slice(2) + Date.now()
+    sessionStorage.setItem('tebk_session', newId)
+    setSessionId(newId)
+    setMessages([{ id: 1, role: 'bot', text: t.welcome }])
+    setShowLimit(false)
+    setInput('')
+    setSidebarOpen(false)
   }
-  
-  // عمل session ID جديد خالص
-  const newId = 'sess_' + Math.random().toString(36).slice(2) + Date.now()
-  sessionStorage.setItem('tebk_session', newId)
-  setSessionId(newId)
-  setMessages([{ id: 1, role: 'bot', text: t.welcome }])
-  setShowLimit(false)
-  setInput('')
-  setSidebarOpen(false)
-}
+
   const loadChat = (chatId) => {
     const saved = getSessionMessages(chatId)
     if (saved.length > 0) {
@@ -210,6 +211,23 @@ const startNewChat = () => {
     setEditingTitle('')
   }
 
+  const deleteChat = (e, chat) => {
+    e.stopPropagation()
+    localStorage.removeItem('tebk_msgs_' + chat.id)
+    const updated = chatHistory.filter(c => c.id !== chat.id)
+    setChatHistory(updated)
+    saveChatHistory(updated)
+    if (chat.id === sessionId) startNewChat()
+  }
+
+  // ─── icon button shared style ───
+  const iconBtn = {
+    width: 28, height: 28, borderRadius: '50%',
+    border: '0.5px solid #e0f0ea', background: '#f8fffe',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    cursor: 'pointer', color: '#666', fontSize: 13, flexShrink: 0,
+  }
+
   return (
     <div style={{
       fontFamily: "'Cairo', sans-serif",
@@ -219,66 +237,123 @@ const startNewChat = () => {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'stretch',
-      padding: '16px 20px'
+      padding: '16px 20px',
     }}>
       <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-      {/* Inner container */}
+      {/* ── Outer wrapper ── */}
       <div style={{
         display: 'flex', width: '100%', maxWidth: 960,
         flex: 1, minHeight: 0, borderRadius: 20, overflow: 'hidden',
-        boxShadow: '0 8px 40px rgba(0,100,70,.12)',
-        border: '0.5px solid #c0e8d8'
+        boxShadow: '0 8px 40px rgba(0,100,70,.14)',
+        border: '0.5px solid #c0e8d8',
       }}>
 
-        {/* Overlay mobile */}
+        {/* Mobile overlay */}
         {sidebarOpen && (
-          <div onClick={() => setSidebarOpen(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 9 }} />
+          <div
+            onClick={() => setSidebarOpen(false)}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 9 }}
+          />
         )}
 
-        {/* SIDEBAR */}
+        {/* ════════════════════════════════════════
+            SIDEBAR — Dark theme
+        ════════════════════════════════════════ */}
         <div style={{
-          width: 220, flexShrink: 0, background: '#f0faf6',
-          borderLeft: lang === 'ar' ? 'none' : '0.5px solid #c0e8d8',
-          borderRight: lang === 'ar' ? '0.5px solid #c0e8d8' : 'none',
+          width: 230, flexShrink: 0,
+          background: '#0d1f17',
+          borderLeft:  lang === 'ar' ? 'none'                  : '1px solid #1a3d2e',
+          borderRight: lang === 'ar' ? '1px solid #1a3d2e'     : 'none',
           display: 'flex', flexDirection: 'column', zIndex: 10,
           position: isMobile ? 'fixed' : 'relative',
-          [lang === 'ar' ? 'right' : 'left']: isMobile ? (sidebarOpen ? 0 : -220) : 0,
-          top: 0, bottom: 0, transition: 'right .25s, left .25s',
-          boxShadow: isMobile && sidebarOpen ? '2px 0 16px rgba(0,0,0,.12)' : 'none'
+          [lang === 'ar' ? 'right' : 'left']: isMobile ? (sidebarOpen ? 0 : -230) : 0,
+          top: 0, bottom: 0,
+          transition: 'right .25s, left .25s',
+          boxShadow: isMobile && sidebarOpen ? '4px 0 24px rgba(0,0,0,.3)' : 'none',
         }}>
-          <div style={{ padding: '14px 12px 10px', borderBottom: '0.5px solid #c0e8d8' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginBottom: 6 }}>
-              <div style={{ width: 30, height: 30, background: '#0F6E56', borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>T</div>
-              <span style={{ fontSize: 14, fontWeight: 700, color: '#085041' }}>طِبك AI</span>
-            </div>
-            <div style={{ fontSize: 10.5, color: '#0F6E56', lineHeight: 1.5, marginBottom: 7 }}>{t.tagline}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10.5, color: '#0F6E56', background: '#d4f0e5', padding: '3px 9px', borderRadius: 20, width: 'fit-content' }}>
-              <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#1D9E75', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
-              {t.online}
+
+          {/* ── Sidebar Header ── */}
+          <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid #1a3d2e' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <div style={{
+                width: 40, height: 40, background: '#0F6E56', borderRadius: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 20, flexShrink: 0,
+              }}>🤖</div>
+              <div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: '#e8f5f0', letterSpacing: '-0.2px' }}>
+                  TEBK AI
+                </div>
+                <div style={{ fontSize: 10.5, color: '#6b9e8a', marginTop: 1 }}>
+                  {t.clinicalAssistant}
+                </div>
+              </div>
             </div>
           </div>
 
-          <button onClick={startNewChat} style={{ margin: '10px 12px 3px', padding: '8px', background: '#0F6E56', color: '#fff', border: 'none', borderRadius: 8, fontFamily: "'Cairo', sans-serif", fontSize: 11.5, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5 }}>
+          {/* ── New Chat button ── */}
+          <button
+            onClick={startNewChat}
+            style={{
+              margin: '14px 14px 4px',
+              padding: '9px 12px',
+              background: '#1D9E75',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 10,
+              fontFamily: "'Cairo', sans-serif",
+              fontSize: 12.5, fontWeight: 700,
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              transition: 'background .2s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#17875f'}
+            onMouseLeave={e => e.currentTarget.style.background = '#1D9E75'}
+          >
             {t.newChat}
           </button>
 
-          <div style={{ fontSize: 9.5, color: '#0F6E56', padding: '10px 12px 4px', fontWeight: 600, letterSpacing: '.5px', textTransform: 'uppercase' }}>{t.history}</div>
+          {/* ── History label ── */}
+          <div style={{
+            fontSize: 9, color: '#4a7a64',
+            padding: '14px 16px 5px',
+            fontWeight: 700, letterSpacing: '1.2px',
+            textTransform: 'uppercase',
+          }}>
+            {t.history}
+          </div>
 
+          {/* ── Chat list ── */}
           <div style={{ flex: 1, overflowY: 'auto' }}>
             {chatHistory.length === 0 ? (
-              <div style={{ padding: '14px 12px', textAlign: 'center', color: '#0F6E56', fontSize: 10.5, lineHeight: 1.7, whiteSpace: 'pre-line' }}>{t.noHistory}</div>
+              <div style={{
+                padding: '18px 14px', textAlign: 'center',
+                color: '#4a7a64', fontSize: 10.5,
+                lineHeight: 1.7, whiteSpace: 'pre-line',
+              }}>
+                {t.noHistory}
+              </div>
             ) : chatHistory.map(chat => (
-              <div key={chat.id}
+              <div
+                key={chat.id}
                 onClick={() => loadChat(chat.id)}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 7, padding: '7px 12px', cursor: 'pointer',
-                  background: chat.id === sessionId ? '#d4f0e5' : 'transparent',
-                  borderRight: lang === 'ar' && chat.id === sessionId ? '3px solid #0F6E56' : lang === 'ar' ? '3px solid transparent' : 'none',
-                  borderLeft: lang === 'en' && chat.id === sessionId ? '3px solid #0F6E56' : lang === 'en' ? '3px solid transparent' : 'none',
-                  transition: 'background .15s'
-                }}>
-                <span style={{ color: '#0F6E56', fontSize: 12, flexShrink: 0 }}>💬</span>
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '8px 10px',
+                  margin: '1px 8px',
+                  cursor: 'pointer',
+                  background: chat.id === sessionId ? '#1a3d2e' : 'transparent',
+                  borderRight: lang === 'ar' && chat.id === sessionId ? '2px solid #1D9E75' : lang === 'ar' ? '2px solid transparent' : 'none',
+                  borderLeft:  lang === 'en' && chat.id === sessionId ? '2px solid #1D9E75' : lang === 'en' ? '2px solid transparent' : 'none',
+                  borderRadius: 8,
+                  transition: 'background .15s',
+                }}
+              >
+                {/* Chat icon */}
+                <span style={{ color: '#4a7a64', fontSize: 12, flexShrink: 0 }}>💬</span>
+
+                {/* Title */}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {editingChatId === chat.id ? (
                     <input
@@ -288,90 +363,194 @@ const startNewChat = () => {
                       onBlur={() => saveEditTitle(chat.id)}
                       onKeyDown={e => e.key === 'Enter' && saveEditTitle(chat.id)}
                       onClick={e => e.stopPropagation()}
-                      style={{ width: '100%', fontSize: 11.5, fontFamily: "'Cairo', sans-serif", border: '0.5px solid #0F6E56', borderRadius: 4, padding: '2px 5px', background: '#fff', color: '#085041', outline: 'none' }}
+                      style={{
+                        width: '100%', fontSize: 11.5,
+                        fontFamily: "'Cairo', sans-serif",
+                        border: '1px solid #1D9E75', borderRadius: 4,
+                        padding: '2px 5px', background: '#0a1a11',
+                        color: '#e8f5f0', outline: 'none',
+                      }}
                     />
                   ) : (
-               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-  <div
-    onDoubleClick={e => { e.stopPropagation(); setEditingChatId(chat.id); setEditingTitle(chat.title) }}
-    title="Double click to rename"
-    style={{ fontSize: 11.5, fontWeight: 600, color: '#085041', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}
-  >{chat.title}</div>
-  <button
-    onClick={e => {
-      e.stopPropagation()
-      // حذف الرسائل من localStorage
-      localStorage.removeItem('tebk_msgs_' + chat.id)
-      // حذف المحادثة من القائمة
-      const updated = chatHistory.filter(c => c.id !== chat.id)
-      setChatHistory(updated)
-      saveChatHistory(updated)
-      // لو المحادثة المحذوفة هي الحالية ابدأ جديد
-      if (chat.id === sessionId) startNewChat()
-    }}
-    title="Delete chat"
-    style={{ width: 16, height: 16, borderRadius: '50%', border: 'none', background: 'transparent', color: '#0F6E56', fontSize: 12, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, opacity: 0.5, lineHeight: 1 }}
-    onMouseEnter={e => e.target.style.opacity = 1}
-    onMouseLeave={e => e.target.style.opacity = 0.5}
-  >×</button>
-</div>
+                    <div
+                      onDoubleClick={e => { e.stopPropagation(); setEditingChatId(chat.id); setEditingTitle(chat.title) }}
+                      title="Double click to rename"
+                      style={{
+                        fontSize: 11.5, fontWeight: 500,
+                        color: chat.id === sessionId ? '#d4f0e4' : '#8ab5a0',
+                        whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                      }}
+                    >
+                      {chat.title}
+                    </div>
                   )}
-                  <div style={{ fontSize: 9.5, color: '#0F6E56' }}>{chat.date}، {chat.time}</div>
+                </div>
+
+                {/* Clock + time + delete */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 3, flexShrink: 0 }}>
+                  <span style={{ fontSize: 9, color: '#4a7a64' }}>🕐</span>
+                  <span style={{ fontSize: 9, color: '#4a7a64', minWidth: 28 }}>{chat.time}</span>
+                  <button
+                    onClick={e => deleteChat(e, chat)}
+                    title="Delete chat"
+                    style={{
+                      width: 15, height: 15, borderRadius: '50%',
+                      border: 'none', background: 'transparent',
+                      color: '#4a7a64', fontSize: 13,
+                      cursor: 'pointer', display: 'flex',
+                      alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0, opacity: 0.5, lineHeight: 1,
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = 1}
+                    onMouseLeave={e => e.currentTarget.style.opacity = 0.5}
+                  >×</button>
                 </div>
               </div>
+            ))}
+          </div>
+
+          {/* ── Sidebar Footer: Settings + Help ── */}
+          <div style={{ borderTop: '1px solid #1a3d2e', padding: '8px 10px' }}>
+            {[
+              { icon: '⚙️', label: t.settings },
+              { icon: '❓', label: t.help },
+            ].map(item => (
+              <button
+                key={item.label}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '7px 8px', background: 'transparent',
+                  border: 'none', cursor: 'pointer',
+                  borderRadius: 8, color: '#6b9e8a',
+                  fontSize: 12, fontFamily: "'Cairo', sans-serif",
+                  fontWeight: 500, width: '100%',
+                  textAlign: lang === 'ar' ? 'right' : 'left',
+                  transition: 'background .15s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#1a3d2e'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <span style={{ fontSize: 14 }}>{item.icon}</span>
+                {item.label}
+              </button>
             ))}
           </div>
         </div>
 
-        {/* MAIN CHAT */}
+        {/* ════════════════════════════════════════
+            MAIN CHAT PANEL
+        ════════════════════════════════════════ */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, minHeight: 0, overflow: 'hidden' }}>
-          {/* Header */}
-          <div style={{ padding: '10px 14px', background: '#fff', borderBottom: '0.5px solid #e0f0ea', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+
+          {/* ── Chat Header ── */}
+          <div style={{
+            padding: '10px 14px',
+            background: '#fff',
+            borderBottom: '0.5px solid #e0f0ea',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexShrink: 0,
+          }}>
+            {/* START side (RIGHT in RTL): avatar + title + online */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {isMobile && (
-                <button onClick={() => setSidebarOpen(!sidebarOpen)} style={{ width: 26, height: 26, borderRadius: '50%', border: '0.5px solid #c0e8d8', background: '#f0faf6', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#0F6E56', fontSize: 13 }}>☰</button>
+                <button
+                  onClick={() => setSidebarOpen(!sidebarOpen)}
+                  style={{ ...iconBtn, border: '0.5px solid #c0e8d8', background: '#f0faf6', color: '#0F6E56', fontSize: 14 }}
+                >☰</button>
               )}
-              <div style={{ width: 30, height: 30, background: '#0F6E56', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10, fontWeight: 700 }}>T</div>
+              <div style={{
+                width: 34, height: 34, background: '#0F6E56', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: '#fff', fontSize: 11, fontWeight: 700, flexShrink: 0,
+              }}>T</div>
               <div>
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: '#1a1a1a' }}>{t.title}</div>
-                <div style={{ fontSize: 10.5, color: '#0F6E56' }}>{t.subtitle}</div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{
+                    width: 6, height: 6, borderRadius: '50%', background: '#1D9E75',
+                    display: 'inline-block', animation: 'pulse 1.5s infinite',
+                  }} />
+                  <span style={{ fontSize: 10.5, color: '#1D9E75', fontWeight: 600 }}>{t.online}</span>
+                </div>
               </div>
             </div>
-            <button onClick={startNewChat} style={{ width: 26, height: 26, borderRadius: '50%', border: '0.5px solid #e0e0e0', background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, color: '#666' }}>↺</button>
+
+            {/* END side (LEFT in RTL): action icons */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <button style={iconBtn} title="Menu">⋮</button>
+              <button style={iconBtn} title="New chat" onClick={startNewChat}>↺</button>
+              <button style={iconBtn} title="Search">🔍</button>
+            </div>
           </div>
 
-          {/* Messages — flex: 1 + overflow scroll */}
-          <div style={{ flex: 1, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 9, overflowY: 'auto', background: '#f8fffe', minHeight: 0 }}>
+          {/* ── Messages area ── */}
+          <div style={{
+            flex: 1, padding: '12px 14px',
+            display: 'flex', flexDirection: 'column', gap: 10,
+            overflowY: 'auto', background: '#f8fffe', minHeight: 0,
+          }}>
             {messages.map(msg => (
               <div key={msg.id} style={{
                 display: 'flex', gap: 6, maxWidth: '78%',
-                alignSelf: msg.role === 'bot' ? (lang === 'ar' ? 'flex-end' : 'flex-start') : (lang === 'ar' ? 'flex-start' : 'flex-end'),
-                flexDirection: msg.role === 'bot' ? (lang === 'ar' ? 'row-reverse' : 'row') : (lang === 'ar' ? 'row' : 'row-reverse')
+                alignSelf: msg.role === 'bot'
+                  ? (lang === 'ar' ? 'flex-end' : 'flex-start')
+                  : (lang === 'ar' ? 'flex-start' : 'flex-end'),
+                flexDirection: msg.role === 'bot'
+                  ? (lang === 'ar' ? 'row-reverse' : 'row')
+                  : (lang === 'ar' ? 'row' : 'row-reverse'),
               }}>
-                <div style={{ width: 22, height: 22, borderRadius: '50%', background: msg.role === 'bot' ? '#0F6E56' : '#1D9E75', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 8, fontWeight: 700, flexShrink: 0, marginTop: 2 }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: msg.role === 'bot' ? '#0F6E56' : '#1D9E75',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontSize: 8, fontWeight: 700,
+                  flexShrink: 0, marginTop: 2,
+                }}>
                   {msg.role === 'bot' ? 'T' : lang === 'ar' ? 'د' : 'Dr'}
                 </div>
                 <div>
-                  {msg.image && <img src={`data:image/jpeg;base64,${msg.image}`} alt="" style={{ maxWidth: 160, borderRadius: 10, marginBottom: 4 }} />}
+                  {msg.image && (
+                    <img
+                      src={`data:image/jpeg;base64,${msg.image}`}
+                      alt=""
+                      style={{ maxWidth: 160, borderRadius: 10, marginBottom: 4 }}
+                    />
+                  )}
                   <div style={{
-                    padding: '8px 12px', borderRadius: 12, fontSize: 12.5, lineHeight: 1.7,
+                    padding: '8px 12px', borderRadius: 12,
+                    fontSize: 12.5, lineHeight: 1.7,
                     background: msg.role === 'bot' ? '#fff' : '#0F6E56',
                     color: msg.role === 'bot' ? '#1a1a1a' : '#fff',
                     border: msg.role === 'bot' ? '0.5px solid #e0f0ea' : 'none',
                     borderBottomRightRadius: msg.role === 'bot' ? (lang === 'ar' ? 3 : 12) : (lang === 'ar' ? 12 : 3),
-                    borderBottomLeftRadius: msg.role === 'bot' ? (lang === 'ar' ? 12 : 3) : (lang === 'ar' ? 3 : 12),
-                    whiteSpace: 'pre-wrap', direction: lang === 'ar' ? 'rtl' : 'ltr'
-                  }}>{msg.text}</div>
+                    borderBottomLeftRadius:  msg.role === 'bot' ? (lang === 'ar' ? 12 : 3) : (lang === 'ar' ? 3 : 12),
+                    whiteSpace: 'pre-wrap', direction: lang === 'ar' ? 'rtl' : 'ltr',
+                  }}>
+                    {msg.text}
+                  </div>
                 </div>
               </div>
             ))}
 
+            {/* Typing indicator */}
             {loading && (
               <div style={{ display: 'flex', gap: 6, alignSelf: lang === 'ar' ? 'flex-end' : 'flex-start' }}>
-                <div style={{ width: 22, height: 22, borderRadius: '50%', background: '#0F6E56', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 8, fontWeight: 700, flexShrink: 0, marginTop: 2 }}>T</div>
-                <div style={{ padding: '9px 13px', background: '#fff', border: '0.5px solid #e0f0ea', borderRadius: 12, display: 'flex', gap: 4, alignItems: 'center' }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: '50%', background: '#0F6E56',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', fontSize: 8, fontWeight: 700, flexShrink: 0, marginTop: 2,
+                }}>T</div>
+                <div style={{
+                  padding: '10px 14px', background: '#fff',
+                  border: '0.5px solid #e0f0ea', borderRadius: 12,
+                  display: 'flex', gap: 4, alignItems: 'center',
+                }}>
                   {[0, 1, 2].map(i => (
-                    <span key={i} style={{ width: 5, height: 5, borderRadius: '50%', background: '#1D9E75', display: 'inline-block', animation: `bounce 0.8s ${i * 0.15}s infinite` }} />
+                    <span key={i} style={{
+                      width: 5, height: 5, borderRadius: '50%',
+                      background: '#1D9E75', display: 'inline-block',
+                      animation: `bounce 0.8s ${i * 0.15}s infinite`,
+                    }} />
                   ))}
                 </div>
               </div>
@@ -379,9 +558,21 @@ const startNewChat = () => {
 
             {/* Limit warning */}
             {showLimit && (
-              <div style={{ alignSelf: 'center', background: '#fff8e6', border: '0.5px solid #f0c060', borderRadius: 12, padding: '10px 16px', fontSize: 12, color: '#7a5a00', textAlign: 'center', maxWidth: '90%' }}>
+              <div style={{
+                alignSelf: 'center', background: '#fff8e6',
+                border: '0.5px solid #f0c060', borderRadius: 12,
+                padding: '10px 16px', fontSize: 12, color: '#7a5a00',
+                textAlign: 'center', maxWidth: '90%',
+              }}>
                 <div style={{ marginBottom: 8 }}>{t.limitMsg}</div>
-                <button onClick={startNewChat} style={{ padding: '6px 16px', background: '#0F6E56', color: '#fff', border: 'none', borderRadius: 8, fontFamily: "'Cairo', sans-serif", fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                <button
+                  onClick={startNewChat}
+                  style={{
+                    padding: '6px 16px', background: '#0F6E56', color: '#fff',
+                    border: 'none', borderRadius: 8,
+                    fontFamily: "'Cairo', sans-serif", fontSize: 12, fontWeight: 600, cursor: 'pointer',
+                  }}
+                >
                   {t.newChatBtn}
                 </button>
               </div>
@@ -390,61 +581,120 @@ const startNewChat = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Bottom Area — fixed at bottom */}
+          {/* ── Bottom area ── */}
           <div style={{ background: '#fff', borderTop: '0.5px solid #e0f0ea', flexShrink: 0 }}>
+
             {/* Image preview */}
             {pendingImage && (
-              <div style={{ padding: '8px 14px', display: 'flex', alignItems: 'center', gap: 8, borderBottom: '0.5px solid #e0f0ea' }}>
-                <img src={`data:image/jpeg;base64,${pendingImage.file}`} alt="preview" style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }} />
+              <div style={{
+                padding: '8px 14px',
+                display: 'flex', alignItems: 'center', gap: 8,
+                borderBottom: '0.5px solid #e0f0ea',
+              }}>
+                <img
+                  src={`data:image/jpeg;base64,${pendingImage.file}`}
+                  alt="preview"
+                  style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }}
+                />
                 <div style={{ flex: 1, fontSize: 12, color: '#0F6E56' }}>{t.imageSaved}</div>
                 <button
                   onClick={() => setPendingImage(null)}
-                  style={{ width: 24, height: 24, borderRadius: '50%', border: 'none', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#666', fontSize: 14 }}
+                  style={{
+                    width: 24, height: 24, borderRadius: '50%', border: 'none',
+                    background: '#f0f0f0', display: 'flex', alignItems: 'center',
+                    justifyContent: 'center', cursor: 'pointer', color: '#666', fontSize: 14,
+                  }}
                 >×</button>
               </div>
             )}
+
+            {/* Input row */}
             <div style={{ padding: '8px 10px', display: 'flex', alignItems: 'center', gap: 6 }}>
+              {/* Send button */}
               <button
                 onClick={() => sendMessage(input, pendingImage?.file || null)}
                 disabled={loading || (!input.trim() && !pendingImage) || showLimit}
-                style={{ width: 30, height: 30, borderRadius: '50%', background: (input.trim() || pendingImage) && !showLimit ? '#0F6E56' : '#a0d4c4', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: (input.trim() || pendingImage) && !showLimit ? 'pointer' : 'default', color: '#fff', fontSize: 13, flexShrink: 0, transition: 'background .2s' }}
+                style={{
+                  width: 32, height: 32, borderRadius: '50%',
+                  background: (input.trim() || pendingImage) && !showLimit ? '#0F6E56' : '#a0d4c4',
+                  border: 'none',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: (input.trim() || pendingImage) && !showLimit ? 'pointer' : 'default',
+                  color: '#fff', fontSize: 14, flexShrink: 0, transition: 'background .2s',
+                }}
               >➤</button>
+
+              {/* Mic button */}
+              <button
+                style={{
+                  width: 30, height: 30, borderRadius: '50%',
+                  border: '0.5px solid #c0e8d8', background: '#f0faf6',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: '#0F6E56', fontSize: 14, flexShrink: 0,
+                }}
+              >🎤</button>
+
+              {/* Text input */}
               <input
                 value={input}
                 onChange={e => setInput(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && !e.shiftKey && sendMessage(input, pendingImage?.file || null)}
-                placeholder={showLimit ? (lang === 'ar' ? 'برجاء بدء محادثة جديدة...' : 'Please start a new chat...') : t.placeholder}
+                placeholder={showLimit
+                  ? (lang === 'ar' ? 'برجاء بدء محادثة جديدة...' : 'Please start a new chat...')
+                  : t.placeholder}
                 disabled={showLimit}
-                style={{ flex: 1, padding: '8px 12px', background: showLimit ? '#f5f5f5' : '#f0faf6', border: '0.5px solid #c0e8d8', borderRadius: 20, fontFamily: "'Cairo', sans-serif", fontSize: 12.5, color: '#1a1a1a', outline: 'none', direction: t.dir, minWidth: 0, opacity: showLimit ? 0.6 : 1 }}
+                style={{
+                  flex: 1, padding: '8px 14px',
+                  background: showLimit ? '#f5f5f5' : '#f0faf6',
+                  border: '0.5px solid #c0e8d8',
+                  borderRadius: 20,
+                  fontFamily: "'Cairo', sans-serif",
+                  fontSize: 12.5, color: '#1a1a1a',
+                  outline: 'none', direction: t.dir, minWidth: 0,
+                  opacity: showLimit ? 0.6 : 1,
+                }}
               />
+
+              {/* Upload button */}
               <input ref={fileInputRef} type="file" accept="image/*" onChange={handleImage} style={{ display: 'none' }} />
               <button
                 onClick={() => fileInputRef.current?.click()}
                 disabled={showLimit}
-                style={{ width: 30, height: 30, borderRadius: '50%', border: '0.5px solid #c0e8d8', background: '#f0faf6', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#0F6E56', fontSize: 16, flexShrink: 0, opacity: showLimit ? 0.4 : 1 }}
+                style={{
+                  width: 30, height: 30, borderRadius: '50%',
+                  border: '0.5px solid #c0e8d8', background: '#f0faf6',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  cursor: 'pointer', color: '#0F6E56', fontSize: 16,
+                  flexShrink: 0, opacity: showLimit ? 0.4 : 1,
+                }}
               >+</button>
             </div>
 
-            <div style={{ padding: '0 10px 8px', display: 'flex', gap: 5, justifyContent: 'center', flexWrap: 'wrap' }}>
+            {/* Feature chips */}
+            <div style={{ padding: '0 10px 9px', display: 'flex', gap: 5, justifyContent: 'center', flexWrap: 'wrap' }}>
               {t.features.map(f => (
-                <div key={f.label} style={{ display: 'flex', alignItems: 'center', gap: 3, padding: '3px 8px', borderRadius: 20, border: '0.5px solid #c0e8d8', background: '#f0faf6' }}>
-                  <span style={{ fontSize: 11 }}>{f.icon}</span>
-                  <span style={{ fontSize: 10, fontWeight: 600, color: '#085041' }}>{f.label}</span>
+                <div key={f.label} style={{
+                  display: 'flex', alignItems: 'center', gap: 4,
+                  padding: '4px 10px', borderRadius: 20,
+                  border: '0.5px solid #c0e8d8', background: '#f0faf6',
+                  cursor: 'default',
+                }}>
+                  <span style={{ fontSize: 12 }}>{f.icon}</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 600, color: '#085041' }}>{f.label}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
-
       </div>
 
       <style>{`
         @keyframes bounce { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-5px)} }
-        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+        @keyframes pulse  { 0%,100%{opacity:1} 50%{opacity:.4} }
         * { box-sizing: border-box; }
         ::-webkit-scrollbar { width: 4px; }
         ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: #c0e8d8; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #1a3d2e; border-radius: 4px; }
       `}</style>
     </div>
   )
