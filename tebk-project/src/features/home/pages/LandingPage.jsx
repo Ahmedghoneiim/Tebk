@@ -77,8 +77,8 @@ export function LandingPage() {
         </motion.div>
 
         {/* ── Text content ── */}
-        <div className="page-container w-full relative z-10 pt-32 pb-36">
-          <div className="max-w-[50%]">
+        <div className="page-container w-full relative z-10 pt-32 pb-16 sm:pb-36">
+          <div className="w-full sm:max-w-[60%] lg:max-w-[50%]">
             <motion.div initial="hidden" animate="show" variants={stagger}>
 
               {/* Eyebrow */}
@@ -286,7 +286,7 @@ export function LandingPage() {
             {MOCK_BUNDLES.filter(b => b.featured).map(bundle => (
               <div
                 key={bundle.id}
-                className="flex rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative"
+                className="flex flex-col sm:flex-row rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl relative"
                 style={{
                   background: 'rgba(255,255,255,0.62)',
                   backdropFilter: 'blur(14px)',
@@ -301,7 +301,7 @@ export function LandingPage() {
                 </div>
 
                 {/* Left – image */}
-                <div className="w-[38%] shrink-0 relative overflow-hidden">
+                <div className="w-full h-48 sm:w-[38%] sm:h-auto shrink-0 relative overflow-hidden">
                   {bundle.image_url ? (
                     <img
                       src={bundle.image_url}
