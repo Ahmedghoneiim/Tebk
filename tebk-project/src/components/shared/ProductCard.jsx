@@ -47,7 +47,7 @@ export function ProductCard({ product, onAddToCart }) {
 
         {/* Image Section */}
         <div className="relative h-52 flex items-center justify-center overflow-hidden"
-          style={{ background: 'linear-gradient(135deg, #E0F9FB 0%, #CCFBFE 100%)' }}>
+          style={{ background: 'linear-gradient(135deg, #EEF3FF 0%, #E0F9FB 100%)' }}>
           {product.image_url ? (
             <img
               src={cl.combined(product.image_url, 400, 400)}

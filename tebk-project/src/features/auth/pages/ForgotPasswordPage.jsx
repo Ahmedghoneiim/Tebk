@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react'
-import { TebkLogo } from '@/components/shared/TebkLogo'
+import logonav from "@/assets/logo (2).svg"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from 'react-router-dom'
@@ -157,7 +157,8 @@ export function ForgotPasswordPage() {
             ) : (
               /* ── Form State ── */
               <>
-                <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.forgot_title')}</h1>
+                <img src={logonav} alt="TEBK Logo" className="h-20 w-auto block mx-auto mb-6" />
+                <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Forgot Password?</h1>
                 <p className="text-gray-400 text-sm mb-8">
                   {t('auth.forgot_subtitle')}
                 </p>

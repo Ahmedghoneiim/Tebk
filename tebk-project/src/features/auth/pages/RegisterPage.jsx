@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react'
-import { TebkLogo } from '@/components/shared/TebkLogo'
+import logonav from "@/assets/logo (2).svg"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link, useNavigate } from 'react-router-dom'
@@ -171,8 +171,9 @@ export function RegisterPage() {
         <div className="flex-1 flex flex-col justify-center px-10 py-10">
           <div className="max-w-sm mx-auto w-full">
 
-            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>{t('auth.create_account')}</h1>
-            <p className="text-gray-400 text-sm mb-7">{t('auth.register_subtitle')}</p>
+            <img src={logonav} alt="TEBK Logo" className="h-20 w-auto block mx-auto mb-6" />
+            <h1 className="text-3xl font-bold mb-1" style={{ color: '#1a3363' }}>Create Account</h1>
+            <p className="text-gray-400 text-sm mb-7">Join TEBK to access medical supplies</p>
 
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl px-4 py-3 mb-4">
