@@ -96,7 +96,7 @@ export function ResetPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
       <div
-        className="w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-visible flex relative"
+        className="w-full max-w-sm sm:max-w-4xl bg-white rounded-3xl shadow-2xl overflow-visible flex relative"
         style={{ minHeight: '500px' }}
       >
 
@@ -122,7 +122,7 @@ export function ResetPasswordPage() {
         </div>
 
         {/* ── Right – Form Panel ── */}
-        <div className="flex-1 flex flex-col justify-center px-10 py-14">
+        <div className="flex-1 flex flex-col justify-center px-5 py-8 sm:px-10 sm:py-14">
           <div className="max-w-sm mx-auto w-full">
 
             <img src={logonav} alt="TEBK Logo" className="h-20 w-auto block mx-auto mb-6" />

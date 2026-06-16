@@ -1,7 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { ShoppingBag, Heart, Bell, User, Layers, RefreshCw } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useAuthStore } from '@/store/authStore'
 import { useTranslation } from '@/hooks/useTranslation'
 import logonav from "@/assets/logo (2).svg"
 
@@ -26,8 +25,7 @@ function SidebarLink({ to, icon: Icon, label, end }) {
 }
 
 export function Sidebar() {
-  const { user } = useAuthStore()
-  const { t }    = useTranslation()
+  const { t } = useTranslation()
 
   const SHARED_LINKS = [
     { to: '/orders',            icon: ShoppingBag, label: t('sidebar.orders') },
