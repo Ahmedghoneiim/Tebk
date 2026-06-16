@@ -193,30 +193,58 @@ export function LandingPage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          FEATURED PRODUCTS
+          FEATURED PRODUCTS — Auto Marquee Slider
       ══════════════════════════════════════════ */}
-      <section className="py-20 section-white">
+      <section className="py-20 section-white" style={{ overflow: 'hidden' }}>
+        <style>{`
+          @keyframes tebk-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .tebk-slider { animation: tebk-scroll 24s linear infinite; }
+          .tebk-slider:hover { animation-play-state: paused; }
+        `}</style>
+
+        {/* Header — inside container */}
         <div className="page-container">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-display font-bold text-primary">{t('landing.popular_products')}</h2>
-              <p className="text-muted text-sm mt-1">{t('landing.popular_subtitle')}</p>
+              <p className="text-sm mt-1" style={{ color: '#6B7280' }}>{t('landing.popular_subtitle')}</p>
             </div>
             <Button variant="outline" asChild>
               <Link to="/products">{t('landing.view_all')} <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {productsLoading
-              ? Array(4).fill(0).map((_, i) => (
-                  <div key={i} className="rounded-3xl bg-gray-100 animate-pulse h-72" />
-                ))
-              : featured.length > 0
-                ? featured.map(p => <ProductCard key={p.id} product={p} />)
-                : <p className="col-span-4 text-center text-muted py-8">No featured products yet.</p>
-            }
-          </div>
         </div>
+
+        {/* Track — breaks out of container for edge-to-edge scroll */}
+        {productsLoading ? (
+          <div className="page-container">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              {Array(4).fill(0).map((_, i) => (
+                <div key={i} className="rounded-3xl bg-gray-100 animate-pulse h-72" />
+              ))}
+            </div>
+          </div>
+        ) : featured.length === 0 ? (
+          <div className="page-container">
+            <p className="text-center py-8" style={{ color: '#6B7280' }}>No featured products yet.</p>
+          </div>
+        ) : (
+          <div style={{ overflow: 'hidden' }}>
+            <div
+              className="tebk-slider"
+              style={{ display: 'flex', gap: '20px', width: 'max-content', padding: '8px 20px 16px' }}
+            >
+              {[...featured, ...featured].map((p, i) => (
+                <div key={`${p.id}-${i}`} style={{ width: '272px', flexShrink: 0 }}>
+                  <ProductCard product={p} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ══════════════════════════════════════════
