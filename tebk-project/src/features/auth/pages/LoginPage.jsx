@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore'
 import { loginSchema } from '@/utils/validators'
 import { toast } from '@/store/notificationStore'
 import { usePageTitle } from '@/hooks/usePageTitle'
+import { supabase } from '@/services/supabaseClient'
 
 function MedicalIllustration() {
   return (
@@ -118,6 +119,14 @@ export function LoginPage() {
   const onSubmit = async (data) => {
     const { error } = await login(data.email, data.password)
     if (!error) toast.success('Welcome back!')
+  }
+
+  const handleGoogleLogin = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin }
+    })
+    if (error) toast.error(error.message || 'Google login failed. Please try again.')
   }
 
   return (
@@ -250,20 +259,14 @@ export function LoginPage() {
             </div>
 
             {/* Social buttons */}
-            <div className="flex items-center justify-center gap-4">
-              <button
-                type="button"
-                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
-              >
-                <GoogleIcon />
-              </button>
-              <button
-                type="button"
-                className="w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors shadow-sm"
-              >
-                <AppleIcon />
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-xl border border-gray-200 hover:bg-gray-50 transition-colors shadow-sm text-sm font-medium text-gray-700"
+            >
+              <GoogleIcon />
+              Continue with Google
+            </button>
 
             {/* Footer */}
             <p className="text-center text-sm text-gray-400 mt-6">
