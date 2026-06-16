@@ -37,7 +37,7 @@ export function LandingPage() {
     staleTime: 5 * 60 * 1000,
   })
 
-  const featured = (productsData?.data || []).slice(0, 4)
+  const featured = (productsData?.data || []).slice(0, 8)
 
   return (
     <div className="overflow-x-hidden -mt-20">
@@ -191,30 +191,64 @@ export function LandingPage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          FEATURED PRODUCTS
+          FEATURED PRODUCTS — Infinite Marquee
       ══════════════════════════════════════════ */}
-      <section className="py-20 section-white">
+      <section className="py-20 section-white" style={{ overflow: 'hidden', backgroundColor: '#F9FAFB' }}>
+        <style>{`
+          @keyframes tebk-scroll {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+          }
+          .tebk-slider { animation: tebk-scroll 26s linear infinite; }
+          .tebk-slider:hover { animation-play-state: paused; }
+        `}</style>
+
+        {/* Header */}
         <div className="page-container">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-display font-bold text-primary">Popular products</h2>
-              <p className="text-muted text-sm mt-1">Most ordered by clinics this month</p>
+              <p className="text-sm mt-1" style={{ color: '#6B7280' }}>Most ordered by clinics this month</p>
             </div>
             <Button variant="outline" asChild>
               <Link to="/products">View all <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {productsLoading
-              ? Array(4).fill(0).map((_, i) => (
-                  <div key={i} className="rounded-3xl bg-gray-100 animate-pulse h-72" />
-                ))
-              : featured.length > 0
-                ? featured.map(p => <ProductCard key={p.id} product={p} />)
-                : <p className="col-span-4 text-center text-muted py-8">No featured products yet.</p>
-            }
-          </div>
         </div>
+
+        {/* Slider */}
+        {productsLoading ? (
+          <div className="page-container">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
+              {Array(4).fill(0).map((_, i) => (
+                <div key={i} className="rounded-3xl bg-gray-100 animate-pulse h-72" />
+              ))}
+            </div>
+          </div>
+        ) : featured.length === 0 ? (
+          <div className="page-container">
+            <p className="text-center py-8" style={{ color: '#6B7280' }}>No featured products yet.</p>
+          </div>
+        ) : (
+          <div style={{ overflow: 'hidden' }}>
+            <div
+              className="tebk-slider"
+              style={{
+                display: 'flex',
+                gap: '20px',
+                width: 'max-content',
+                padding: '8px 0 16px',
+              }}
+            >
+              {/* Duplicate array for seamless infinite loop — no left padding so no gap on reset */}
+              {[...featured, ...featured].map((p, i) => (
+                <div key={`${p.id}-${i}`} style={{ width: '272px', flexShrink: 0 }}>
+                  <ProductCard product={p} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ══════════════════════════════════════════
@@ -227,11 +261,11 @@ export function LandingPage() {
           <div className="flex justify-center mb-10">
             <div
               className="inline-flex items-center gap-2.5 px-6 py-2.5 rounded-full text-sm font-medium"
-              style={{ background: 'rgba(255,255,255,0.75)', backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.9)', boxShadow: '0 2px 16px rgba(33,51,96,0.08)', color: '#444' }}
+              style={{ background: 'rgba(23,195,206,0.08)', border: '1px solid rgba(23,195,206,0.35)', boxShadow: '0 2px 16px rgba(23,195,206,0.12)', color: '#1a3363' }}
             >
-              <Sparkles className="w-4 h-4" style={{ color: '#4ea055' }} />
+              <Sparkles className="w-4 h-4" style={{ color: '#17C3CE' }} />
               Pre-built supply kits
-              <span className="w-1 h-1 rounded-full inline-block bg-gray-300" />
+              <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: '#17C3CE', opacity: 0.5 }} />
               save up to 22% vs buying individually
             </div>
           </div>
@@ -242,7 +276,7 @@ export function LandingPage() {
               <h2 className="text-2xl font-display font-bold text-primary">Smart Bundles</h2>
               <p className="text-muted text-sm mt-1">Pre-built kits for every clinic type</p>
             </div>
-            <Button variant="outline" asChild>
+            <Button variant="outline" asChild style={{ borderColor: '#17C3CE', color: '#17C3CE' }}>
               <Link to="/bundles">All bundles <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
@@ -304,14 +338,14 @@ export function LandingPage() {
                       <Link
                         to="/bundles"
                         className="text-sm font-semibold transition-colors hover:underline"
-                        style={{ color: '#1a3363' }}
+                        style={{ color: '#17C3CE' }}
                       >
                         Details →
                       </Link>
                       <Link
                         to="/bundles"
                         className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:scale-105"
-                        style={{ background: '#1a3363' }}
+                        style={{ background: '#17C3CE' }}
                       >
                         <ShoppingCart className="w-4 h-4" />
                         Add to Cart

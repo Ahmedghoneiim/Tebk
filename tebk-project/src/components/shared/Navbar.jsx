@@ -18,8 +18,9 @@ import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent,
   DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu'
-import { TebkLogo } from './TebkLogo'
+import logonav from "@/assets/logo (2).svg";
 import { cn } from '@/lib/utils'
+
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -83,10 +84,12 @@ export function Navbar() {
         >
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-1.5 shrink-0 group">
-            <span className="font-display font-bold text-primary dark:text-white text-xl transition-colors duration-200 group-hover:text-secondary">
-              TEBK
-            </span>
+          <Link to="/" className="flex items-center shrink-0 group">
+            <img
+              src={logonav}
+              alt="TEBK Logo"
+              className="h-10 w-auto transition-opacity duration-200 group-hover:opacity-80"
+            />
           </Link>
 
           {/* Desktop Nav */}

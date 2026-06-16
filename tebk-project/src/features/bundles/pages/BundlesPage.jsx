@@ -169,14 +169,14 @@ export function BundlesPage() {
                       <Link
                         to={`/bundles/${bundle.id}`}
                         className="text-sm font-semibold transition-colors hover:underline"
-                        style={{ color: '#1a3363' }}
+                        style={{ color: '#17C3CE' }}
                       >
                         Details →
                       </Link>
                       <button
                         onClick={() => handleAddBundle(bundle)}
                         className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-white text-sm font-semibold transition-all duration-200 hover:opacity-90 hover:scale-105"
-                        style={{ background: '#1a3363' }}
+                        style={{ background: '#17C3CE' }}
                       >
                         <ShoppingCart className="w-4 h-4" />
                         Add to Cart

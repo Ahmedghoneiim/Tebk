@@ -277,7 +277,7 @@ export function AssistantPage() {
           <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid #1a3d2e' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
-                width: 40, height: 40, background: '#0F6E56', borderRadius: 10,
+                width: 40, height: 40, background: '#17C3CE', borderRadius: 10,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontSize: 20, flexShrink: 0,
               }}>🤖</div>
@@ -298,7 +298,7 @@ export function AssistantPage() {
             style={{
               margin: '14px 14px 4px',
               padding: '9px 12px',
-              background: '#1D9E75',
+              background: '#17C3CE',
               color: '#fff',
               border: 'none',
               borderRadius: 10,
@@ -308,8 +308,8 @@ export function AssistantPage() {
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               transition: 'background .2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = '#17875f'}
-            onMouseLeave={e => e.currentTarget.style.background = '#1D9E75'}
+            onMouseEnter={e => e.currentTarget.style.background = '#0EA3AC'}
+            onMouseLeave={e => e.currentTarget.style.background = '#17C3CE'}
           >
             {t.newChat}
           </button>
@@ -344,8 +344,8 @@ export function AssistantPage() {
                   margin: '1px 8px',
                   cursor: 'pointer',
                   background: chat.id === sessionId ? '#1a3d2e' : 'transparent',
-                  borderRight: lang === 'ar' && chat.id === sessionId ? '2px solid #1D9E75' : lang === 'ar' ? '2px solid transparent' : 'none',
-                  borderLeft:  lang === 'en' && chat.id === sessionId ? '2px solid #1D9E75' : lang === 'en' ? '2px solid transparent' : 'none',
+                  borderRight: lang === 'ar' && chat.id === sessionId ? '2px solid #17C3CE' : lang === 'ar' ? '2px solid transparent' : 'none',
+                  borderLeft:  lang === 'en' && chat.id === sessionId ? '2px solid #17C3CE' : lang === 'en' ? '2px solid transparent' : 'none',
                   borderRadius: 8,
                   transition: 'background .15s',
                 }}
@@ -366,7 +366,7 @@ export function AssistantPage() {
                       style={{
                         width: '100%', fontSize: 11.5,
                         fontFamily: "'Cairo', sans-serif",
-                        border: '1px solid #1D9E75', borderRadius: 4,
+                        border: '1px solid #17C3CE', borderRadius: 4,
                         padding: '2px 5px', background: '#0a1a11',
                         color: '#e8f5f0', outline: 'none',
                       }}
@@ -455,11 +455,11 @@ export function AssistantPage() {
               {isMobile && (
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  style={{ ...iconBtn, border: '0.5px solid #c0e8d8', background: '#f0faf6', color: '#0F6E56', fontSize: 14 }}
+                  style={{ ...iconBtn, border: '0.5px solid #c0e8d8', background: '#f0faf6', color: '#17C3CE', fontSize: 14 }}
                 >☰</button>
               )}
               <div style={{
-                width: 34, height: 34, background: '#0F6E56', borderRadius: '50%',
+                width: 34, height: 34, background: '#17C3CE', borderRadius: '50%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: '#fff', fontSize: 11, fontWeight: 700, flexShrink: 0,
               }}>T</div>
@@ -467,10 +467,10 @@ export function AssistantPage() {
                 <div style={{ fontSize: 12.5, fontWeight: 700, color: '#1a1a1a' }}>{t.title}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                   <span style={{
-                    width: 6, height: 6, borderRadius: '50%', background: '#1D9E75',
+                    width: 6, height: 6, borderRadius: '50%', background: '#17C3CE',
                     display: 'inline-block', animation: 'pulse 1.5s infinite',
                   }} />
-                  <span style={{ fontSize: 10.5, color: '#1D9E75', fontWeight: 600 }}>{t.online}</span>
+                  <span style={{ fontSize: 10.5, color: '#17C3CE', fontWeight: 600 }}>{t.online}</span>
                 </div>
               </div>
             </div>
@@ -501,7 +501,7 @@ export function AssistantPage() {
               }}>
                 <div style={{
                   width: 24, height: 24, borderRadius: '50%',
-                  background: msg.role === 'bot' ? '#0F6E56' : '#1D9E75',
+                  background: msg.role === 'bot' ? '#17C3CE' : '#17C3CE',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#fff', fontSize: 8, fontWeight: 700,
                   flexShrink: 0, marginTop: 2,
@@ -519,7 +519,7 @@ export function AssistantPage() {
                   <div style={{
                     padding: '8px 12px', borderRadius: 12,
                     fontSize: 12.5, lineHeight: 1.7,
-                    background: msg.role === 'bot' ? '#fff' : '#0F6E56',
+                    background: msg.role === 'bot' ? '#fff' : '#17C3CE',
                     color: msg.role === 'bot' ? '#1a1a1a' : '#fff',
                     border: msg.role === 'bot' ? '0.5px solid #e0f0ea' : 'none',
                     borderBottomRightRadius: msg.role === 'bot' ? (lang === 'ar' ? 3 : 12) : (lang === 'ar' ? 12 : 3),
@@ -536,7 +536,7 @@ export function AssistantPage() {
             {loading && (
               <div style={{ display: 'flex', gap: 6, alignSelf: lang === 'ar' ? 'flex-end' : 'flex-start' }}>
                 <div style={{
-                  width: 24, height: 24, borderRadius: '50%', background: '#0F6E56',
+                  width: 24, height: 24, borderRadius: '50%', background: '#17C3CE',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#fff', fontSize: 8, fontWeight: 700, flexShrink: 0, marginTop: 2,
                 }}>T</div>
@@ -548,7 +548,7 @@ export function AssistantPage() {
                   {[0, 1, 2].map(i => (
                     <span key={i} style={{
                       width: 5, height: 5, borderRadius: '50%',
-                      background: '#1D9E75', display: 'inline-block',
+                      background: '#17C3CE', display: 'inline-block',
                       animation: `bounce 0.8s ${i * 0.15}s infinite`,
                     }} />
                   ))}
@@ -568,7 +568,7 @@ export function AssistantPage() {
                 <button
                   onClick={startNewChat}
                   style={{
-                    padding: '6px 16px', background: '#0F6E56', color: '#fff',
+                    padding: '6px 16px', background: '#17C3CE', color: '#fff',
                     border: 'none', borderRadius: 8,
                     fontFamily: "'Cairo', sans-serif", fontSize: 12, fontWeight: 600, cursor: 'pointer',
                   }}
@@ -596,7 +596,7 @@ export function AssistantPage() {
                   alt="preview"
                   style={{ width: 50, height: 50, borderRadius: 8, objectFit: 'cover' }}
                 />
-                <div style={{ flex: 1, fontSize: 12, color: '#0F6E56' }}>{t.imageSaved}</div>
+                <div style={{ flex: 1, fontSize: 12, color: '#17C3CE' }}>{t.imageSaved}</div>
                 <button
                   onClick={() => setPendingImage(null)}
                   style={{
@@ -616,7 +616,7 @@ export function AssistantPage() {
                 disabled={loading || (!input.trim() && !pendingImage) || showLimit}
                 style={{
                   width: 32, height: 32, borderRadius: '50%',
-                  background: (input.trim() || pendingImage) && !showLimit ? '#0F6E56' : '#a0d4c4',
+                  background: (input.trim() || pendingImage) && !showLimit ? '#17C3CE' : 'rgba(23,195,206,0.35)',
                   border: 'none',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   cursor: (input.trim() || pendingImage) && !showLimit ? 'pointer' : 'default',
@@ -630,7 +630,7 @@ export function AssistantPage() {
                   width: 30, height: 30, borderRadius: '50%',
                   border: '0.5px solid #c0e8d8', background: '#f0faf6',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', color: '#0F6E56', fontSize: 14, flexShrink: 0,
+                  cursor: 'pointer', color: '#17C3CE', fontSize: 14, flexShrink: 0,
                 }}
               >🎤</button>
 
@@ -664,7 +664,7 @@ export function AssistantPage() {
                   width: 30, height: 30, borderRadius: '50%',
                   border: '0.5px solid #c0e8d8', background: '#f0faf6',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  cursor: 'pointer', color: '#0F6E56', fontSize: 16,
+                  cursor: 'pointer', color: '#17C3CE', fontSize: 16,
                   flexShrink: 0, opacity: showLimit ? 0.4 : 1,
                 }}
               >+</button>
@@ -680,7 +680,7 @@ export function AssistantPage() {
                   cursor: 'default',
                 }}>
                   <span style={{ fontSize: 12 }}>{f.icon}</span>
-                  <span style={{ fontSize: 10.5, fontWeight: 600, color: '#085041' }}>{f.label}</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 600, color: '#0C7F87' }}>{f.label}</span>
                 </div>
               ))}
             </div>

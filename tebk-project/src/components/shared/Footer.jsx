@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from '@/hooks/useTranslation'
 import { ArrowUp } from 'lucide-react'
+import logonav from "@/assets/logo (2).svg"
 
 function IgIcon() {
   return (
@@ -71,8 +72,8 @@ export function Footer() {
 
             {/* Brand */}
             <div>
-              <div className="flex items-center gap-2 mb-4">
-                <span className="font-display font-bold text-xl text-white">TEBK</span>
+              <div className="flex items-center mb-4">
+                <img src={logonav} alt="TEBK Logo" className="h-10 w-auto brightness-0 invert" />
               </div>
               <p className="text-white/60 text-sm leading-relaxed mb-6">
                 {t('footer.tagline')}

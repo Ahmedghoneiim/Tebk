@@ -1,14 +1,12 @@
 import { useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { Search, X } from 'lucide-react'
 import { fetchProducts, fetchCategories } from '@/services/productService'
 import { ProductCard } from '@/components/shared/ProductCard'
 import { ProductCardSkeleton } from '@/components/shared/LoadingSkeleton'
 import { EmptyState } from '@/components/shared/EmptyState'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import { usePageTitle } from '@/hooks/usePageTitle'
 import { cn } from '@/lib/utils'
 
@@ -23,7 +21,6 @@ export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams()
   const [search,      setSearch]      = useState('')
   const [sortBy,      setSortBy]      = useState('name_asc')
-  const [showFilters, setShowFilters] = useState(false)
 
   const category = searchParams.get('cat') || 'all'
   const setCategory = (val) => setSearchParams(p => {
@@ -59,8 +56,6 @@ export function CatalogPage() {
     return results
   }, [allProducts, category, search, sortBy])
 
-  const activeFiltersCount = (category !== 'all' ? 1 : 0) + (search ? 1 : 0)
-
   return (
     <div className="page-container py-8">
       <div className="mb-6">
@@ -95,17 +90,6 @@ export function CatalogPage() {
         >
           {SORT_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
         </select>
-        <Button
-          variant="outline"
-          onClick={() => setShowFilters(v => !v)}
-          className={cn(activeFiltersCount > 0 && 'border-secondary text-secondary')}
-        >
-          <SlidersHorizontal className="w-4 h-4" />
-          Filters
-          {activeFiltersCount > 0 && (
-            <Badge variant="secondary" className="ml-1">{activeFiltersCount}</Badge>
-          )}
-        </Button>
       </div>
 
       {/* Category pills */}
