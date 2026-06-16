@@ -13,6 +13,7 @@ import { LoginPage }          from '@/features/auth/pages/LoginPage'
 import { RegisterPage }       from '@/features/auth/pages/RegisterPage'
 import { ForgotPasswordPage } from '@/features/auth/pages/ForgotPasswordPage'
 import { ResetPasswordPage }  from '@/features/auth/pages/ResetPasswordPage'
+import { AuthCallbackPage }   from '@/features/auth/pages/AuthCallbackPage'
 
 // Public pages
 import { LandingPage }     from '@/features/home/pages/LandingPage'
@@ -73,6 +74,9 @@ export function AppRoutes() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password"  element={<ResetPasswordPage />} />
       </Route>
+
+      {/* OAuth callback — standalone, no layout */}
+      <Route path="/auth/callback" element={<AuthCallbackPage />} />
 
       {/* Public routes */}
       <Route element={<PublicLayout />}>

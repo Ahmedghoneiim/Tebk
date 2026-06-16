@@ -132,7 +132,7 @@ export function RegisterPage() {
     const baseUrl = window.location.origin
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${baseUrl}/dashboard` }
+      options: { redirectTo: `${baseUrl}/auth/callback` }
     })
     if (error) toast.error(error.message || 'Google login failed.')
   }

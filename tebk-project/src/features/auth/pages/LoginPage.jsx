@@ -2,7 +2,7 @@
 import logonav from "@/assets/logo (2).svg"
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Loader2, Mail, Lock, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '@/store/authStore'
 import { loginSchema } from '@/utils/validators'
@@ -97,17 +97,12 @@ export function LoginPage() {
   usePageTitle('Login')
   const { t } = useTranslation()
   const { login, loading, error, clearError, user } = useAuthStore()
-  const navigate  = useNavigate()
-  const location  = useLocation()
+  const navigate = useNavigate()
   const [showPw, setShowPw] = useState(false)
-
-  const rawFrom = location.state?.from?.pathname
-  const from    = (rawFrom && rawFrom !== '/' && !rawFrom.startsWith('/login') && !rawFrom.startsWith('/register'))
-    ? rawFrom : null
 
   useEffect(() => {
     if (!user) return
-    const dest = from || (user.role === 'supplier' ? '/products' : '/')
+    const dest = user.role === 'supplier' ? '/products' : '/'
     navigate(dest, { replace: true })
   }, [user])
 
@@ -127,7 +122,7 @@ export function LoginPage() {
     const baseUrl = window.location.origin
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: `${baseUrl}/dashboard` }
+      options: { redirectTo: `${baseUrl}/auth/callback` }
     })
     if (error) toast.error(error.message || 'Google login failed.')
   }
